@@ -23,6 +23,11 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalConfig = error.config;
 
+    // config가 없거나 response가 없는 경우 그냥 reject
+    if (!originalConfig || !error.response) {
+      return Promise.reject(error);
+    }
+
     // 재발급 URL인 경우 재발급 시도 안함(무한 루프 방지)
     if (originalConfig.url?.includes("/api/v1/auth/reissue")) {
       return Promise.reject(error);
