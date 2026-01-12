@@ -1,9 +1,11 @@
+import { shorthands } from "@tamagui/shorthands";
 import { createTamagui } from "tamagui";
 import { darkTheme, lightTheme } from "./src/theme/themes";
 import { tokens } from "./src/theme/tokens";
 
 export const tamaguiConfig = createTamagui({
   tokens,
+  shorthands,
   themes: {
     light: lightTheme,
     dark: darkTheme,
