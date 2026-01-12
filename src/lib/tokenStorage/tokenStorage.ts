@@ -1,4 +1,3 @@
-// src/lib/tokenStorage.ts
 import * as SecureStore from "expo-secure-store";
 import { TokenStorage } from "./tokenStorage.types";
 
