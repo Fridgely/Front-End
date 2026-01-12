@@ -8,9 +8,6 @@ export default function AuthLayout() {
         contentStyle: { backgroundColor: "#FFFFFF" },
         animation: "slide_from_right",
       }}
-    >
-      <Stack.Screen name="login" />
-      <Stack.Screen name="signup" />
-    </Stack>
+    ></Stack>
   );
 }
