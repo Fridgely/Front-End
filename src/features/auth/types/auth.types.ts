@@ -4,6 +4,7 @@ interface AuthFormData {
   email: string;
   password: string;
   nickname?: string;
+  confirmPassword?: string;
 }
 
 interface AuthInputProps {
