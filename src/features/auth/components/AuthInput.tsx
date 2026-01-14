@@ -10,6 +10,7 @@ export function AuthInput({
   rules,
   ...props
 }: AuthInputProps) {
+  const error = errors?.[name];
   return (
     <YStack gap="$2">
       <Text color="$gray12" fontWeight="700" fontSize={14} ml="$1">
@@ -25,7 +26,7 @@ export function AuthInput({
             fontSize={16}
             bc="$gray2"
             // 에러 발생 시 테두리를 빨간색($danger)으로 표시
-            bw={errors[name] ? 1.5 : 0}
+            bw={error ? 1.5 : 0}
             boc="$danger"
             br="$3"
             px="$4"
@@ -37,9 +38,9 @@ export function AuthInput({
           />
         )}
       />
-      {errors[name] && (
+      {error && (
         <Text color="$danger" fontSize={12} ml="$1" mt="$1">
-          {errors[name]?.message as string}
+          {error.message?.toString()}
         </Text>
       )}
     </YStack>

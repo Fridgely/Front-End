@@ -16,6 +16,7 @@ export function LoginScreen() {
     handleSubmit,
     formState: { errors },
   } = useForm<AuthFormData>({
+    mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
