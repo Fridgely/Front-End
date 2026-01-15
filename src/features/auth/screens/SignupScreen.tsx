@@ -20,7 +20,7 @@ export function SignupScreen() {
     mode: "onBlur",
     defaultValues: {
       nickname: "",
-      email: "",
+      id: "",
       password: "",
       confirmPassword: "",
     },
@@ -66,17 +66,21 @@ export function SignupScreen() {
             />
 
             <AuthInput
-              label="이메일 주소"
-              name="email"
+              label="아이디"
+              name="id"
               control={control}
               errors={errors}
-              placeholder="example@fridgely.com"
-              keyboardType="email-address"
+              placeholder="아이디를 입력하세요."
+              keyboardType="default"
               rules={{
-                required: "이메일을 입력해주세요.",
+                required: "아이디를 입력해주세요.",
+                minLength: {
+                  value: 4,
+                  message: "최소 4자 이상 입력해주세요.",
+                },
                 pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: "유효한 이메일 형식이 아닙니다.",
+                  value: /^[a-z0-9]+$/,
+                  message: "영문 소문자와 숫자만 사용 가능합니다.",
                 },
               }}
             />

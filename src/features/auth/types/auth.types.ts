@@ -1,7 +1,7 @@
 import { Control, FieldErrors } from "react-hook-form";
 
 interface AuthFormData {
-  email: string;
+  id: string;
   password: string;
   nickname?: string;
   confirmPassword?: string;
