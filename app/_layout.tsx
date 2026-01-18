@@ -1,3 +1,4 @@
+import { toastConfig } from "@/components/ui/ToastConfig";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { queryClient } from "@/lib/queryClient";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
@@ -6,6 +7,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 import config from "../tamagui.config";
 
@@ -38,6 +40,7 @@ export default function RootLayout() {
             />
           </Stack>
           <StatusBar style="auto" />
+          <Toast config={toastConfig} />
         </TamaguiProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
