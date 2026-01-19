@@ -6,17 +6,19 @@ import { Button, H2, Paragraph, Spacer, Text, XStack, YStack } from "tamagui";
 
 import { useForm } from "react-hook-form";
 import { AuthInput } from "../components/AuthInput";
+import { useLoginMutation } from "../hooks/useAuthMutation";
 import { AuthFormData } from "../types/auth.types";
 
 export function LoginScreen() {
   const router = useRouter();
+  const { mutate: login, isPending: isLoginPending } = useLoginMutation();
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<AuthFormData>({
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: {
       id: "",
       password: "",
@@ -24,7 +26,10 @@ export function LoginScreen() {
   });
 
   const handleLoginClick = (data: AuthFormData) => {
-    console.log("로그인 데이터:", data);
+    login({
+      loginId: data.id,
+      password: data.password,
+    });
   };
 
   return (
@@ -79,6 +84,10 @@ export function LoginScreen() {
               secureTextEntry
               rules={{
                 required: "비밀번호를 입력해주세요.",
+                pattern: {
+                  value: /^\S+$/,
+                  message: "비밀번호에는 공백을 포함할 수 없습니다.",
+                },
                 minLength: { value: 6, message: "6자 이상 입력해주세요." },
               }}
             />
@@ -95,6 +104,7 @@ export function LoginScreen() {
               icon={LogIn}
               pressStyle={{ opacity: 0.8, scale: 0.98 }}
               onPress={handleSubmit(handleLoginClick)}
+              disabled={!isValid || isLoginPending}
             >
               로그인하기
             </Button>
