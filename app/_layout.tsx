@@ -1,14 +1,20 @@
 import { toastConfig } from "@/components/ui/ToastConfig";
+import {
+  useAuthActions,
+  useIsAuthLoaded,
+  useIsLoggedIn,
+} from "@/features/auth/store/useAuthStore";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { queryClient } from "@/lib/queryClient";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { TamaguiProvider } from "tamagui";
+import { Spinner, TamaguiProvider, View } from "tamagui";
 import config from "../tamagui.config";
 
 if (__DEV__) {
@@ -22,8 +28,25 @@ export const unstable_settings = {
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
   const colorScheme = useColorScheme();
-  // TODO 나중에 zustand로 교체 예정
-  const isLoggedIn = false;
+
+  const isLoggedIn = useIsLoggedIn();
+  const isLoaded = useIsAuthLoaded();
+  const { hydrate } = useAuthActions();
+
+  // 앱 시작시 토큰 정보 불러오기(자동 로그인)
+  useEffect(() => {
+    hydrate();
+  }, []);
+
+  if (!isLoaded) {
+    return (
+      <TamaguiProvider config={config}>
+        <View f={1} ai="center" jc="center" bg="$background">
+          <Spinner size="large" color="$primary" />
+        </View>
+      </TamaguiProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
