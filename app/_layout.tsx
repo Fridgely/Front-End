@@ -11,6 +11,10 @@ import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 import config from "../tamagui.config";
 
+if (__DEV__) {
+  require("../ReactotronConfig");
+}
+
 export const unstable_settings = {
   anchor: "(tabs)",
 };
