@@ -20,10 +20,11 @@ const useAuthStore = create(
     combine(initialState, (set) => ({
       actions: {
         setTokens: async (data: LoginResponse) => {
-          await tokenStorage.setAccessToken(data.accessToken);
-          await tokenStorage.setRefreshToken(data.refreshToken);
+          const authData = data.data;
+          await tokenStorage.setAccessToken(authData.accessToken.toString());
+          await tokenStorage.setRefreshToken(authData.refreshToken.toString());
           set({
-            accessToken: data.accessToken,
+            accessToken: authData.accessToken,
             isLoggedIn: true,
             isLoaded: true,
           });

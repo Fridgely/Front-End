@@ -11,8 +11,10 @@ interface SignupRequest {
 
 interface LoginResponse {
   result: string;
-  accessToken: string;
-  refreshToken: string;
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 export { LoginRequest, LoginResponse, SignupRequest };

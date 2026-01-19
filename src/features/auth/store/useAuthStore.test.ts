@@ -28,8 +28,10 @@ describe("AuthStore 테스트", () => {
 
     await setTokens({
       result: "SUCCESS",
-      accessToken: "test_access",
-      refreshToken: "test_refresh",
+      data: {
+        accessToken: "test_access",
+        refreshToken: "test_refresh",
+      },
     });
 
     expect(mockStorage.setAccessToken).toHaveBeenCalledWith("test_access");
