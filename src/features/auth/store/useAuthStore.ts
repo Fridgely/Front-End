@@ -47,7 +47,7 @@ const useAuthStore = create(
 );
 
 const useIsLoggedIn = () => useAuthStore((state) => state.isLoggedIn);
-const useIsAuthLoading = () => useAuthStore((state) => state.isLoaded);
+const useIsAuthLoaded = () => useAuthStore((state) => state.isLoaded);
 const useAuthActions = () => useAuthStore((state) => state.actions);
 
-export { useAuthActions, useAuthStore, useIsAuthLoading, useIsLoggedIn };
+export { useAuthActions, useAuthStore, useIsAuthLoaded, useIsLoggedIn };
