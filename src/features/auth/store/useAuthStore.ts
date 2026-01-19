@@ -19,27 +19,42 @@ const useAuthStore = create(
   devtools(
     combine(initialState, (set) => ({
       actions: {
-        setTokens: async (data: LoginResponse) => {
-          const authData = data.data;
-          await tokenStorage.setAccessToken(authData.accessToken.toString());
-          await tokenStorage.setRefreshToken(authData.refreshToken.toString());
-          set({
-            accessToken: authData.accessToken,
-            isLoggedIn: true,
-            isLoaded: true,
-          });
+        setTokens: async (res: LoginResponse) => {
+          const authData = res.data;
+          try {
+            await tokenStorage.setAccessToken(authData.accessToken.toString());
+            await tokenStorage.setRefreshToken(
+              authData.refreshToken.toString(),
+            );
+            set({
+              accessToken: authData.accessToken,
+              isLoggedIn: true,
+              isLoaded: true,
+            });
+          } catch (error) {
+            set({ ...initialState, isLoaded: true });
+            throw error;
+          }
         },
         hydrate: async () => {
-          const token = await tokenStorage.getAccessToken();
-          set({
-            accessToken: token,
-            isLoggedIn: !!token,
-            isLoaded: true,
-          });
+          try {
+            const token = await tokenStorage.getAccessToken();
+            set({
+              accessToken: token,
+              isLoggedIn: !!token,
+              isLoaded: true,
+            });
+          } catch (error) {
+            set({ ...initialState, isLoaded: true });
+            throw error;
+          }
         },
         logout: async () => {
-          await tokenStorage.clear();
-          set({ ...initialState, isLoaded: true });
+          try {
+            await tokenStorage.clear();
+          } finally {
+            set({ ...initialState, isLoaded: true });
+          }
         },
       },
     })),
