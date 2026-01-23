@@ -28,7 +28,7 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
@@ -45,7 +45,9 @@ export default function RootLayout() {
 
   const onLayoutRootView = useCallback(async () => {
     if (isLoaded) {
-      await SplashScreen.hideAsync();
+      try {
+        await SplashScreen.hideAsync();
+      } catch {}
     }
   }, [isLoaded]);
 
