@@ -1,4 +1,4 @@
-import ApiBuilder from "@/apis/builder/ApiBuilder";
+import ApiBuilder from "@/shared/apis/builder/ApiBuilder";
 import type { LoginRequest, LoginResponse, SignupRequest } from "./auth.types";
 
 const loginApi = ApiBuilder.create<LoginRequest, LoginResponse>(

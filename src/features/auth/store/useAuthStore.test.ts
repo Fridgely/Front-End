@@ -1,4 +1,4 @@
-import { tokenStorage } from "@/lib/tokenStorage/tokenStorage";
+import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import { useAuthStore } from "./useAuthStore";
 
 jest.mock("@/lib/tokenStorage/tokenStorage", () => ({
