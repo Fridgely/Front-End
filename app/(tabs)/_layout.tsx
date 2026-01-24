@@ -1,38 +1,73 @@
 import { Tabs } from "expo-router";
-import React from "react";
-
-import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import {
+  Calendar,
+  Home,
+  Refrigerator,
+  Search,
+  User,
+} from "lucide-react-native";
+import { useTheme } from "tamagui";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const theme = useTheme();
+
+  const activeColor = theme.active.get();
+  const inactiveColor = theme.inactive.get();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarActiveTintColor: activeColor,
+        tabBarInactiveTintColor: inactiveColor,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "600",
+          marginTop: -2,
+        },
+        tabBarStyle: {
+          backgroundColor: theme.background.get(),
+          borderTopWidth: 1,
+          borderTopColor: theme.borderColor.get(),
+          height: 65,
+          paddingTop: 3,
+          elevation: 0, // 안드로이드 특유의 그림자 제거
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
+          title: "홈",
+          tabBarIcon: ({ color }) => <Home color={color} size={24} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="fridge"
         options={{
-          title: "Explore",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
+          title: "냉장고목록",
+          tabBarIcon: ({ color }) => <Refrigerator color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          title: "캘린더",
+          tabBarIcon: ({ color }) => <Calendar color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: "검색",
+          tabBarIcon: ({ color }) => <Search color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "설정",
+          tabBarIcon: ({ color }) => <User color={color} size={24} />,
         }}
       />
     </Tabs>
