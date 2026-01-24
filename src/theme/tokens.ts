@@ -10,8 +10,15 @@ export const tokens = createTokens({
     white: "#FFFFFF",
     black: "#000000",
 
-    primary: "#2563EB",
-    primarySoft: "#DBEAFE",
+    primary: "#5EC3A3", // Main Green (브랜드의 핵심 색상)
+    primaryLight: "#8FE1B6", // Light Mint (배경이나 부드러운 강조)
+    primarySoft: "#C9F1E3", // Soft Mint (알림 배경 등)
+    primaryDark: "#5EC3A3", // Teal Accent (버튼 눌림이나 깊은 강조)
+    secondary: "#A8DDEB", // Cool Blue (냉동실이나 보조 정보)
+    secondaryDark: "#6FB7C6", // Deep Blue (강조된 냉동실 정보)
+
+    mainText: "#2F4F64", // 깊은 네이비/그린 계열의 텍스트 컬러
+    outline: "#2F4F64",
 
     gray1: "#F9FAFB",
     gray2: "#F3F4F6",
@@ -19,7 +26,7 @@ export const tokens = createTokens({
     gray10: "#6B7280",
     gray12: "#111827",
 
-    success: "#16A34A",
+    success: "#8FE1B6",
     warning: "#F59E0B",
     danger: "#DC2626",
   },

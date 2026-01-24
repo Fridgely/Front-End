@@ -2,20 +2,26 @@ import { tokens } from "./tokens";
 
 export const lightTheme = {
   background: tokens.color.white,
-  color: tokens.color.gray12,
+  color: tokens.color.mainText,
 
   primary: tokens.color.primary,
   primaryText: tokens.color.white,
+
+  active: tokens.color.primary,
+  inactive: tokens.color.gray10,
 
   borderColor: tokens.color.gray3,
 };
 
 export const darkTheme = {
-  background: tokens.color.gray12,
+  background: tokens.color.mainText,
   color: tokens.color.gray1,
 
-  primary: tokens.color.primary,
+  primary: tokens.color.primaryDark,
   primaryText: tokens.color.white,
 
-  borderColor: tokens.color.gray10,
+  active: tokens.color.primary,
+  inactive: tokens.color.gray10,
+
+  borderColor: tokens.color.outline,
 };
