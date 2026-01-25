@@ -1,4 +1,4 @@
-import { tokenStorage } from "@/lib/tokenStorage/tokenStorage";
+import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import apiClient from "./apiClient";
@@ -88,10 +88,10 @@ describe("apiClient 테스트", () => {
 
       // 토큰 재발급이 호출되었는지 확인
       expect(mockTokenStorage.setAccessToken).toHaveBeenCalledWith(
-        newAccessToken
+        newAccessToken,
       );
       expect(mockTokenStorage.setRefreshToken).toHaveBeenCalledWith(
-        newRefreshToken
+        newRefreshToken,
       );
 
       // 재시도 후 성공

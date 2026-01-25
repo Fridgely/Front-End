@@ -1,4 +1,4 @@
-import { tokenStorage } from "@/lib/tokenStorage/tokenStorage";
+import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import { create } from "zustand";
 import { combine, devtools } from "zustand/middleware";
 import type { LoginResponse } from "../api/auth.types";

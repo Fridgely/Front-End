@@ -1,4 +1,4 @@
-import apiClient from "@/apis/apiClient";
+import apiClient from "@/shared/apis/apiClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react-native";
 import { useRouter } from "expo-router";

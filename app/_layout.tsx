@@ -1,12 +1,12 @@
-import AnimatedSplashScreen from "@/components/AnimatedSplashScreen";
-import { toastConfig } from "@/components/ui/ToastConfig";
 import {
   useAuthActions,
   useIsAuthLoaded,
   useIsLoggedIn,
 } from "@/features/auth/store/useAuthStore";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { queryClient } from "@/lib/queryClient";
+import AnimatedSplashScreen from "@/shared/components/AnimatedSplashScreen";
+import { toastConfig } from "@/shared/components/ui/ToastConfig";
+import { useColorScheme } from "@/shared/hooks/use-color-scheme";
+import { queryClient } from "@/shared/lib/queryClient";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
