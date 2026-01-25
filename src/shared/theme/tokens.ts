@@ -13,7 +13,6 @@ export const tokens = createTokens({
     primary: "#5EC3A3", // Main Green (브랜드의 핵심 색상)
     primaryLight: "#8FE1B6", // Light Mint (배경이나 부드러운 강조)
     primarySoft: "#C9F1E3", // Soft Mint (알림 배경 등)
-    primaryDark: "#5EC3A3", // Teal Accent (버튼 눌림이나 깊은 강조)
     secondary: "#A8DDEB", // Cool Blue (냉동실이나 보조 정보)
     secondaryDark: "#6FB7C6", // Deep Blue (강조된 냉동실 정보)
 
