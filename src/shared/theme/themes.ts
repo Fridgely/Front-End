@@ -17,7 +17,7 @@ export const darkTheme = {
   background: tokens.color.mainText,
   color: tokens.color.gray1,
 
-  primary: tokens.color.primaryDark,
+  primary: tokens.color.primary,
   primaryText: tokens.color.white,
 
   active: tokens.color.primary,
