@@ -1,12 +1,16 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Header } from "@/shared/components/Header/Header";
 import { Text, YStack } from "tamagui";
 
 export function ProfileScreen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <YStack f={1} backgroundColor="$background">
+      <Header title="설정" />
+
       <YStack f={1} jc="center" ai="center">
-        <Text>Profile Screen</Text>
+        <Text fontSize="$6" fontWeight="bold">
+          Profile Screen
+        </Text>
       </YStack>
-    </SafeAreaView>
+    </YStack>
   );
 }

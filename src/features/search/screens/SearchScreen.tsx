@@ -1,12 +1,16 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Header } from "@/shared/components/Header/Header";
 import { Text, YStack } from "tamagui";
 
 export function SearchScreen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <YStack f={1} backgroundColor="$background">
+      <Header title="검색" />
+
       <YStack f={1} jc="center" ai="center">
-        <Text>Search Screen</Text>
+        <Text fontSize="$6" fontWeight="bold">
+          Search Screen
+        </Text>
       </YStack>
-    </SafeAreaView>
+    </YStack>
   );
 }

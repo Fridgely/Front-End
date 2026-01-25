@@ -1,12 +1,16 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Header } from "@/shared/components/Header/Header";
 import { Text, YStack } from "tamagui";
 
 export function CalendarScreen() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <YStack f={1} backgroundColor="$background">
+      <Header title="캘린더" />
+
       <YStack f={1} jc="center" ai="center">
-        <Text>Calendar Screen</Text>
+        <Text fontSize="$6" fontWeight="bold">
+          Calendar Screen
+        </Text>
       </YStack>
-    </SafeAreaView>
+    </YStack>
   );
 }
