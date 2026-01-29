@@ -15,12 +15,12 @@ export default function AnimatedSplashScreen({
 }: {
   onAnimationFinish: () => void;
 }) {
-  const fadeAnim = useSharedValue(1);
+  const fadeAnim = useSharedValue(0);
 
   useEffect(() => {
     fadeAnim.value = withDelay(
       500,
-      withTiming(0, {
+      withTiming(1, {
         duration: 600,
         easing: Easing.bezier(0.7, 0, 0.84, 0),
       }),
@@ -41,11 +41,8 @@ export default function AnimatedSplashScreen({
     <View style={styles.container}>
       <View style={styles.centered}>
         <Image
-          source={require("../assets/images/open_fridge.png")}
-          style={[
-            styles.logo,
-            { transform: [{ translateX: -2 }, { translateY: 1.3 }] },
-          ]}
+          source={require("../assets/images/closed_fridge.png")}
+          style={styles.logo}
           resizeMode="contain"
         />
       </View>
@@ -54,8 +51,11 @@ export default function AnimatedSplashScreen({
         style={[StyleSheet.absoluteFill, styles.centered, animatedStyle]}
       >
         <Image
-          source={require("../assets/images/closed_fridge.png")}
-          style={styles.logo}
+          source={require("../assets/images/open_fridge.png")}
+          style={[
+            styles.logo,
+            { transform: [{ translateX: -2 }, { translateY: 1.3 }] },
+          ]}
           resizeMode="contain"
         />
       </Animated.View>
