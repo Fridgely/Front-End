@@ -10,14 +10,20 @@ export const tokens = createTokens({
     white: "#FFFFFF",
     black: "#000000",
 
-    primary: "#5EC3A3", // Main Green (브랜드의 핵심 색상)
-    primaryLight: "#8FE1B6", // Light Mint (배경이나 부드러운 강조)
-    primarySoft: "#C9F1E3", // Soft Mint (알림 배경 등)
-    secondary: "#A8DDEB", // Cool Blue (냉동실이나 보조 정보)
-    secondaryDark: "#6FB7C6", // Deep Blue (강조된 냉동실 정보)
+    primary: "#2BEEAD",
+    primaryDark: "#26D19B",
 
-    mainText: "#2F4F64", // 깊은 네이비/그린 계열의 텍스트 컬러
-    outline: "#2F4F64",
+    secondary: "#10B981",
+    secondaryDark: "#22C55E",
+
+    background: "#F6F8F7",
+    backgroundDark: "#0B1110",
+
+    mainText: "#111816",
+    mainTextDark: "#E5EBE9",
+
+    gray: "#64748B",
+    grayDark: "#1A2522",
 
     gray1: "#F9FAFB",
     gray2: "#F3F4F6",
@@ -25,9 +31,9 @@ export const tokens = createTokens({
     gray10: "#6B7280",
     gray12: "#111827",
 
-    success: "#8FE1B6",
-    warning: "#F59E0B",
-    danger: "#DC2626",
+    success: "#22C55E",
+    warning: "#EF4444",
+    alert: "#F97316",
   },
 
   space: {
@@ -39,7 +45,7 @@ export const tokens = createTokens({
     5: 20,
     6: 24,
 
-    true: 16, // ⭐ 필수 (기본 spacing)
+    true: 16,
   },
 
   size: {
@@ -51,7 +57,7 @@ export const tokens = createTokens({
     5: 40,
     6: 48,
 
-    true: 24, // ⭐ 필수 (기본 size)
+    true: 24,
   },
 
   radius: {
