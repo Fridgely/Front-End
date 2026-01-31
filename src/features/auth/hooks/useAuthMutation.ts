@@ -7,6 +7,7 @@ import { useAuthActions } from "../store/useAuthStore";
 
 const useLoginMutation = () => {
   const { setTokens } = useAuthActions();
+  const router = useRouter();
 
   return useApiMutation<LoginRequest, LoginResponse>(loginApi, {
     onSuccess: async (res) => {
@@ -17,6 +18,7 @@ const useLoginMutation = () => {
           text1: "로그인 성공",
           text2: "환영합니다!",
         });
+        router.replace("/(tabs)");
       } else {
         Toast.show({
           type: "error",
