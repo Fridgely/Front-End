@@ -39,13 +39,14 @@ const useAuthStore = create(
         hydrate: async () => {
           try {
             const token = await tokenStorage.getAccessToken();
+            const hasToken = !!token && token.length > 0;
             set({
-              accessToken: token,
-              isLoggedIn: !!token,
+              accessToken: hasToken ? token : null,
+              isLoggedIn: hasToken,
               isLoaded: true,
             });
           } catch (error) {
-            set({ ...initialState, isLoaded: true });
+            set({ accessToken: null, isLoggedIn: false, isLoaded: true });
             throw error;
           }
         },
@@ -53,7 +54,7 @@ const useAuthStore = create(
           try {
             await tokenStorage.clear();
           } finally {
-            set({ ...initialState, isLoaded: true });
+            set({ accessToken: null, isLoggedIn: false, isLoaded: true });
           }
         },
       },
