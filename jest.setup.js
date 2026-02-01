@@ -8,4 +8,4 @@ jest.mock("expo-secure-store", () => ({
 }));
 
 // Mock tokenStorage
-jest.mock("./src/shared/lib/tokenStorage/tokenStorage");
+jest.mock("@/shared/lib/tokenStorage/tokenStorage");
