@@ -25,9 +25,8 @@ export function AuthInput({
             h={56}
             fontSize={16}
             bc="$gray2"
-            // 에러 발생 시 테두리를 빨간색($danger)으로 표시
             bw={error ? 1.5 : 0}
-            boc="$danger"
+            boc="$warning"
             br="$3"
             px="$4"
             onBlur={onBlur}
@@ -39,7 +38,7 @@ export function AuthInput({
         )}
       />
       {error && (
-        <Text color="$danger" fontSize={12} ml="$1" mt="$1">
+        <Text color="$warning" fontSize={12} ml="$1" mt="$1">
           {error.message?.toString()}
         </Text>
       )}

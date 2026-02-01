@@ -10,6 +10,8 @@ export const tokens = createTokens({
     white: "#FFFFFF",
     black: "#000000",
 
+    iconBackground: "#E9FDF7",
+
     primary: "#2BEEAD",
     primaryDark: "#26D19B",
 

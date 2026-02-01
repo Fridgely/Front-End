@@ -1,7 +1,7 @@
 import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import { useAuthStore } from "./useAuthStore";
 
-jest.mock("@/lib/tokenStorage/tokenStorage", () => ({
+jest.mock("@/shared/lib/tokenStorage/tokenStorage", () => ({
   tokenStorage: {
     getAccessToken: jest.fn(),
     setAccessToken: jest.fn(),

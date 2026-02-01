@@ -4,11 +4,10 @@ import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, H2, View, XStack } from "tamagui";
 import { HeaderProps } from "./Header.types";
-
 export function Header({
   title = "Fridgely",
   showBackButton = false,
-  showNotificationBell = true,
+  showNotificationBell = false,
 }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -19,40 +18,48 @@ export function Header({
         height={60}
         paddingHorizontal="$4"
         alignItems="center"
-        justifyContent="space-between"
+        justifyContent="center"
+        position="relative"
       >
-        <XStack alignItems="center" gap="$2">
-          {showBackButton && (
+        <XStack position="absolute" left="$4" alignItems="center">
+          {showBackButton ? (
             <Button
               size="$2"
-              chromeless // 배경 투명 및 테두리 제거
-              icon={<ChevronLeft size={24} color="$primary" />}
+              chromeless
+              icon={<ChevronLeft size={24} color="$mainText" />}
               onPress={() => router.back()}
               paddingLeft={0}
             />
+          ) : (
+            <H2
+              fontSize="$6"
+              fontWeight="900"
+              color="$mainText"
+              letterSpacing={-0.5}
+            >
+              {title}
+            </H2>
           )}
-          <H2
-            fontSize="$6"
-            fontWeight="900"
-            color="$primary"
-            letterSpacing={-0.5}
-          >
-            {title}
-          </H2>
         </XStack>
 
-        {showNotificationBell && (
-          <Button
-            size="$4"
-            circular
-            chromeless
-            icon={<Bell size={24} color="$primary" />}
-            pressStyle={{ opacity: 0.5 }}
-            onPress={() => {
-              router.push("/notification");
-            }}
-          />
+        {showBackButton && (
+          <H2 fontSize="$5" fontWeight="700" color="$mainText">
+            {title}
+          </H2>
         )}
+
+        <XStack position="absolute" right="$4">
+          {showNotificationBell && (
+            <Button
+              size="$4"
+              circular
+              chromeless
+              icon={<Bell size={24} color="$mainText" />}
+              pressStyle={{ opacity: 0.5 }}
+              onPress={() => router.push("/notification")}
+            />
+          )}
+        </XStack>
       </XStack>
     </View>
   );

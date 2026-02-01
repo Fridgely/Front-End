@@ -7,7 +7,7 @@ import Toast from "react-native-toast-message";
 import { useAuthActions } from "../store/useAuthStore";
 import { useLoginMutation, useSignupMutation } from "./useAuthMutation";
 
-jest.mock("@/apis/apiClient");
+jest.mock("@/shared/apis/apiClient");
 jest.mock("react-native-toast-message", () => ({ show: jest.fn() }));
 jest.mock("expo-router", () => ({ useRouter: jest.fn() }));
 jest.mock("../store/useAuthStore", () => ({ useAuthActions: jest.fn() }));
