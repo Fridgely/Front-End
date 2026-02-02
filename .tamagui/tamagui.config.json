@@ -28553,6 +28553,13 @@
           "val": "#22C55E",
           "variable": ""
         },
+        "successBackground": {
+          "isVar": true,
+          "key": "$successBackground",
+          "name": "c-successBackground",
+          "val": "#F2F9F2",
+          "variable": ""
+        },
         "warning": {
           "isVar": true,
           "key": "$warning",
@@ -28560,11 +28567,25 @@
           "val": "#EF4444",
           "variable": ""
         },
+        "warningBackground": {
+          "isVar": true,
+          "key": "$warningBackground",
+          "name": "c-warningBackground",
+          "val": "#FCF1F1",
+          "variable": ""
+        },
         "alert": {
           "isVar": true,
           "key": "$alert",
           "name": "c-alert",
           "val": "#F97316",
+          "variable": ""
+        },
+        "alertBackground": {
+          "isVar": true,
+          "key": "$alertBackground",
+          "name": "c-alertBackground",
+          "val": "#FFF8ED",
           "variable": ""
         }
       },
@@ -28780,8 +28801,11 @@
         "gray10": "#6B7280",
         "gray12": "#111827",
         "success": "#22C55E",
+        "successBackground": "#F2F9F2",
         "warning": "#EF4444",
+        "warningBackground": "#FCF1F1",
         "alert": "#F97316",
+        "alertBackground": "#FFF8ED",
         "color": "#E5EBE9",
         "primaryText": "#E5EBE9",
         "active": "#26D19B",
@@ -28809,8 +28833,11 @@
         "gray10": "#6B7280",
         "gray12": "#111827",
         "success": "#22C55E",
+        "successBackground": "#F2F9F2",
         "warning": "#EF4444",
+        "warningBackground": "#FCF1F1",
         "alert": "#F97316",
+        "alertBackground": "#FFF8ED",
         "color": "#111816",
         "primaryText": "#111816",
         "active": "#2BEEAD",
@@ -28920,6 +28947,13 @@
         "key": "$alert",
         "name": "c-alert",
         "val": "#F97316",
+        "variable": ""
+      },
+      "$color.alertBackground": {
+        "isVar": true,
+        "key": "$alertBackground",
+        "name": "c-alertBackground",
+        "val": "#FFF8ED",
         "variable": ""
       },
       "$color.background": {
@@ -29048,11 +29082,25 @@
         "val": "#22C55E",
         "variable": ""
       },
+      "$color.successBackground": {
+        "isVar": true,
+        "key": "$successBackground",
+        "name": "c-successBackground",
+        "val": "#F2F9F2",
+        "variable": ""
+      },
       "$color.warning": {
         "isVar": true,
         "key": "$warning",
         "name": "c-warning",
         "val": "#EF4444",
+        "variable": ""
+      },
+      "$color.warningBackground": {
+        "isVar": true,
+        "key": "$warningBackground",
+        "name": "c-warningBackground",
+        "val": "#FCF1F1",
         "variable": ""
       },
       "$color.white": {
