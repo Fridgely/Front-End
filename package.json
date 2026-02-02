@@ -20,6 +20,7 @@
     "@react-navigation/native": "^7.1.8",
     "@tamagui/config": "^1.144.1",
     "@tamagui/lucide-icons": "^1.144.1",
+    "@tamagui/metro-plugin": "^2.0.0-rc.0",
     "@tamagui/shorthands": "^1.144.1",
     "@tanstack/react-query": "^5.90.16",
     "axios": "^1.13.2",
