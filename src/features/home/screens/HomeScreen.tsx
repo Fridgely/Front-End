@@ -1,6 +1,6 @@
 import { Header } from "@/shared/components/Header/Header";
 import { FlashList } from "@shopify/flash-list";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { Text, XStack, YStack } from "tamagui";
 import { CategoryTabs } from "../components/CategoryTabs";
@@ -18,11 +18,14 @@ export function HomeScreen() {
   const [selectedFridgeId, setSelectedFridgeId] = useState<number | null>(null);
 
   // 냉장고 목록 로드 완료 시 첫 번째 ID 설정
-  useMemo(() => {
+  useEffect(() => {
     if (fridgeData?.data && selectedFridgeId === null) {
-      setSelectedFridgeId(fridgeData.data[0]?.id);
+      const firstFridgeId = fridgeData.data[0]?.id;
+      if (firstFridgeId) {
+        setSelectedFridgeId(firstFridgeId);
+      }
     }
-  }, [fridgeData]);
+  }, [fridgeData, selectedFridgeId]);
 
   const { data: foodStatusData, isLoading: isFoodLoading } = useFoodStatusQuery(
     selectedFridgeId || 0,
@@ -64,7 +67,7 @@ export function HomeScreen() {
   }, [foodStatusData, currentTab, statusFilter, isAscending]);
 
   const currentFridgeName =
-    fridgeData?.data.find((f) => f.id === selectedFridgeId)?.name || "냉장고";
+    fridgeData?.data?.find((f) => f.id === selectedFridgeId)?.name || "냉장고";
 
   if (isFridgeLoading || isFoodLoading) {
     return (
@@ -87,9 +90,9 @@ export function HomeScreen() {
         <Expiry
           activeStatus={statusFilter}
           counts={{
-            RED: foodStatusData?.data.RED?.length || 0,
-            YELLOW: foodStatusData?.data.YELLOW?.length || 0,
-            GREEN: foodStatusData?.data.GREEN?.length || 0,
+            RED: foodStatusData?.data?.RED?.length || 0,
+            YELLOW: foodStatusData?.data?.YELLOW?.length || 0,
+            GREEN: foodStatusData?.data?.GREEN?.length || 0,
           }}
           onStatusChange={(status) =>
             setStatusFilter((prev) => (prev === status ? null : status))
