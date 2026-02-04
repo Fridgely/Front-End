@@ -1,5 +1,4 @@
 import { Header } from "@/shared/components/Header/Header";
-import { FoodItem } from "@/shared/types/food";
 import { FlashList } from "@shopify/flash-list";
 import { useMemo, useState } from "react";
 import { View } from "react-native";
@@ -8,103 +7,39 @@ import { CategoryTabs } from "../components/CategoryTabs";
 import { Expiry } from "../components/Expiry/Expiry";
 import { FoodListItem } from "../components/FoodListItem";
 import { FridgeTabScroll } from "../components/FridgeTabScroll";
+import { HomeSkeleton } from "../components/HomeSkeleton";
+import { useFoodStatusQuery } from "../hooks/queries/useFoodStatusQuery";
+import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
 import { FoodStatus } from "../types";
 
-const MOCK_FOODS: FoodItem[] = [
-  {
-    id: 1,
-    name: "우유",
-    categoryName: "유제품",
-    imageURL: "",
-    quantity: { amount: 1.5, unit: "L" },
-    condition: {
-      expirationDate: "2026-02-4",
-      storageType: "REFRIGERATOR",
-      foodStatus: "RED", // 빨간색 테스트
-      daysLeft: 1,
-    },
-  },
-  {
-    id: 2,
-    name: "닭가슴살",
-    categoryName: "육류",
-    imageURL: "",
-    quantity: { amount: 500, unit: "g" },
-    condition: {
-      expirationDate: "2026-03-01",
-      storageType: "FREEZER",
-      foodStatus: "GREEN", // 초록색 테스트
-      daysLeft: 22,
-    },
-  },
-  {
-    id: 3,
-    name: "계란",
-    categoryName: "알류",
-    imageURL: "",
-    quantity: { amount: 10, unit: "알" },
-    condition: {
-      expirationDate: "2026-02-15",
-      storageType: "REFRIGERATOR",
-      foodStatus: "YELLOW", // 노란색 테스트
-      daysLeft: 8,
-    },
-  },
-  {
-    id: 4,
-    name: "계란",
-    categoryName: "알류",
-    imageURL: "",
-    quantity: { amount: 10, unit: "알" },
-    condition: {
-      expirationDate: "2026-02-15",
-      storageType: "REFRIGERATOR",
-      foodStatus: "YELLOW",
-      daysLeft: 8,
-    },
-  },
-  {
-    id: 5,
-    name: "계란",
-    categoryName: "알류",
-    imageURL: "",
-    quantity: { amount: 10, unit: "알" },
-    condition: {
-      expirationDate: "2026-02-15",
-      storageType: "REFRIGERATOR",
-      foodStatus: "YELLOW",
-      daysLeft: 8,
-    },
-  },
-  {
-    id: 6,
-    name: "계란",
-    categoryName: "알류",
-    imageURL: "",
-    quantity: { amount: 10, unit: "알" },
-    condition: {
-      expirationDate: "2026-02-15",
-      storageType: "REFRIGERATOR",
-      foodStatus: "YELLOW",
-      daysLeft: 8,
-    },
-  },
-];
-
 export function HomeScreen() {
-  const [selectedFridge, setSelectedFridge] = useState({
-    id: 1,
-    name: "우리집 냉장고",
-    role: "OWNER",
-    isOwner: true,
-  });
+  const { data: fridgeData, isLoading: isFridgeLoading } = useFridgeQuery();
+  // 첫번째 냉장고를 기본값으로 설정
+  const [selectedFridgeId, setSelectedFridgeId] = useState<number | null>(null);
+
+  // 냉장고 목록 로드 완료 시 첫 번째 ID 설정
+  useMemo(() => {
+    if (fridgeData?.data && selectedFridgeId === null) {
+      setSelectedFridgeId(fridgeData.data[0]?.id);
+    }
+  }, [fridgeData]);
+
+  const { data: foodStatusData, isLoading: isFoodLoading } = useFoodStatusQuery(
+    selectedFridgeId || 0,
+  );
+
   const [currentTab, setCurrentTab] = useState("전체");
   const [statusFilter, setStatusFilter] = useState<FoodStatus | null>(null);
   const [isAscending, setIsAscending] = useState(true);
 
   // 필터링 및 정렬 로직 (성능을 위해 useMemo 사용)
   const sortedAndFilteredFoods = useMemo(() => {
-    let result = MOCK_FOODS.filter((food) => {
+    if (!foodStatusData?.data) return [];
+
+    // 전체를 하나의 배열로
+    const allFoods = Object.values(foodStatusData.data).flat();
+
+    let result = allFoods.filter((food) => {
       // 카테고리 필터
       const matchesTab =
         currentTab === "전체" ||
@@ -123,22 +58,39 @@ export function HomeScreen() {
 
     // 정렬 로직 (유통기한 순)
     return result.sort((a, b) => {
-      return isAscending
-        ? a.condition.daysLeft - b.condition.daysLeft
-        : b.condition.daysLeft - a.condition.daysLeft;
+      const diff = a.condition.daysLeft - b.condition.daysLeft;
+      return isAscending ? diff : -diff;
     });
-  }, [currentTab, statusFilter, isAscending]);
+  }, [foodStatusData, currentTab, statusFilter, isAscending]);
+
+  const currentFridgeName =
+    fridgeData?.data.find((f) => f.id === selectedFridgeId)?.name || "냉장고";
+
+  if (isFridgeLoading || isFoodLoading) {
+    return (
+      <YStack f={1} backgroundColor="$background">
+        <Header />
+        <HomeSkeleton />
+      </YStack>
+    );
+  }
+
   return (
     <YStack f={1} backgroundColor="$background">
-      <Header title={selectedFridge.name} showNotificationBell />
-
+      <Header title={currentFridgeName} showNotificationBell />
       <YStack gap="$5">
         <FridgeTabScroll
-          selectedId={selectedFridge.id}
-          onSelect={setSelectedFridge}
+          selectedId={selectedFridgeId}
+          onSelect={(fridge) => setSelectedFridgeId(fridge.id)}
+          data={fridgeData?.data}
         />
         <Expiry
           activeStatus={statusFilter}
+          counts={{
+            RED: foodStatusData?.data.RED?.length || 0,
+            YELLOW: foodStatusData?.data.YELLOW?.length || 0,
+            GREEN: foodStatusData?.data.GREEN?.length || 0,
+          }}
           onStatusChange={(status) =>
             setStatusFilter((prev) => (prev === status ? null : status))
           }

@@ -3,7 +3,7 @@ import { Card, Separator, XStack } from "tamagui";
 import { ExpiryProps } from "../../types";
 import { StatusItem } from "./StatusItem";
 
-export function Expiry({ activeStatus, onStatusChange }: ExpiryProps) {
+export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
   return (
     <Card
       elevate
@@ -17,7 +17,7 @@ export function Expiry({ activeStatus, onStatusChange }: ExpiryProps) {
         <StatusItem
           icon={<AlertCircle size={14} color="$warning" />}
           label="임박"
-          count="3"
+          count={counts.RED.toString()}
           sub="10일 이내"
           color="$warning"
           onPress={() => onStatusChange("RED")}
@@ -27,7 +27,7 @@ export function Expiry({ activeStatus, onStatusChange }: ExpiryProps) {
         <StatusItem
           icon={<AlertTriangle size={14} color="$alert" />}
           label="주의"
-          count="6"
+          count={counts.YELLOW.toString()}
           sub="20일 이내"
           color="$alert"
           onPress={() => onStatusChange("YELLOW")}
@@ -37,7 +37,7 @@ export function Expiry({ activeStatus, onStatusChange }: ExpiryProps) {
         <StatusItem
           icon={<CheckCircle size={14} color="$success" />}
           label="양호"
-          count="12"
+          count={counts.GREEN.toString()}
           sub="양호"
           color="$success"
           onPress={() => onStatusChange("GREEN")}

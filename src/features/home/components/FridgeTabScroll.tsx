@@ -1,16 +1,11 @@
-import { Fridge } from "@/shared/types/fridge";
 import { Plus } from "@tamagui/lucide-icons";
 import { Button, ScrollView, Text, XStack } from "tamagui";
 import { FridgeTabScrollProps } from "../types";
 
-const MOCK_REFRIGERATORS: Fridge[] = [
-  { id: 1, name: "우리집 냉장고", role: "OWNER", isOwner: true },
-  { id: 2, name: "사무실", role: "MEMBER", isOwner: false },
-  { id: 3, name: "기숙사", role: "OWNER", isOwner: true },
-];
 export function FridgeTabScroll({
   selectedId,
   onSelect,
+  data = [],
 }: FridgeTabScrollProps) {
   return (
     <ScrollView
@@ -19,7 +14,7 @@ export function FridgeTabScroll({
       contentContainerStyle={{ paddingHorizontal: 16 }}
     >
       <XStack gap="$2" ai="center" backgroundColor="$background">
-        {MOCK_REFRIGERATORS.map((fridge) => {
+        {data.map((fridge) => {
           const isActive = selectedId === fridge.id;
           return (
             <Button
