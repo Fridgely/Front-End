@@ -3,6 +3,11 @@ import { FoodItem, FoodStatus } from "@/shared/types/food";
 import { Fridge } from "@/shared/types/fridge";
 
 interface ExpiryProps {
+  counts: {
+    RED: number;
+    YELLOW: number;
+    GREEN: number;
+  };
   activeStatus: FoodStatus | null;
   onStatusChange: (status: FoodStatus) => void;
 }
@@ -18,8 +23,10 @@ interface StatusItemProps {
 }
 
 interface FridgeTabScrollProps {
-  selectedId: number;
+  selectedId: number | null;
   onSelect: (fridge: Fridge) => void;
+
+  data?: Fridge[];
 }
 
 interface FoodListItemProps {
