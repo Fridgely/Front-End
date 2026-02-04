@@ -31,9 +31,24 @@ describe("useFoodStatusQuery 테스트", () => {
     const mockData = {
       result: "SUCCESS",
       data: {
-        black: [{ id: 1, name: "우유", condition: { foodStatus: "GREEN" } }],
-        red: [],
-        yellow: [],
+        BLACK: [
+          {
+            id: 1,
+            name: "우유",
+            categoryName: "유제품",
+            imageURL: "",
+            quantity: { amount: 1, unit: "L" },
+            condition: {
+              expirationDate: "2026-02-10",
+              storageType: "REFRIGERATOR",
+              foodStatus: "BLACK",
+              daysLeft: 5,
+            },
+          },
+        ],
+        RED: [],
+        YELLOW: [],
+        GREEN: [],
       },
     };
 

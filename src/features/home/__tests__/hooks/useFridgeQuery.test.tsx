@@ -31,8 +31,8 @@ describe("useFridgeQuery 테스트", () => {
     const mockData = {
       result: "SUCCESS",
       data: [
-        { id: 1, name: "우리집 냉장고", role: "OWNER" },
-        { id: 2, name: "자취방 냉장고", role: "MEMBER" },
+        { id: 1, name: "우리집 냉장고", role: "OWNER", isOwner: true },
+        { id: 2, name: "자취방 냉장고", role: "MEMBER", isOwner: false },
       ],
     };
 
