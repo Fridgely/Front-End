@@ -34,8 +34,13 @@ export const tokens = createTokens({
     gray12: "#111827",
 
     success: "#22C55E",
+    successBackground: "#F2F9F2",
     warning: "#EF4444",
+    warningBackground: "#FCF1F1",
     alert: "#F97316",
+    alertBackground: "#FFF8ED",
+    expired: "#1E293B",
+    expiredBackground: "#F1F5F9",
   },
 
   space: {

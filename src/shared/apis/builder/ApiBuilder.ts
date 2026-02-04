@@ -77,9 +77,12 @@ class ApiBuilder<T = any, R = any> {
 export function useApiQuery<T, R, TError = Error>(
   apiBuilder: ApiBuilder<T, R>,
   queryKey: QueryKey,
-  options?: UseQueryOptions<R, TError, R>
+  options?: Omit<
+    UseQueryOptions<R, TError, R, QueryKey>,
+    "queryKey" | "queryFn"
+  >,
 ) {
-  return useQuery<R, TError>({
+  return useQuery<R, TError, R, QueryKey>({
     queryKey,
     queryFn: apiBuilder.getQueryFn(),
     ...options,
@@ -88,7 +91,7 @@ export function useApiQuery<T, R, TError = Error>(
 
 export function useApiMutation<T, R, TError = Error>(
   apiBuilder: ApiBuilder<T, R>,
-  options?: UseMutationOptions<R, TError, T>
+  options?: UseMutationOptions<R, TError, T>,
 ) {
   return useMutation<R, TError, T>({
     mutationFn: apiBuilder.getMutationFn(),
