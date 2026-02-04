@@ -1,4 +1,9 @@
-import { AlertCircle, AlertTriangle, CheckCircle } from "@tamagui/lucide-icons";
+import {
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+} from "@tamagui/lucide-icons";
 import { Card, Separator, XStack } from "tamagui";
 import { ExpiryProps } from "../../types";
 import { StatusItem } from "./StatusItem";
@@ -14,6 +19,16 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
       mx="$4"
     >
       <XStack jc="space-around" ai="center">
+        <StatusItem
+          icon={<XCircle size={14} color="$expired" />}
+          label="만료"
+          count={counts.BLACK.toString()}
+          sub="만료"
+          color="$expired"
+          onPress={() => onStatusChange("BLACK")}
+          opacity={activeStatus && activeStatus !== "BLACK" ? 0.3 : 1}
+        />
+        <Separator vertical height={60} opacity={1} />
         <StatusItem
           icon={<AlertCircle size={14} color="$warning" />}
           label="임박"

@@ -4,6 +4,7 @@ import { Fridge } from "@/shared/types/fridge";
 
 interface ExpiryProps {
   counts: {
+    BLACK: number;
     RED: number;
     YELLOW: number;
     GREEN: number;

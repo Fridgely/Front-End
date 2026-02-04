@@ -90,6 +90,7 @@ export function HomeScreen() {
         <Expiry
           activeStatus={statusFilter}
           counts={{
+            BLACK: foodStatusData?.data?.BLACK?.length || 0,
             RED: foodStatusData?.data?.RED?.length || 0,
             YELLOW: foodStatusData?.data?.YELLOW?.length || 0,
             GREEN: foodStatusData?.data?.GREEN?.length || 0,
@@ -121,7 +122,6 @@ export function HomeScreen() {
           renderItem={({ item }) => <FoodListItem item={item} />}
           keyExtractor={(item) => item.id.toString()}
           //@ts-ignore
-          estimatedItemSize={120}
           contentContainerStyle={{ paddingBottom: 40 }}
           ListEmptyComponent={
             <YStack ai="center" jc="center" py="$10">

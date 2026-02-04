@@ -12,12 +12,14 @@ const FOOD_STATUS_LABELS: Record<FoodStatus, string> = {
   GREEN: "$success",
   YELLOW: "$alert",
   RED: "$warning",
+  BLACK: "$expired",
 } as const;
 
 const FOOD_STATUS_BG_COLORS: Record<FoodStatus, string> = {
   GREEN: "$successBackground",
   YELLOW: "$alertBackground",
   RED: "$warningBackground",
+  BLACK: "$expiredBackground",
 } as const;
 
 export {

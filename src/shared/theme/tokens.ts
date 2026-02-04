@@ -39,6 +39,8 @@ export const tokens = createTokens({
     warningBackground: "#FCF1F1",
     alert: "#F97316",
     alertBackground: "#FFF8ED",
+    expired: "#1E293B",
+    expiredBackground: "#F1F5F9",
   },
 
   space: {
