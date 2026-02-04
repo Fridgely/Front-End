@@ -1,11 +1,11 @@
-type FoodStatus = "GREEN" | "YELLOW" | "RED";
+type FoodStatus = "BLACK" | "GREEN" | "YELLOW" | "RED";
 type StorageType = "REFRIGERATOR" | "FREEZER" | "ROOM_TEMPERATURE";
 
 interface FoodItem {
   id: number;
   name: string;
   categoryName: string;
-  imageURL: string;
+  imageURL?: string;
   quantity: {
     amount: number;
     unit: string;
