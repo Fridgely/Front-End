@@ -21,8 +21,9 @@ export default function TabLayout() {
           tabBarActiveTintColor: activeColor,
           tabBarInactiveTintColor: inactiveColor,
           tabBarLabelStyle: {
+            fontFamily: "GyeonggiTitle-Bold",
             fontSize: 12,
-            fontWeight: "600",
+            fontWeight: "700",
             marginTop: -2,
           },
           tabBarStyle: {

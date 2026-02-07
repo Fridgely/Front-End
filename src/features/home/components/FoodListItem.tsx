@@ -3,7 +3,7 @@ import {
   FOOD_STATUS_LABELS,
 } from "@/shared/constants/food";
 import { getExpiryLabel } from "@/shared/utils/date";
-import { Card, Text, View, XStack, YStack } from "tamagui";
+import { Card, Heading, Text, View, XStack, YStack } from "tamagui";
 import { FoodListItemProps } from "../types";
 
 export function FoodListItem({ item }: FoodListItemProps) {
@@ -37,9 +37,9 @@ export function FoodListItem({ item }: FoodListItemProps) {
         </View>
 
         <YStack f={1} gap="$1">
-          <Text fontSize="$6" fontWeight="700">
+          <Heading fontSize="$4" fontWeight="700">
             {item.name}
-          </Text>
+          </Heading>
           <Text
             fontSize="$3"
             color="$gray10"

@@ -1,25 +1,24 @@
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
-import { Stack } from "expo-router";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { TamaguiProvider } from "tamagui";
-import Toast from "react-native-toast-message";
 import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import { TamaguiProvider } from "tamagui";
 
 import {
   useAuthActions,
   useIsAuthLoaded,
-  useIsLoggedIn,
 } from "@/features/auth/store/useAuthStore";
 import AnimatedSplashScreen from "@/shared/components/AnimatedSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
-import { useColorScheme } from "@/shared/hooks/use-color-scheme";
 import { queryClient } from "@/shared/lib/queryClient";
 import { SessionProvider } from "@/shared/providers/SessionProvider";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
+import { useFonts } from "expo-font";
 import config from "../tamagui.config";
 
 if (__DEV__) {
@@ -37,18 +36,25 @@ export default function RootLayout() {
   const isLoaded = useIsAuthLoaded();
   const { hydrate } = useAuthActions();
   const [animationFinished, setAnimationFinished] = useState(false);
+  const [fontsLoaded, fontError] = useFonts({
+    "GyeonggiBatang-Bold": require("../assets/fonts/GyeonggiBatang-Bold.otf"),
+    "GyeonggiTitle-Bold": require("../assets/fonts/GyeonggiTitle-Bold.otf"),
+    BMJUA: require("../assets/fonts/BMJUA.otf"),
+  });
 
   useEffect(() => {
     hydrate();
   }, []);
 
+  const isAppReady = (isLoaded && fontsLoaded) || !!fontError;
+
   const onLayoutRootView = useCallback(async () => {
-    if (isLoaded) {
+    if (isAppReady) {
       await SplashScreen.hideAsync().catch(() => {});
     }
-  }, [isLoaded]);
+  }, [isAppReady]);
 
-  if (!isLoaded || !animationFinished) {
+  if (!isAppReady || !animationFinished) {
     return (
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
         <AnimatedSplashScreen

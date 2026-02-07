@@ -143,8 +143,8 @@ export function SignupScreen() {
               color="$white"
               h={56}
               br="$3"
-              fontWeight="800"
-              fontSize={18}
+              fontWeight="700"
+              fontSize="$4"
               pressStyle={{ opacity: 0.8, scale: 0.98 }}
               onPress={handleSubmit(onSignUpClick)}
               disabled={!isValid || isSignupPending}

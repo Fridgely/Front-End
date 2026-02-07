@@ -2,7 +2,15 @@ import { LogIn } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, H2, Paragraph, Spacer, Text, XStack, YStack } from "tamagui";
+import {
+  Button,
+  Heading,
+  Paragraph,
+  Spacer,
+  Text,
+  XStack,
+  YStack,
+} from "tamagui";
 
 import { useForm } from "react-hook-form";
 import { AuthInput } from "../components/AuthInput";
@@ -44,11 +52,17 @@ export function LoginScreen() {
       >
         <YStack f={1} px="$6" jc="center" bc="$gray1">
           <YStack mb={40}>
-            <H2 fontWeight="900" color="$primary" fontSize={32} ls={-1}>
+            <Heading fontWeight="700" color="$primary" fontSize={30} lh="$6">
               Fridgely
-            </H2>
+            </Heading>
             <Spacer size="$2" />
-            <Paragraph color="$gray10" fontSize={16} lh={24}>
+            <Paragraph
+              fontFamily="$baemin"
+              fontWeight="400"
+              color="$gray10"
+              fontSize="$3"
+              lh={24}
+            >
               스마트한 냉장고 관리의 시작.{"\n"}
               버려지는 식재료 없이 신선하게 유지하세요.
             </Paragraph>
@@ -99,8 +113,8 @@ export function LoginScreen() {
               color="$white"
               h={56}
               br="$3"
-              fontWeight="800"
-              fontSize={18}
+              fontWeight="700"
+              fontSize="$4"
               icon={LogIn}
               pressStyle={{ opacity: 0.8, scale: 0.98 }}
               onPress={handleSubmit(handleLoginClick)}
@@ -112,13 +126,19 @@ export function LoginScreen() {
 
           <YStack mt="$2" ai="center" gap="$3">
             <XStack gap="$2" ai="center">
-              <Text color="$gray10" fontSize={15}>
+              <Text
+                fontFamily="$baemin"
+                fontWeight="400"
+                color="$gray10"
+                fontSize="$3"
+              >
                 계정이 없으신가요?
               </Text>
               <Text
+                fontFamily="$baemin"
                 color="$primary"
-                fontWeight="800"
-                fontSize={15}
+                fontWeight="700"
+                fontSize="$3"
                 onPress={() => router.push("/signup")}
               >
                 회원가입

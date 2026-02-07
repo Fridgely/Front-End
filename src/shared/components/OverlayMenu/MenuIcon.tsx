@@ -48,8 +48,8 @@ export function MenuIcon({
       </Circle>
       <Text
         color="white"
-        fontSize={13}
-        fontWeight="bold"
+        fontSize="$3"
+        fontWeight="400"
         textAlign="center"
         textShadowColor="rgba(0,0,0,0.5)"
         textShadowRadius={4}
@@ -58,7 +58,7 @@ export function MenuIcon({
         {label}
       </Text>
       {isDisabled && (
-        <Text color="$warning" position="absolute" bottom={-13} fontSize={10}>
+        <Text color="$warning" position="absolute" bottom={-13} fontSize={12}>
           준비중
         </Text>
       )}

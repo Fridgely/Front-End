@@ -29,6 +29,8 @@ export function FridgeTabScroll({
               pressStyle={{ scale: 0.9 }}
             >
               <Text
+                fontFamily="$baemin"
+                fontSize="$3"
                 color={isActive ? "white" : "$gray"}
                 fontWeight={isActive ? "700" : "400"}
               >
@@ -45,6 +47,8 @@ export function FridgeTabScroll({
           br="$4"
           px="$3"
           chromeless
+          fontFamily="$baemin"
+          fontSize="$3"
         >
           추가
         </Button>

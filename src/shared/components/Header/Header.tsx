@@ -2,7 +2,7 @@ import { Bell, ChevronLeft } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, H2, View, XStack } from "tamagui";
+import { Button, Heading, View, XStack } from "tamagui";
 import { HeaderProps } from "./Header.types";
 export function Header({
   title = "Fridgely",
@@ -31,21 +31,21 @@ export function Header({
               paddingLeft={0}
             />
           ) : (
-            <H2
-              fontSize="$6"
-              fontWeight="900"
+            <Heading
+              size="$6"
+              fontWeight="700"
               color="$mainText"
               letterSpacing={-0.5}
             >
               {title}
-            </H2>
+            </Heading>
           )}
         </XStack>
 
         {showBackButton && (
-          <H2 fontSize="$5" fontWeight="700" color="$mainText">
+          <Heading size="$5" fontWeight="700" color="$mainText">
             {title}
-          </H2>
+          </Heading>
         )}
 
         <XStack position="absolute" right="$4">

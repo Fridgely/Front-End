@@ -1,4 +1,4 @@
-import { Text, XStack, YStack } from "tamagui";
+import { Heading, Text, XStack, YStack } from "tamagui";
 import { StatusItemProps } from "../../types";
 
 export function StatusItem({
@@ -20,14 +20,14 @@ export function StatusItem({
     >
       <XStack ai="center" gap="$1">
         {icon}
-        <Text color={color} fontWeight="700" fontSize={14}>
+        <Heading color={color} fontWeight="700" fontSize="$4">
           {label}
-        </Text>
+        </Heading>
       </XStack>
-      <Text fontSize="$5" fontWeight="800" py="$1">
+      <Text fontSize="$5" fontWeight="700" py="$1">
         {count}
       </Text>
-      <Text fontSize={10} color="$gray10">
+      <Text fontFamily="$baemin" fontSize={10} fontWeight="400" color="$gray10">
         {sub}
       </Text>
     </YStack>
