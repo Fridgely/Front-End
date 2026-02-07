@@ -17,8 +17,9 @@ export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
               style={{ position: "relative" }}
             >
               <Text
+                fontFamily="$baemin"
                 fontSize="$5"
-                fontWeight={isActive ? "700" : "400"}
+                fontWeight="700"
                 color={isActive ? "$secondary" : "$gray"}
               >
                 {tab}

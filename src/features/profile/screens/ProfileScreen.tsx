@@ -11,9 +11,7 @@ import {
   Avatar,
   Button,
   Card,
-  H2,
-  H3,
-  Paragraph,
+  Heading,
   ScrollView,
   Text,
   XStack,
@@ -42,17 +40,19 @@ export function ProfileScreen() {
               <Avatar.Fallback bc="$blue10" />
             </Avatar>
             <YStack alignItems="center">
-              <H2 fontSize="$4" fontWeight="900">
+              <Heading size="$5" fontWeight="700">
                 Fridgely님
-              </H2>
-              <Paragraph color="$gray">userId</Paragraph>
+              </Heading>
+              <Text fontSize="$3" fontWeight="400" color="$gray">
+                userId
+              </Text>
             </YStack>
             <Button
               size="$4"
               borderRadius="$4"
               backgroundColor="$iconBackground"
               color="$primary"
-              fontWeight="500"
+              fontWeight="400"
               mt="$2"
             >
               프로필 수정
@@ -73,9 +73,9 @@ export function ProfileScreen() {
                 <Text color="$gray" fontSize="$4">
                   등록한 식품
                 </Text>
-                <H3 color="$mainText" fontSize="$5" fontWeight="800">
+                <Heading color="$mainText" fontSize="$5" fontWeight="700">
                   42개
-                </H3>
+                </Heading>
               </YStack>
             </Card>
           </XStack>
@@ -104,10 +104,10 @@ export function ProfileScreen() {
           </YStack>
 
           <YStack alignItems="center" gap="$1" marginTop="$4">
-            <Text color="$gray10" fontSize="$2">
+            <Text color="$gray10" fontSize="$3">
               Fridgely App
             </Text>
-            <Text color="$gray10" fontSize="$2">
+            <Text color="$gray10" fontSize="$3">
               버전 1.0.0
             </Text>
           </YStack>

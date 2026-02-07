@@ -32,7 +32,12 @@ export function Menu({
           <View p="$2" borderRadius="$3" backgroundColor={backgroundColor}>
             {clonedIcon}
           </View>
-          <Text fontSize="$4" fontWeight="600" color={titleColor}>
+          <Text
+            fontFamily="$baemin"
+            fontSize="$4"
+            fontWeight="400"
+            color={titleColor}
+          >
             {title}
           </Text>
         </XStack>
