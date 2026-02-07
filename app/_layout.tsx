@@ -46,7 +46,7 @@ export default function RootLayout() {
     hydrate();
   }, []);
 
-  const isAppReady = isLoaded && fontsLoaded;
+  const isAppReady = (isLoaded && fontsLoaded) || !!fontError;
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
