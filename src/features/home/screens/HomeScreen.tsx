@@ -43,6 +43,7 @@ export function HomeScreen() {
     const allFoods = Object.values(foodStatusData.data).flat();
 
     let result = allFoods.filter((food) => {
+      if (!food || !food.condition) return false;
       // 카테고리 필터
       const matchesTab =
         currentTab === "전체" ||
