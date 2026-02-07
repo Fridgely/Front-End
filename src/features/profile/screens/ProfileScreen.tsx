@@ -73,7 +73,7 @@ export function ProfileScreen() {
                 <Text color="$gray" fontSize="$4">
                   등록한 식품
                 </Text>
-                <Heading color="$mainText" fontSize="$5" fontWeight="700">
+                <Heading color="$mainText" size="$5" fontWeight="700">
                   42개
                 </Heading>
               </YStack>
