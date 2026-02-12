@@ -30,6 +30,9 @@ export const tokens = createTokens({
     gray1: "#F9FAFB",
     gray2: "#F3F4F6",
     gray3: "#E5E7EB",
+    gray4: "#D1D5DB",
+    gray5: "#9CA3AF",
+    gray6: "#6B7280",
     gray10: "#6B7280",
     gray12: "#111827",
 
@@ -73,6 +76,8 @@ export const tokens = createTokens({
     2: 8,
     3: 12,
     4: 16,
+    5: 20,
+    6: 24,
   },
 
   zIndex: {
