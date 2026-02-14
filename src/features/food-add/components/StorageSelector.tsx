@@ -12,8 +12,8 @@ const LabelText = styled(Text, {
 });
 
 const STORAGE_OPTIONS: { label: string; value: StorageType }[] = [
-  { label: "냉장", value: "REFRIGERATOR" },
-  { label: "냉동", value: "FREEZER" },
+  { label: "냉장", value: "REFRIGERATION" },
+  { label: "냉동", value: "FROZEN" },
   { label: "실온", value: "ROOM_TEMPERATURE" },
 ];
 

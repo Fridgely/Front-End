@@ -1,8 +1,8 @@
 import { FoodStatus, StorageType } from "../types/food";
 
 const STORAGE_TYPE_LABELS: Record<StorageType, string> = {
-  REFRIGERATOR: "냉장",
-  FREEZER: "냉동",
+  REFRIGERATION: "냉장",
+  FROZEN: "냉동",
   ROOM_TEMPERATURE: "실온",
 } as const;
 

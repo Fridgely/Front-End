@@ -53,8 +53,8 @@ export function HomeScreen() {
       const matchesTab =
         currentTab === "전체" ||
         (currentTab === "냉장" &&
-          food.condition.storageType === "REFRIGERATOR") ||
-        (currentTab === "냉동" && food.condition.storageType === "FREEZER") ||
+          food.condition.storageType === "REFRIGERATION") ||
+        (currentTab === "냉동" && food.condition.storageType === "FROZEN") ||
         (currentTab === "실온" &&
           food.condition.storageType === "ROOM_TEMPERATURE");
 

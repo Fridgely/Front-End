@@ -1,5 +1,5 @@
 type FoodStatus = "BLACK" | "GREEN" | "YELLOW" | "RED";
-type StorageType = "REFRIGERATOR" | "FREEZER" | "ROOM_TEMPERATURE";
+type StorageType = "REFRIGERATION" | "FROZEN" | "ROOM_TEMPERATURE";
 
 interface FoodItem {
   id: number;
