@@ -14,7 +14,7 @@ import { FoodFormValues } from "../types";
 
 export function FoodAddScreen() {
   const selectedFridgeId = useSelectedFridgeId();
-  const { mutate: addFood } = useAddFoodMutation(selectedFridgeId!);
+  const { mutate: addFood, isPending } = useAddFoodMutation(selectedFridgeId!);
   const { control, handleSubmit } = useForm<FoodFormValues>({
     defaultValues: {
       name: "",
@@ -52,6 +52,7 @@ export function FoodAddScreen() {
           size="$6"
           br="$3"
           onPress={handleSubmit(onSubmit)}
+          disabled={isPending}
         >
           <Text
             color="$mainText"
