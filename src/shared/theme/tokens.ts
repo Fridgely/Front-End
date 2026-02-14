@@ -32,7 +32,6 @@ export const tokens = createTokens({
     gray3: "#E5E7EB",
     gray4: "#D1D5DB",
     gray5: "#9CA3AF",
-    gray6: "#6B7280",
     gray10: "#6B7280",
     gray12: "#111827",
 
