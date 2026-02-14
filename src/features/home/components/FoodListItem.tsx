@@ -3,6 +3,7 @@ import {
   FOOD_STATUS_LABELS,
 } from "@/shared/constants/food";
 import { getExpiryLabel } from "@/shared/utils/date";
+import { getUnitLabel } from "@/shared/utils/food";
 import { Card, Heading, Text, View, XStack, YStack } from "tamagui";
 import { FoodListItemProps } from "../types";
 
@@ -11,6 +12,7 @@ export function FoodListItem({ item }: FoodListItemProps) {
   const statusColor = FOOD_STATUS_LABELS[foodStatus];
   const statusBgColor = FOOD_STATUS_BG_COLORS[foodStatus];
   const expiryLabel = getExpiryLabel(expirationDate, daysLeft);
+  const unitLabel = getUnitLabel(item.quantity.unit);
 
   return (
     <Card
@@ -43,7 +45,7 @@ export function FoodListItem({ item }: FoodListItemProps) {
           <Text
             fontSize="$3"
             color="$gray10"
-          >{`${item.quantity.amount} ${item.quantity.unit} • ${item.categoryName}`}</Text>
+          >{`${item.quantity.amount} ${unitLabel} • ${item.categoryName}`}</Text>
         </YStack>
 
         <YStack ai="flex-end" gap="$1">

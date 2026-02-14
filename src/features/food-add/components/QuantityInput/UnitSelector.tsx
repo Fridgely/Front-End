@@ -1,3 +1,4 @@
+import { UNIT_OPTIONS } from "@/shared/constants/food";
 import { ChevronDown } from "@tamagui/lucide-icons";
 import React, { useState } from "react";
 import { Modal } from "react-native";
@@ -27,7 +28,9 @@ const Overlay = styled(View, {
 
 export const UnitSelector = ({ value, onChange }: any) => {
   const [show, setShow] = useState(false);
-  const units = ["개", "팩", "병", "봉지", "g", "kg", "ml", "L"];
+
+  const currentLabel =
+    UNIT_OPTIONS.find((opt) => opt.value === value)?.label || value;
 
   return (
     <>
@@ -40,7 +43,7 @@ export const UnitSelector = ({ value, onChange }: any) => {
         iconAfter={<ChevronDown size={16} color="$gray9" />}
       >
         <Text fontSize="$4" color="$mainText" fontFamily="$baemin">
-          {value}
+          {value.label || currentLabel}
         </Text>
       </Button>
 
@@ -85,21 +88,21 @@ export const UnitSelector = ({ value, onChange }: any) => {
                   </Text>
 
                   <XStack flexWrap="wrap" gap="$2">
-                    {units.map((unit) => (
+                    {UNIT_OPTIONS.map((option) => (
                       <Button
-                        key={unit}
+                        key={option.value}
                         onPress={() => {
-                          onChange(unit);
+                          onChange(option.value);
                           setShow(false);
                         }}
-                        bg={value === unit ? "$primary" : "$gray3"}
+                        bg={value === option.value ? "$primary" : "$gray3"}
                         br="$4"
                         px="$4"
                         h={45}
                         pressStyle={{ scale: 0.95 }}
                       >
                         <Text color="$mainText" fontWeight="700">
-                          {unit}
+                          {option.label}
                         </Text>
                       </Button>
                     ))}

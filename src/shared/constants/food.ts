@@ -8,6 +8,14 @@ const STORAGE_TYPE_LABELS: Record<StorageType, string> = {
 
 const STORAGE_TABS = ["전체", ...Object.values(STORAGE_TYPE_LABELS)];
 
+const UNIT_OPTIONS = [
+  { label: "개", value: "PIECE" },
+  { label: "ml", value: "ML" },
+  { label: "L", value: "L" },
+  { label: "g", value: "G" },
+  { label: "kg", value: "KG" },
+] as const;
+
 const FOOD_STATUS_LABELS: Record<FoodStatus, string> = {
   GREEN: "$success",
   YELLOW: "$alert",
@@ -27,4 +35,5 @@ export {
   FOOD_STATUS_LABELS,
   STORAGE_TABS,
   STORAGE_TYPE_LABELS,
+  UNIT_OPTIONS,
 };
