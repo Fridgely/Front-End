@@ -30,24 +30,29 @@ export const DateSelectModal = ({
   value,
   onChange,
 }: DateSelectModalProps) => {
+  const safeDate = React.useMemo(() => {
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? new Date() : date;
+  }, [value]);
+
+  // 2. 서버 포맷 변환 함수
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === "android") {
-      // 안드로이드는 사용자가 날짜를 선택(set)하거나 취소(dismissed)하면 바로 종료
+      // 안드로이드는 사용자가 날짜를 선택하거나 취소하면 바로 종료
       onClose();
       if (event.type === "set" && selectedDate) {
         onChange(selectedDate);
       }
     } else {
-      // iOS는 '확인' 버튼을 누를 때 처리하므로 여기서는 값만 업데이트 (필요 시)
+      // iOS는 '확인' 버튼을 누를 때 처리
       if (selectedDate) onChange(selectedDate);
     }
   };
 
-  // 안드로이드일 경우: 모달/시트 없이 네이티브 피커만 띄움
   if (Platform.OS === "android") {
     return show ? (
       <DateTimePicker
-        value={value && !isNaN(value.getTime()) ? value : new Date()}
+        value={safeDate}
         mode="date"
         display="default" // 안드로이드 표준 달력
         onChange={handleDateChange}
@@ -104,7 +109,7 @@ export const DateSelectModal = ({
                 </XStack>
                 <View px="$4" py="$2">
                   <DateTimePicker
-                    value={value}
+                    value={safeDate}
                     mode="date"
                     display="spinner"
                     locale="ko-KR"

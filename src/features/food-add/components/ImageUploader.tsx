@@ -20,7 +20,7 @@ export const ImageUploader = ({
 
     // NOTE: 이미지 선택기 (아래 옵션들 수정 예정)
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // 이미지만 선택 가능
+      mediaTypes: "images",
       allowsEditing: true, // 크롭 등 편집 허용
       aspect: [1, 1], // 1:1 비율로 제한
       quality: 1, // 화질 설정 (0~1)

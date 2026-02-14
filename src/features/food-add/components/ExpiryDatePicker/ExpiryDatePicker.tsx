@@ -32,7 +32,7 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
       control={control}
       name="expirationDate"
       // 앱 구동 시 초기값을 오늘 날짜 ISO 스트링으로 설정
-      defaultValue={new Date().toISOString()}
+      defaultValue={new Date()}
       render={({ field: { value, onChange } }) => (
         <>
           <XStack ai="center" justifyContent="space-between">

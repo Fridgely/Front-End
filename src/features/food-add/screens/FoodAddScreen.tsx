@@ -1,37 +1,33 @@
 import { Header } from "@/shared/components/Header/Header";
+import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button, ScrollView, Text, YStack } from "tamagui";
-import { CategorySelector } from "../components/CategorySelecotr";
+import { CategorySelector } from "../components/CategorySelector";
 import { ExpiryDatePicker } from "../components/ExpiryDatePicker/ExpiryDatePicker";
 import { FoodNameInput } from "../components/FoodNameInput";
 import { ImageUploader } from "../components/ImageUploader";
 import { QuantityInput } from "../components/QuantityInput/QuantityInput";
 import { StorageSelector } from "../components/StorageSelector";
+import { useAddFoodMutation } from "../hooks/mutations/useAddFoodMutation";
 import { FoodFormValues } from "../types";
 
 export function FoodAddScreen() {
+  const selectedFridgeId = useSelectedFridgeId();
+  const { mutate: addFood } = useAddFoodMutation(selectedFridgeId!);
   const { control, handleSubmit } = useForm<FoodFormValues>({
     defaultValues: {
-      imageURL: null,
       name: "",
-      categoryId: 1,
-      storageType: "REFRIGERATOR",
-      expirationDate: "2023.12.31",
+      categoryId: 0,
+      storageType: "REFRIGERATION",
+      expirationDate: new Date(),
       amount: 1,
-      unit: "개",
+      unit: "PIECE",
     },
   });
 
-  const tempCategories = [
-    { id: 1, name: "유제품", isDefaultType: true },
-    { id: 2, name: "육류", isDefaultType: true },
-    { id: 3, name: "채소", isDefaultType: true },
-    { id: 4, name: "과일", isDefaultType: true },
-  ];
-
   const onSubmit = (data: FoodFormValues) => {
-    console.log("최종 제출 데이터:", data);
+    addFood(data);
   };
 
   return (
@@ -41,7 +37,9 @@ export function FoodAddScreen() {
         <YStack p="$4" gap="$5" pb="$10">
           <ImageUploader control={control} />
           <FoodNameInput control={control} />
-          <CategorySelector control={control} categories={tempCategories} />
+          {selectedFridgeId !== null && (
+            <CategorySelector control={control} fridgeId={selectedFridgeId} />
+          )}
           <StorageSelector control={control} />
           <ExpiryDatePicker control={control} />
           <QuantityInput control={control} />

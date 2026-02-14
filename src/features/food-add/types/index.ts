@@ -2,12 +2,12 @@ import type { StorageType } from "@/shared/types/food";
 import { Control } from "react-hook-form";
 
 interface FoodFormValues {
-  imageURL: string | null;
+  imageURL?: string;
   name: string;
   categoryId: number;
   amount: number;
   unit: string;
-  expirationDate: string;
+  expirationDate: Date;
   storageType: StorageType;
   description?: string;
 }
