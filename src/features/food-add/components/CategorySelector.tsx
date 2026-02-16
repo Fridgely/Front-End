@@ -2,18 +2,14 @@ import { Plus } from "@tamagui/lucide-icons";
 import React from "react";
 import { Controller } from "react-hook-form";
 import { Button, ScrollView, Text, XStack, YStack, styled } from "tamagui";
-import { useCategoryQuery } from "../hooks/queries/useCategoryQuery";
 import { CategorySelectorProps } from "../types";
 
 const LabelText = styled(Text, { fontSize: 18, fontWeight: "700", mb: "$2" });
 
 export const CategorySelector = ({
   control,
-  fridgeId,
+  categories,
 }: CategorySelectorProps) => {
-  const { data: categoryData } = useCategoryQuery(fridgeId);
-  const categories = categoryData?.data || [];
-
   return (
     <Controller
       control={control}
@@ -21,7 +17,6 @@ export const CategorySelector = ({
       render={({ field: { onChange, value } }) => (
         <YStack py="$2">
           <LabelText>카테고리</LabelText>
-
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <XStack gap="$2" flexWrap="nowrap">
               {categories.map((cat) => (

@@ -18,9 +18,19 @@ export const FoodNameInput = ({
   <Controller
     control={control}
     name="name"
-    render={({ field: { onChange, value } }) => (
+    rules={{
+      required: "식품명을 입력해주세요.",
+      validate: (value) => value?.trim().length > 0 || "식품명을 입력해주세요.",
+      maxLength: { value: 20, message: "최대 20자까지 입력할 수 있습니다." },
+    }}
+    render={({ field: { onChange, value }, fieldState: { error } }) => (
       <YStack>
         <LabelText>식품명</LabelText>
+        {error && (
+          <Text color="$warning" fontSize="$3" fontWeight="600" mb="$2">
+            {error.message}
+          </Text>
+        )}
         <Input
           h={50}
           value={value}

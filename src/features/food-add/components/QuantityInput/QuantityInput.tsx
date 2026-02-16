@@ -21,6 +21,11 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
           <Controller
             control={control}
             name="amount"
+            rules={{
+              required: "수량을 입력해주세요.",
+              validate: (value) =>
+                value > 0 || "수량은 1 이상이어야 합니다.",
+            }}
             render={({ field: { onChange, value } }) => (
               <>
                 <Button
@@ -50,6 +55,7 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
         <Controller
           control={control}
           name="unit"
+          rules={{ required: "단위를 선택해주세요." }}
           render={({ field: { value, onChange } }) => (
             <UnitSelector value={value} onChange={onChange} />
           )}

@@ -1,6 +1,6 @@
 import { Header } from "@/shared/components/Header/Header";
 import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button, ScrollView, Text, YStack } from "tamagui";
 import { CategorySelector } from "../components/CategorySelector";
@@ -10,12 +10,22 @@ import { ImageUploader } from "../components/ImageUploader";
 import { QuantityInput } from "../components/QuantityInput/QuantityInput";
 import { StorageSelector } from "../components/StorageSelector";
 import { useAddFoodMutation } from "../hooks/mutations/useAddFoodMutation";
+import { useCategoryQuery } from "../hooks/queries/useCategoryQuery";
 import { FoodFormValues } from "../types";
 
 export function FoodAddScreen() {
   const selectedFridgeId = useSelectedFridgeId();
+  const { data: categoryData } = useCategoryQuery(selectedFridgeId!);
+  const categories = categoryData?.data || [];
+
   const { mutate: addFood, isPending } = useAddFoodMutation(selectedFridgeId!);
-  const { control, handleSubmit } = useForm<FoodFormValues>({
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { isValid },
+  } = useForm<FoodFormValues>({
+    mode: "onChange",
     defaultValues: {
       name: "",
       categoryId: 0,
@@ -25,6 +35,13 @@ export function FoodAddScreen() {
       unit: "PIECE",
     },
   });
+
+  // 데이터 로드 시 첫 번째 값 설정
+  useEffect(() => {
+    if (categories.length > 0) {
+      setValue("categoryId", categories[0].id);
+    }
+  }, [categories, setValue]);
 
   const onSubmit = (data: FoodFormValues) => {
     addFood(data);
@@ -38,7 +55,7 @@ export function FoodAddScreen() {
           <ImageUploader control={control} />
           <FoodNameInput control={control} />
           {selectedFridgeId !== null && (
-            <CategorySelector control={control} fridgeId={selectedFridgeId} />
+            <CategorySelector control={control} categories={categories} />
           )}
           <StorageSelector control={control} />
           <ExpiryDatePicker control={control} />

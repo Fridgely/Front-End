@@ -23,7 +23,7 @@ interface FoodFormProps {
 }
 
 interface CategorySelectorProps extends FoodFormProps {
-  fridgeId: number;
+  categories: Category[];
 }
 
 interface ImageUploaderProps {
