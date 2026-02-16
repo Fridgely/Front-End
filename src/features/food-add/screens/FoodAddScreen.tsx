@@ -19,12 +19,7 @@ export function FoodAddScreen() {
   const categories = categoryData?.data || [];
 
   const { mutate: addFood, isPending } = useAddFoodMutation(selectedFridgeId!);
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { isValid },
-  } = useForm<FoodFormValues>({
+  const { control, handleSubmit, setValue } = useForm<FoodFormValues>({
     mode: "onChange",
     defaultValues: {
       name: "",

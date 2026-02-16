@@ -23,8 +23,7 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
             name="amount"
             rules={{
               required: "수량을 입력해주세요.",
-              validate: (value) =>
-                value > 0 || "수량은 1 이상이어야 합니다.",
+              validate: (value) => value > 0 || "수량은 1 이상이어야 합니다.",
             }}
             render={({ field: { onChange, value } }) => (
               <>
@@ -34,7 +33,7 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
                   br="$2"
                   bg="white"
                   icon={<Minus size={16} />}
-                  onPress={() => onChange(Math.max(0, value - 1))}
+                  onPress={() => onChange(Math.max(1, value - 1))}
                 />
                 <Text fontSize="$5" fontWeight="600" minWidth={20} ta="center">
                   {value}
