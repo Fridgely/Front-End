@@ -1,4 +1,8 @@
 import { Header } from "@/shared/components/Header/Header";
+import {
+  useFridgeActions,
+  useSelectedFridgeId,
+} from "@/shared/stores/useFridgeStore";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
@@ -15,7 +19,8 @@ import { FoodStatus } from "../types";
 export function HomeScreen() {
   const { data: fridgeData, isLoading: isFridgeLoading } = useFridgeQuery();
   // 첫번째 냉장고를 기본값으로 설정
-  const [selectedFridgeId, setSelectedFridgeId] = useState<number | null>(null);
+  const selectedFridgeId = useSelectedFridgeId();
+  const { setSelectedFridgeId } = useFridgeActions();
 
   // 냉장고 목록 로드 완료 시 첫 번째 ID 설정
   useEffect(() => {
@@ -48,8 +53,8 @@ export function HomeScreen() {
       const matchesTab =
         currentTab === "전체" ||
         (currentTab === "냉장" &&
-          food.condition.storageType === "REFRIGERATOR") ||
-        (currentTab === "냉동" && food.condition.storageType === "FREEZER") ||
+          food.condition.storageType === "REFRIGERATION") ||
+        (currentTab === "냉동" && food.condition.storageType === "FROZEN") ||
         (currentTab === "실온" &&
           food.condition.storageType === "ROOM_TEMPERATURE");
 
