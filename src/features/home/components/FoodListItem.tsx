@@ -13,6 +13,7 @@ export function FoodListItem({ item }: FoodListItemProps) {
   const statusBgColor = FOOD_STATUS_BG_COLORS[foodStatus];
   const expiryLabel = getExpiryLabel(expirationDate, daysLeft);
   const unitLabel = getUnitLabel(item.quantity.unit);
+  const isExpired = daysLeft < 0;
 
   return (
     <Card
@@ -51,11 +52,11 @@ export function FoodListItem({ item }: FoodListItemProps) {
         <YStack ai="flex-end" gap="$1">
           <View width={45} py="$1" br="$2" bg={`${statusBgColor}`} ai="center">
             <Text color={statusColor} fontWeight="800" fontSize="$3">
-              D-{daysLeft}
+              {isExpired ? "만료" : `D-${daysLeft}`}
             </Text>
           </View>
           <Text fontSize={10} color="$gray9">
-            {expiryLabel}
+            {isExpired ? "기한 만료" : expiryLabel}
           </Text>
         </YStack>
       </XStack>
