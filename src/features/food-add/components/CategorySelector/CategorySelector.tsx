@@ -1,15 +1,30 @@
 import { Plus } from "@tamagui/lucide-icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Button, ScrollView, Text, XStack, YStack, styled } from "tamagui";
-import { CategorySelectorProps } from "../types";
+import { CategorySelectorProps } from "../../types";
+import { CategoryAddModal } from "./CategoryAddModal";
 
 const LabelText = styled(Text, { fontSize: 18, fontWeight: "700", mb: "$2" });
 
 export const CategorySelector = ({
   control,
   categories,
+  onModalOpenChange,
 }: CategorySelectorProps) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  useEffect(() => {
+    onModalOpenChange?.(isAddModalOpen);
+  }, [isAddModalOpen, onModalOpenChange]);
+
+  const closeModal = () => setIsAddModalOpen(false);
+
+  const handleAddCategory = async (name: string) => {
+    // TODO: 카테고리 추가 API 연동
+    console.log("카테고리 추가:", name);
+    closeModal();
+  };
   return (
     <Controller
       control={control}
@@ -41,10 +56,7 @@ export const CategorySelector = ({
                 bg="$gray3"
                 br="$4"
                 px="$4"
-                onPress={() => {
-                  // TODO: 카테고리 추가 로직 구현
-                  console.log("카테고리 추가 클릭");
-                }}
+                onPress={() => setIsAddModalOpen(true)}
               >
                 <Text fontFamily="$baemin" fontSize="$3" color="$mainText">
                   추가
@@ -52,6 +64,11 @@ export const CategorySelector = ({
               </Button>
             </XStack>
           </ScrollView>
+          <CategoryAddModal
+            visible={isAddModalOpen}
+            onClose={closeModal}
+            onAdd={handleAddCategory}
+          />
         </YStack>
       )}
     />

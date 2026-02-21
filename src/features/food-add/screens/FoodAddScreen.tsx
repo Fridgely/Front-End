@@ -1,9 +1,9 @@
 import { Header } from "@/shared/components/Header/Header";
 import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, ScrollView, Text, YStack } from "tamagui";
-import { CategorySelector } from "../components/CategorySelector";
+import { CategorySelector } from "../components/CategorySelector/CategorySelector";
 import { ExpiryDatePicker } from "../components/ExpiryDatePicker/ExpiryDatePicker";
 import { FoodNameInput } from "../components/FoodNameInput";
 import { ImageUploader } from "../components/ImageUploader";
@@ -30,6 +30,7 @@ export function FoodAddScreen() {
       unit: "PIECE",
     },
   });
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   // 데이터 로드 시 첫 번째 값 설정
   useEffect(() => {
@@ -50,7 +51,11 @@ export function FoodAddScreen() {
           <ImageUploader control={control} />
           <FoodNameInput control={control} />
           {selectedFridgeId !== null && (
-            <CategorySelector control={control} categories={categories} />
+            <CategorySelector
+              control={control}
+              categories={categories}
+              onModalOpenChange={setIsCategoryModalOpen}
+            />
           )}
           <StorageSelector control={control} />
           <ExpiryDatePicker control={control} />
@@ -58,24 +63,26 @@ export function FoodAddScreen() {
         </YStack>
       </ScrollView>
 
-      <YStack p="$4" pb="$6" backgroundColor="$background">
-        <Button
-          backgroundColor="$primary"
-          size="$6"
-          br="$3"
-          onPress={handleSubmit(onSubmit)}
-          disabled={isPending}
-        >
-          <Text
-            color="$mainText"
-            fontWeight="700"
-            fontSize="$5"
-            fontFamily="$baemin"
+      {!isCategoryModalOpen && (
+        <YStack p="$4" pb="$6" backgroundColor="$background">
+          <Button
+            backgroundColor="$primary"
+            size="$6"
+            br="$3"
+            onPress={handleSubmit(onSubmit)}
+            disabled={isPending}
           >
-            식품 등록
-          </Text>
-        </Button>
-      </YStack>
+            <Text
+              color="$mainText"
+              fontWeight="700"
+              fontSize="$5"
+              fontFamily="$baemin"
+            >
+              식품 등록
+            </Text>
+          </Button>
+        </YStack>
+      )}
     </YStack>
   );
 }
