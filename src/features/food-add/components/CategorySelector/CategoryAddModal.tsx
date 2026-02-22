@@ -59,6 +59,8 @@ export const CategoryAddModal = ({
   }, []);
 
   const onSubmit = async ({ name }: CategoryAddFormValues) => {
+    if (isPending) return;
+
     const trimmedName = name.trim();
     if (!trimmedName) return;
     await onAdd(trimmedName);
