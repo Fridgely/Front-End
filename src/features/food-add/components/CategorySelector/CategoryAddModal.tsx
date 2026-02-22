@@ -63,7 +63,12 @@ export const CategoryAddModal = ({
 
     const trimmedName = name.trim();
     if (!trimmedName) return;
-    await onAdd(trimmedName);
+
+    try {
+      await onAdd(trimmedName);
+    } catch (error) {
+      console.error("카테고리 추가 실패:", error);
+    }
   };
 
   return (
