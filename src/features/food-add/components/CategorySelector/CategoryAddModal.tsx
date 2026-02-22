@@ -95,6 +95,7 @@ export const CategoryAddModal = ({
           <AnimatePresence>
             {visible && (
               <YStack
+                key="category-add-sheet"
                 bg="$background"
                 p="$5"
                 pb="$5"
