@@ -10,7 +10,7 @@ describe("Category API 테스트", () => {
     expect(api.method).toBe("GET");
   });
 
-  it("addCategoryApi 올바른 URL과 메소드로 설정되어야 한다", () => {
+  it("addCategoryApi는 올바른 URL과 메소드로 설정되어야 한다", () => {
     const refrigeratorId = 1;
     const api = addCategoryApi(refrigeratorId) as any;
     expect(api.endpoint).toBe(
