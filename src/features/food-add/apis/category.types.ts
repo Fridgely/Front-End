@@ -5,4 +5,8 @@ interface CategoryListResponse {
   data: Category[];
 }
 
-export type { CategoryListResponse };
+interface AddCategoryRequest {
+  name: string;
+}
+
+export type { AddCategoryRequest, CategoryListResponse };

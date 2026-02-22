@@ -24,6 +24,19 @@ interface FoodFormProps {
 
 interface CategorySelectorProps extends FoodFormProps {
   categories: Category[];
+  onModalOpenChange?: (open: boolean) => void;
+  fridgeId: number;
+}
+
+interface CategoryAddFormValues {
+  name: string;
+}
+
+interface CategoryAddModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onAdd: (name: string) => void | Promise<void>;
+  isPending?: boolean;
 }
 
 interface ImageUploaderProps {
@@ -45,6 +58,8 @@ interface DateSelectModalProps {
 
 export {
   Category,
+  CategoryAddFormValues,
+  CategoryAddModalProps,
   CategorySelectorProps,
   DateSelectModalProps,
   FoodFormProps,
