@@ -1,9 +1,14 @@
 import ApiBuilder from "@/shared/apis/builder/ApiBuilder";
-import { CategoryListResponse } from "./category.types";
+import { AddCategoryRequest, CategoryListResponse } from "./category.types";
 
 const getCategoryApi = (refrigeratorId: number) =>
   ApiBuilder.create<void, CategoryListResponse>(
     `/api/v1/refrigerators/${refrigeratorId}/categories`,
   ).setMethod("GET");
 
-export { getCategoryApi };
+const addCategoryApi = (refrigeratorId: number) =>
+  ApiBuilder.create<AddCategoryRequest, void>(
+    `/api/v1/refrigerators/${refrigeratorId}/categories`,
+  ).setMethod("POST");
+
+export { addCategoryApi, getCategoryApi };

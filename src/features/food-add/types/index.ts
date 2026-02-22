@@ -25,6 +25,7 @@ interface FoodFormProps {
 interface CategorySelectorProps extends FoodFormProps {
   categories: Category[];
   onModalOpenChange?: (open: boolean) => void;
+  fridgeId: number;
 }
 
 interface CategoryAddFormValues {

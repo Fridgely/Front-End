@@ -55,6 +55,7 @@ export function FoodAddScreen() {
               control={control}
               categories={categories}
               onModalOpenChange={setIsCategoryModalOpen}
+              fridgeId={selectedFridgeId!}
             />
           )}
           <StorageSelector control={control} />

@@ -59,10 +59,9 @@ export const CategoryAddModal = ({
   }, []);
 
   const onSubmit = async ({ name }: CategoryAddFormValues) => {
-    const trimmed = name.trim();
-    if (!trimmed) return;
-    console.log("카테고리 추가:", trimmed);
-    onClose();
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+    await onAdd(trimmedName);
   };
 
   return (

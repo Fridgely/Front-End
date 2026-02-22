@@ -2,6 +2,7 @@ import { Plus } from "@tamagui/lucide-icons";
 import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Button, ScrollView, Text, XStack, YStack, styled } from "tamagui";
+import { useAddCategoryMutation } from "../../hooks/mutations/useAddCategoryMutation";
 import { CategorySelectorProps } from "../../types";
 import { CategoryAddModal } from "./CategoryAddModal";
 
@@ -11,8 +12,10 @@ export const CategorySelector = ({
   control,
   categories,
   onModalOpenChange,
+  fridgeId,
 }: CategorySelectorProps) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const { mutate: addCategory, isPending } = useAddCategoryMutation(fridgeId);
 
   useEffect(() => {
     onModalOpenChange?.(isAddModalOpen);
@@ -20,10 +23,15 @@ export const CategorySelector = ({
 
   const closeModal = () => setIsAddModalOpen(false);
 
-  const handleAddCategory = async (name: string) => {
-    // TODO: 카테고리 추가 API 연동
-    console.log("카테고리 추가:", name);
-    closeModal();
+  const handleAddCategory = (name: string) => {
+    addCategory(
+      { name },
+      {
+        onSuccess: () => {
+          closeModal();
+        },
+      },
+    );
   };
   return (
     <Controller
@@ -68,6 +76,7 @@ export const CategorySelector = ({
             visible={isAddModalOpen}
             onClose={closeModal}
             onAdd={handleAddCategory}
+            isPending={isPending}
           />
         </YStack>
       )}
