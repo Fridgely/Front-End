@@ -41,11 +41,24 @@ interface CategoryTabsProps {
   onTabChange: (tab: CategoryTabType) => void;
 }
 
+type SortOption = "EXPIRY_ASC" | "REGISTERED_DESC" | "NAME_ASC";
+
+interface SortFilterProps {
+  visible: boolean;
+  onClose: () => void;
+  selectedSort: SortOption;
+  selectedCategory: string;
+  categories: string[];
+  onApply: (next: { sort: SortOption; category: string }) => void;
+}
+
 export {
   CategoryTabsProps,
   ExpiryProps,
   FoodListItemProps,
   FoodStatus,
   FridgeTabScrollProps,
+  SortFilterProps,
+  SortOption,
   StatusItemProps,
 };
