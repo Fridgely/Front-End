@@ -12,9 +12,10 @@ import { Expiry } from "../components/Expiry/Expiry";
 import { FoodListItem } from "../components/FoodListItem";
 import { FridgeTabScroll } from "../components/FridgeTabScroll";
 import { HomeSkeleton } from "../components/HomeSkeleton";
+import { SortFilter } from "../components/SortFilter";
 import { useFoodStatusQuery } from "../hooks/queries/useFoodStatusQuery";
 import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
-import { FoodStatus } from "../types";
+import { FoodStatus, SortOption } from "../types";
 
 export function HomeScreen() {
   const { data: fridgeData, isLoading: isFridgeLoading } = useFridgeQuery();
@@ -30,7 +31,7 @@ export function HomeScreen() {
         setSelectedFridgeId(firstFridgeId);
       }
     }
-  }, [fridgeData, selectedFridgeId]);
+  }, [fridgeData, selectedFridgeId, setSelectedFridgeId]);
 
   const { data: foodStatusData, isLoading: isFoodLoading } = useFoodStatusQuery(
     selectedFridgeId || 0,
@@ -38,15 +39,30 @@ export function HomeScreen() {
 
   const [currentTab, setCurrentTab] = useState("전체");
   const [statusFilter, setStatusFilter] = useState<FoodStatus | null>(null);
-  const [isAscending, setIsAscending] = useState(true);
+  const [sortOption, setSortOption] = useState<SortOption>("EXPIRY_ASC");
+  const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const allFoods = useMemo(() => {
+    if (!foodStatusData?.data) return [];
+    return Object.values(foodStatusData.data).flat();
+  }, [foodStatusData]);
+
+  const categoryOptions = useMemo(() => {
+    const names = Array.from(
+      new Set(allFoods.map((food) => food.categoryName).filter(Boolean)),
+    );
+    return ["전체", ...names];
+  }, [allFoods]);
+
+  useEffect(() => {
+    if (!categoryOptions.includes(selectedCategory)) {
+      setSelectedCategory("전체");
+    }
+  }, [categoryOptions, selectedCategory]);
 
   // 필터링 및 정렬 로직 (성능을 위해 useMemo 사용)
   const sortedAndFilteredFoods = useMemo(() => {
-    if (!foodStatusData?.data) return [];
-
-    // 전체를 하나의 배열로
-    const allFoods = Object.values(foodStatusData.data).flat();
-
     let result = allFoods.filter((food) => {
       if (!food || !food.condition) return false;
       // 카테고리 필터
@@ -62,15 +78,24 @@ export function HomeScreen() {
       const matchesStatus =
         statusFilter === null || food.condition.foodStatus === statusFilter;
 
-      return matchesTab && matchesStatus;
+      const matchesCategory =
+        selectedCategory === "전체" || food.categoryName === selectedCategory;
+
+      return matchesTab && matchesStatus && matchesCategory;
     });
 
-    // 정렬 로직 (유통기한 순)
     return result.sort((a, b) => {
-      const diff = a.condition.daysLeft - b.condition.daysLeft;
-      return isAscending ? diff : -diff;
+      if (sortOption === "REGISTERED_DESC") {
+        return b.id - a.id;
+      }
+
+      if (sortOption === "NAME_ASC") {
+        return a.name.localeCompare(b.name, "ko");
+      }
+
+      return a.condition.daysLeft - b.condition.daysLeft;
     });
-  }, [foodStatusData, currentTab, statusFilter, isAscending]);
+  }, [allFoods, currentTab, statusFilter, selectedCategory, sortOption]);
 
   const currentFridgeName =
     fridgeData?.data?.find((f) => f.id === selectedFridgeId)?.name || "냉장고";
@@ -113,10 +138,10 @@ export function HomeScreen() {
             <Text
               fontSize={12}
               color="$gray"
-              onPress={() => setIsAscending(!isAscending)}
+              onPress={() => setIsFilterOpen(true)}
               pressStyle={{ opacity: 0.5 }}
             >
-              유통기한순 정렬 {isAscending ? "▲" : "▼"}
+              정렬 및 필터
             </Text>
           </XStack>
         </YStack>
@@ -136,6 +161,18 @@ export function HomeScreen() {
           }
         />
       </View>
+
+      <SortFilter
+        visible={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        selectedSort={sortOption}
+        selectedCategory={selectedCategory}
+        categories={categoryOptions}
+        onApply={({ sort, category }) => {
+          setSortOption(sort);
+          setSelectedCategory(category);
+        }}
+      />
     </YStack>
   );
 }
