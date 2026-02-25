@@ -45,7 +45,12 @@ export function HomeScreen() {
 
   const allFoods = useMemo(() => {
     if (!foodStatusData?.data) return [];
-    return Object.values(foodStatusData.data).flat();
+    return [
+      ...foodStatusData.data.black,
+      ...foodStatusData.data.red,
+      ...foodStatusData.data.yellow,
+      ...foodStatusData.data.green,
+    ];
   }, [foodStatusData]);
 
   const categoryOptions = useMemo(() => {
@@ -121,10 +126,10 @@ export function HomeScreen() {
         <Expiry
           activeStatus={statusFilter}
           counts={{
-            BLACK: foodStatusData?.data?.BLACK?.length || 0,
-            RED: foodStatusData?.data?.RED?.length || 0,
-            YELLOW: foodStatusData?.data?.YELLOW?.length || 0,
-            GREEN: foodStatusData?.data?.GREEN?.length || 0,
+            BLACK: foodStatusData?.data?.blackCount ?? 0,
+            RED: foodStatusData?.data?.redCount ?? 0,
+            YELLOW: foodStatusData?.data?.yellowCount ?? 0,
+            GREEN: foodStatusData?.data?.greenCount ?? 0,
           }}
           onStatusChange={(status) =>
             setStatusFilter((prev) => (prev === status ? null : status))
