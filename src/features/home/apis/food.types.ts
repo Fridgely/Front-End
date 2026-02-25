@@ -1,7 +1,14 @@
-import { FoodItem, FoodStatus } from "@/shared/types/food";
+import { FoodItem } from "@/shared/types/food";
 
 type FoodStatusData = {
-  [key in FoodStatus]: FoodItem[];
+  black: FoodItem[];
+  red: FoodItem[];
+  yellow: FoodItem[];
+  green: FoodItem[];
+  blackCount: number;
+  redCount: number;
+  yellowCount: number;
+  greenCount: number;
 };
 
 interface FoodStatusResponse {
