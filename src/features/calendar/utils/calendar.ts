@@ -62,10 +62,10 @@ export const getFoodsOnDate = (foods: FoodItem[], selectedDate: string) => {
 };
 
 export const getSelectedDateLabel = (selectedDate: string) => {
-  const [, month, day] = selectedDate.split("-");
+  const [year, month, day] = selectedDate.split("-").map(Number);
   const dayOfWeek = new Intl.DateTimeFormat("ko-KR", {
     weekday: "long",
-  }).format(new Date(selectedDate));
+  }).format(new Date(year, month - 1, day));
 
-  return `${month}월 ${day}일 ${dayOfWeek}`;
+  return `${String(month).padStart(2, "0")}월 ${String(day).padStart(2, "0")}일 ${dayOfWeek}`;
 };

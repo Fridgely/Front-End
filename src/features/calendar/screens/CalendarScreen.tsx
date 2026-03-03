@@ -11,12 +11,19 @@ import { buildMarkedDates, getFoodsOnDate } from "../utils/calendar";
 
 setupCalendarLocale();
 
+const getLocalDateString = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 export function CalendarScreen() {
   const selectedFridgeId = useSelectedFridgeId();
 
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().split("T")[0],
-  );
+  const [selectedDate, setSelectedDate] = useState(() => getLocalDateString());
 
   const { data: foodStatusData } = useFoodStatusQuery(selectedFridgeId ?? 0);
 
