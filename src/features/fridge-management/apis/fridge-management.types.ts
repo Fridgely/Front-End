@@ -4,5 +4,15 @@ interface FridgeListResponse {
   result: string;
   data: Fridge[];
 }
+interface UpdateFridgeNameRequest {
+  newName: string;
+}
+interface UpdateFridgeNameResponse {
+  result: string;
+}
 
-export { FridgeListResponse };
+export {
+  FridgeListResponse,
+  UpdateFridgeNameRequest,
+  UpdateFridgeNameResponse,
+};
