@@ -1,5 +1,6 @@
 import ApiBuilder from "@/shared/apis/builder/ApiBuilder";
 import {
+  FridgeDetailResponse,
   FridgeListResponse,
   UpdateFridgeNameRequest,
   UpdateFridgeNameResponse,
@@ -11,7 +12,7 @@ const getFridgeListApi = () =>
   ).setMethod("GET");
 
 const getFridgeDetailApi = (fridgeId: number) =>
-  ApiBuilder.create<void, FridgeListResponse>(
+  ApiBuilder.create<void, FridgeDetailResponse>(
     `/api/v1/refrigerators/${fridgeId}`,
   ).setMethod("GET");
 
