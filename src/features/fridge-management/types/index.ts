@@ -1,4 +1,4 @@
-import { Fridge } from "@/shared/types/fridge";
+import { Fridge, FridgeMember } from "@/shared/types/fridge";
 
 interface FridgeSelectionProps {
   visible: boolean;
@@ -16,4 +16,23 @@ interface FridgeNameEditSheetProps {
   isLoading?: boolean;
 }
 
-export { FridgeNameEditSheetProps, FridgeSelectionProps };
+interface FridgeMembersProps {
+  member: FridgeMember;
+  isLast?: boolean;
+}
+
+interface InviteModalProps {
+  visible: boolean;
+  onClose: () => void;
+  inviteCode: string;
+  expirationAt: Date;
+  onCopy: () => void;
+  onShareKakao: () => void;
+}
+
+export {
+  FridgeMembersProps,
+  FridgeNameEditSheetProps,
+  FridgeSelectionProps,
+  InviteModalProps,
+};

@@ -1,4 +1,5 @@
 import { Check, PlusCircle, Refrigerator } from "@tamagui/lucide-icons";
+import { router } from "expo-router";
 import React from "react";
 import { Modal, Platform, Pressable, StyleSheet } from "react-native";
 import {
@@ -61,7 +62,6 @@ export const FridgeSelectionSheet = ({
               opacity={1}
               maxHeight="70%"
             >
-              {/* 상단 핸들러 */}
               <View
                 w={40}
                 h={5}
@@ -137,6 +137,10 @@ export const FridgeSelectionSheet = ({
                     mt="$2"
                     pressStyle={{ opacity: 0.7 }}
                     opacity={0.6}
+                    onPress={() => {
+                      onClose();
+                      router.push("/fridge-add");
+                    }}
                   >
                     <PlusCircle size={20} color="$mainText" />
                     <Text
