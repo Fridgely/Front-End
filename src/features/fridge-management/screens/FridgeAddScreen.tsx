@@ -13,7 +13,7 @@ export function FridgeAddScreen() {
   };
 
   const handleJoin = () => {
-    if (inviteCode.length !== 8) return;
+    if (isPending || inviteCode.length !== 8) return;
 
     joinFridge({ code: inviteCode });
   };
@@ -51,6 +51,7 @@ export function FridgeAddScreen() {
           fontWeight="700"
           fontSize="$4"
           onPress={handleJoin}
+          disabled={isPending || inviteCode.length !== 8}
         >
           참여하기
         </Button>
