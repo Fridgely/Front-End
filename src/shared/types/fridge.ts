@@ -7,4 +7,11 @@ interface Fridge {
   isOwner: boolean;
 }
 
-export { Fridge, FridgeRole };
+interface FridgeMember {
+  memberId: number;
+  nickname: string;
+  role: FridgeRole;
+  isOwner: boolean;
+}
+
+export { Fridge, FridgeMember, FridgeRole };

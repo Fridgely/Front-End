@@ -81,7 +81,7 @@ export function OverlayMenu({
       distance: 110,
       icon: <Refrigerator />,
       label: "냉장고관리",
-      path: "/fridge",
+      path: "/fridge-management",
       isDisabled: false,
     },
   ];
