@@ -222,8 +222,16 @@ export function FridgeManagementScreen() {
         onClose={() => setEditSheetOpen(false)}
         currentName={fridgeInfo?.data.name || ""}
         onSave={(newName) => {
-          updateName({ newName: newName });
-          setEditSheetOpen(false);
+          updateName(
+            { newName: newName },
+            {
+              onSuccess: (res) => {
+                if (res.result === "SUCCESS") {
+                  setEditSheetOpen(false);
+                }
+              },
+            },
+          );
         }}
       />
       <InviteModal
