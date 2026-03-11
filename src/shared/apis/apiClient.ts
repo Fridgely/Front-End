@@ -36,22 +36,28 @@ apiClient.interceptors.response.use(
     if (error.response.status === 401 && !originalConfig._retry) {
       originalConfig._retry = true;
       try {
-        const accessToken = await tokenStorage.getAccessToken();
         const refreshToken = await tokenStorage.getRefreshToken();
 
         const reissueUrl =
           process.env.EXPO_PUBLIC_API_URL + "/api/v1/auth/reissue";
 
         const { data } = await axios.post(reissueUrl, {
-          accessToken,
           refreshToken,
         });
 
-        await tokenStorage.setAccessToken(data.accessToken);
-        await tokenStorage.setRefreshToken(data.refreshToken);
+        const newAccess = data?.data?.accessToken ?? data?.accessToken;
+        const newRefresh = data?.data?.refreshToken ?? data?.refreshToken;
 
-        originalConfig.headers.Authorization = `Bearer ${data.accessToken}`;
+        if (!newAccess || !newRefresh) {
+          throw new Error(
+            "Invalid reissue response: missing access/refresh token",
+          );
+        }
 
+        await tokenStorage.setAccessToken(newAccess);
+        await tokenStorage.setRefreshToken(newRefresh);
+
+        originalConfig.headers.Authorization = `Bearer ${newAccess}`;
         return apiClient.request(originalConfig);
       } catch (reissueError) {
         console.error("토큰 재발급 실패:", reissueError);
