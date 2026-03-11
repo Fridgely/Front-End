@@ -122,7 +122,7 @@ export function FridgeManagementScreen() {
       <Header title="냉장고 관리" showBackButton />
 
       <ScrollView f={1} contentContainerStyle={{ pb: "$10" }}>
-        {isDetailLoading && !fridgeInfo && isMembersLoading ? (
+        {isDetailLoading && !fridgeInfo ? (
           <YStack py="$20" ai="center">
             <Spinner color="$primary" />
           </YStack>
