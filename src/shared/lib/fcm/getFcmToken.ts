@@ -10,7 +10,8 @@ export const getFcmToken = async () => {
     await registerDeviceForRemoteMessages(messaging);
     const token = await getToken(messaging);
     return token || null;
-  } catch {
-    return null;
+  } catch (error) {
+    console.error("FCM Token 발급 중 예외 발생:", error);
+    throw error;
   }
 };
