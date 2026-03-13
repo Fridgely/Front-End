@@ -30,9 +30,9 @@ export const useFcmSync = (
       const prevUserId = lastSyncRef.current.userId;
 
       if (fcmToken !== prevToken || currentUserId !== prevUserId) {
+        if (onSync) await onSync();
         // 토큰 또는 사용자 ID가 변경된 경우에만 서버에 동기화
         lastSyncRef.current = { token: fcmToken, userId: currentUserId };
-        if (onSync) await onSync();
       } else {
         // 토큰과 사용자 ID 모두 변경되지 않음
       }
