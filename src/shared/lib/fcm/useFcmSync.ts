@@ -5,7 +5,7 @@ import { getFcmToken } from "./getFcmToken";
 
 export const useFcmSync = (
   userId: string | null,
-  onSync?: () => Promise<void>,
+  onSync?: (token: string) => Promise<void>,
 ) => {
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const lastSyncRef = useRef<{ token: string; userId: string | null }>({
@@ -30,7 +30,7 @@ export const useFcmSync = (
       const prevUserId = lastSyncRef.current.userId;
 
       if (fcmToken !== prevToken || currentUserId !== prevUserId) {
-        if (onSync) await onSync();
+        if (onSync) await onSync(fcmToken);
         // 토큰 또는 사용자 ID가 변경된 경우에만 서버에 동기화
         lastSyncRef.current = { token: fcmToken, userId: currentUserId };
       } else {

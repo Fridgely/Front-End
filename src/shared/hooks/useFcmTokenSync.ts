@@ -4,9 +4,9 @@ import { useFcmMutation } from "./useFcmMutation";
 export const useFcmTokenSync = () => {
   const { mutateAsync: registerFcm } = useFcmMutation();
 
-  const syncFcmToken = async () => {
+  const syncFcmToken = async (token?: string) => {
     try {
-      const fcmToken = await getFcmToken();
+      const fcmToken = token ?? (await getFcmToken());
       if (!fcmToken) return;
 
       await registerFcm({ token: fcmToken });
