@@ -4,27 +4,28 @@
     "slug": "FrontEnd",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "@/assets/images/icon.png",
+    "icon": "./assets/images/splash.png",
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chacha.fridgely",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "package": "com.chacha.fridgely",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "backgroundColor": "#E0F6EA",
-        "foregroundImage": "./src/assets/images/android-icon-foreground.png",
-        "backgroundImage": "./src/assets/images/android-icon-background.png",
-        "monochromeImage": "./src/assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#E0F6EA"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": []
     },
     "web": {
       "output": "static",
-      "favicon": "@/assets/images/favicon.png"
+      "favicon": "@/assets/images/splash.png"
     },
     "splash": {
       "image": "./assets/images/splash.png",
@@ -56,7 +57,9 @@
         }
       ],
       "expo-secure-store",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging"
     ],
     "experiments": {
       "typedRoutes": true,
