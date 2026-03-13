@@ -66,10 +66,17 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="profile/index"
           options={{
             title: "설정",
             tabBarIcon: ({ color }) => <User color={color} size={24} />,
+            href: "/profile",
+          }}
+        />
+        <Tabs.Screen
+          name="profile/notification-setting"
+          options={{
+            href: null,
           }}
         />
       </Tabs>
