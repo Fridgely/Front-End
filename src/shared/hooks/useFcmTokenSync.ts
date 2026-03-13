@@ -10,7 +10,11 @@ export const useFcmTokenSync = () => {
       if (!fcmToken) return;
 
       await registerFcm({ token: fcmToken });
-    } catch (error) {}
+    } catch (error) {
+      // 동기화 실패 시에도 앱이 정상 동작하도록 에러를 무시
+      console.error("FCM 토큰 동기화 실패:", error);
+      throw error;
+    }
   };
 
   return { syncFcmToken };
