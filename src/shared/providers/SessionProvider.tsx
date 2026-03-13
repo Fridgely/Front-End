@@ -6,6 +6,7 @@ import {
 import { useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { useFcmTokenSync } from "../hooks/useFcmTokenSync";
+import { getSubFromToken } from "../lib/decodeJwt";
 import { useFcmSync } from "../lib/fcm/useFcmSync";
 
 export function SessionProvider() {
@@ -14,9 +15,10 @@ export function SessionProvider() {
   const segments = useSegments();
   const router = useRouter();
   const accessToken = useAuthStore((state) => state.accessToken);
+  const stableUserId = getSubFromToken(accessToken);
   const { syncFcmToken } = useFcmTokenSync();
 
-  useFcmSync(isLoggedIn ? accessToken : null, syncFcmToken);
+  useFcmSync(isLoggedIn ? stableUserId : null, syncFcmToken);
 
   useEffect(() => {
     if (!isLoaded) return;
