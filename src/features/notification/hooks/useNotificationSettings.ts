@@ -9,7 +9,7 @@ const useNotificationSettings = () => {
   const settings = query.data?.data;
 
   const updateSettings = (changes: Partial<NotificationSettingsRequest>) => {
-    if (!settings) {
+    if (!settings || mutation.isPending) {
       return;
     }
 
