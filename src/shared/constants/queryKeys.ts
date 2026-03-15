@@ -14,6 +14,10 @@ const QUERY_KEYS = {
     status: (fridgeId: number) =>
       [...QUERY_KEYS.food.all, "status", fridgeId] as const,
   },
+  notification: {
+    all: ["notifications"] as const,
+    settings: () => [...QUERY_KEYS.notification.all, "settings"] as const,
+  },
 };
 
 export { QUERY_KEYS };

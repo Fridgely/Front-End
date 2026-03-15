@@ -6,6 +6,7 @@ import {
   Palette,
   Refrigerator,
 } from "@tamagui/lucide-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Avatar,
@@ -22,6 +23,7 @@ import { useLogoutMutation } from "../hooks/useLogoutMutation";
 
 export function ProfileScreen() {
   const { mutate: logout } = useLogoutMutation();
+  const router = useRouter();
 
   return (
     <YStack f={1} backgroundColor="$background">
@@ -88,7 +90,11 @@ export function ProfileScreen() {
             borderWidth={1}
             borderColor="$gray3"
           >
-            <Menu icon={<Bell />} title="알림 설정" />
+            <Menu
+              icon={<Bell />}
+              title="알림 설정"
+              onPress={() => router.push("/profile/notification-setting")}
+            />
             <Menu icon={<Refrigerator />} title="냉장고 관리" />
             <Menu icon={<Palette />} title="테마 설정" />
             <Menu icon={<Headphones />} title="고객센터" />
