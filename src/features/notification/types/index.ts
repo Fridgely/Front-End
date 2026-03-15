@@ -1,3 +1,5 @@
+import React from "react";
+
 interface PickerColumnProps {
   items: (string | number)[];
   selected: string | number;
