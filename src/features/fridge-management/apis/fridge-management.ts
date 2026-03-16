@@ -21,4 +21,20 @@ const updateFridgeNameApi = (fridgeId: number) =>
     `/api/v1/refrigerators/${fridgeId}`,
   ).setMethod("PATCH");
 
-export { getFridgeDetailApi, getFridgeListApi, updateFridgeNameApi };
+const deleteFridgeApi = (fridgeId: number) =>
+  ApiBuilder.create<void, void>(`/api/v1/refrigerators/${fridgeId}`).setMethod(
+    "DELETE",
+  );
+
+const leaveFridgeApi = (fridgeId: number) =>
+  ApiBuilder.create<void, void>(
+    `/api/v1/refrigerators/${fridgeId}/me`,
+  ).setMethod("POST");
+
+export {
+  deleteFridgeApi,
+  getFridgeDetailApi,
+  getFridgeListApi,
+  leaveFridgeApi,
+  updateFridgeNameApi,
+};
