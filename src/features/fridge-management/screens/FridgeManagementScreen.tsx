@@ -282,7 +282,7 @@ export function FridgeManagementScreen() {
         description={
           modalConfig.type === "delete"
             ? "냉장고를 삭제하면 다시 되돌릴 수 없습니다. 정말 삭제하시겠습니까??"
-            : "냉장고에서 나가면 해당 냉장고에 접근할 수 없게 됩니다. 정말 나가시겠습니까??"
+            : "냉장고에서 나가면 해당 냉장고에 접근할 수 없게 됩니다. 정말 나가시겠습니까?"
         }
         confirmText={modalConfig.type === "delete" ? "삭제하기" : "나가기"}
         onConfirm={handleConfirm}
