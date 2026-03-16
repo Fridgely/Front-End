@@ -1,4 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
+import { ConfirmModal } from "@/shared/components/Modal/ConfirmModal";
 import { ChevronDown, Refrigerator } from "@tamagui/lucide-icons";
 import * as Clipboard from "expo-clipboard";
 import * as Linking from "expo-linking";
@@ -17,7 +18,9 @@ import { FridgeNameEditSheet } from "../components/FridgeNameEditSheet";
 import { FridgeSelectionSheet } from "../components/FridgeSelectionSheet";
 import { InviteModal } from "../components/InviteModal";
 import { MemberItem } from "../components/MemberItem";
+import { useDeleteFridgeMutation } from "../hooks/mutations/useDeleteFridgeMutation";
 import { useGenerateInviteCodeMutation } from "../hooks/mutations/useGenerateInviteCodeMutation";
+import { useLeaveFridgeMutation } from "../hooks/mutations/useLeaveFridgeMutation";
 import { useUpdateFridgeNameMutation } from "../hooks/mutations/useUpdateFridgeNameMutation";
 import { useFridgeDetailQuery } from "../hooks/queries/useFridgeDetailQuery";
 import { useFridgeListQuery } from "../hooks/queries/useFridgeListQuery";
@@ -45,6 +48,12 @@ export function FridgeManagementScreen() {
   const { data: membersData, isLoading: isMembersLoading } =
     useFridgeMembersQuery(selectedId ?? 0);
   const members = useMemo(() => membersData?.data || [], [membersData]);
+  const { mutate: deleteFridge } = useDeleteFridgeMutation(selectedId ?? 0);
+  const { mutate: leaveFridge } = useLeaveFridgeMutation(selectedId ?? 0);
+  const [modalConfig, setModalConfig] = useState<{
+    open: boolean;
+    type: "delete" | "leave";
+  }>({ open: false, type: "leave" });
 
   useEffect(() => {
     if (fridges.length > 0 && selectedId === null) {
@@ -117,6 +126,20 @@ export function FridgeManagementScreen() {
     }
   };
 
+  const openConfirmModal = (type: "delete" | "leave") => {
+    setModalConfig({ open: true, type });
+  };
+
+  const handleConfirm = () => {
+    if (!selectedId) return;
+
+    if (modalConfig.type === "delete") {
+      deleteFridge();
+    } else {
+      leaveFridge();
+    }
+  };
+
   return (
     <YStack f={1} backgroundColor="$background">
       <Header title="냉장고 관리" showBackButton />
@@ -183,7 +206,11 @@ export function FridgeManagementScreen() {
                 </Button>
 
                 <YStack ai="center" gap="$4" py="$2">
-                  <Text color="$gray10" fontSize={14}>
+                  <Text
+                    color="$gray10"
+                    fontSize={14}
+                    onPress={() => openConfirmModal("leave")}
+                  >
                     냉장고 나가기
                   </Text>
                   {fridgeInfo.data.isOwner && (
@@ -196,7 +223,11 @@ export function FridgeManagementScreen() {
                     </Text>
                   )}
                   {fridgeInfo.data.isOwner && (
-                    <Text color="$warning" fontSize={14}>
+                    <Text
+                      color="$warning"
+                      fontSize={14}
+                      onPress={() => openConfirmModal("delete")}
+                    >
                       냉장고 삭제
                     </Text>
                   )}
@@ -241,6 +272,20 @@ export function FridgeManagementScreen() {
         expirationAt={inviteData.expirationAt}
         onCopy={handleCopyCode}
         onShareKakao={handleShareKakao}
+      />
+      <ConfirmModal
+        open={modalConfig.open}
+        onOpenChange={(open) =>
+          setModalConfig((prev) => ({ ...prev, open: open }))
+        }
+        title={modalConfig.type === "delete" ? "냉장고 삭제" : "냉장고 나가기"}
+        description={
+          modalConfig.type === "delete"
+            ? "냉장고를 삭제하면 다시 되돌릴 수 없습니다. 정말 삭제하시겠습니까??"
+            : "냉장고에서 나가면 해당 냉장고에 접근할 수 없게 됩니다. 정말 나가시겠습니까??"
+        }
+        confirmText={modalConfig.type === "delete" ? "삭제하기" : "나가기"}
+        onConfirm={handleConfirm}
       />
     </YStack>
   );
