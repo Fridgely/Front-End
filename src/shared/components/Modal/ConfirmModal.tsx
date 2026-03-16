@@ -88,7 +88,7 @@ export const ConfirmModal = ({
 
               <Dialog.Close asChild>
                 <Button size="$5" backgroundColor="$gray3" chromeless br="$2">
-                  <Text color="$gray11" fontWeight="700" fontSize="$5">
+                  <Text color="$mainText" fontWeight="700" fontSize="$5">
                     취소
                   </Text>
                 </Button>
