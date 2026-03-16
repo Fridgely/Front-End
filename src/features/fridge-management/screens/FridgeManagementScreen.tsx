@@ -131,7 +131,8 @@ export function FridgeManagementScreen() {
   };
 
   const handleConfirm = () => {
-    if (!selectedId) return;
+    // !selectedId의 혹시라도 진짜 냉장고 ID가 0일 경우 대비
+    if (selectedId === null) return;
 
     if (modalConfig.type === "delete") {
       deleteFridge();
