@@ -19,7 +19,7 @@ const useAddFoodMutation = (fridgeId: number) => {
       });
 
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.food.status(fridgeId),
+        queryKey: QUERY_KEYS.food.all,
       });
 
       if (router.canGoBack()) {
