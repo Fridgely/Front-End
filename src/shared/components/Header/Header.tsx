@@ -1,3 +1,4 @@
+import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
 import { Bell, ChevronLeft } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -11,6 +12,9 @@ export function Header({
 }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const hasUnreadNotifications = useNotificationStore((state) =>
+    state.notifications.some((notification) => !notification.isRead),
+  );
 
   return (
     <View backgroundColor="$background" style={{ paddingTop: insets.top }}>
@@ -54,7 +58,22 @@ export function Header({
               size="$4"
               circular
               chromeless
-              icon={<Bell size={24} color="$mainText" />}
+              icon={
+                <View position="relative">
+                  <Bell size={24} color="$mainText" />
+                  {hasUnreadNotifications && (
+                    <View
+                      position="absolute"
+                      top={-2}
+                      right={-2}
+                      width={8}
+                      height={8}
+                      borderRadius={100}
+                      backgroundColor="$warning"
+                    />
+                  )}
+                </View>
+              }
               pressStyle={{ opacity: 0.5 }}
               onPress={() => router.push("/notification")}
             />
