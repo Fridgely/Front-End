@@ -22,4 +22,19 @@ interface SettingRowProps {
   onCheckedChange?: (checked: boolean) => void;
 }
 
-export { DayButtonProps, PickerColumnProps, SettingRowProps };
+interface NotificationItemProps {
+  id: string;
+  title: string;
+  body: string;
+  createdAt: string;
+  isRead: boolean;
+  targetScreen?: string;
+  messageId?: string;
+}
+
+export type {
+  DayButtonProps,
+  NotificationItemProps,
+  PickerColumnProps,
+  SettingRowProps,
+};
