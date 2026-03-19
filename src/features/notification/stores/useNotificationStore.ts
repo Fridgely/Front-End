@@ -27,25 +27,34 @@ export const useNotificationStore = create<NotificationState>()(
       // 새 알림 추가 (최신순 정렬)
       addNotification: (content) =>
         set((state) => {
-          if (
+          // messageId 기반 중복 체크
+          const isDuplicateId =
             content.messageId &&
+            state.notifications.some((n) => n.messageId === content.messageId);
+
+          //  아이디가 없는 경우를 대비해 제목과 내용으로 한 번 더 체크
+          const isDuplicateContent =
+            !content.messageId &&
             state.notifications.some(
-              (notification) => notification.messageId === content.messageId,
-            )
-          ) {
+              (n) => n.title === content.title && n.body === content.body,
+            );
+
+          if (isDuplicateId || isDuplicateContent) {
             return state;
           }
+
+          const tempId = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
           return {
             notifications: [
               {
                 ...content,
-                id: content.messageId ?? Date.now().toString(),
+                id: content.messageId ?? tempId,
                 createdAt: new Date().toISOString(),
                 isRead: false,
               },
               ...state.notifications,
-            ].slice(0, 50), // 최대 50개 유지
+            ].slice(0, 50),
           };
         }),
 
