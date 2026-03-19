@@ -25,6 +25,8 @@ interface StatusItemProps {
 
 interface FridgeTabScrollProps {
   selectedId: number | null;
+  isAllSelected: boolean;
+  onSelectAll: () => void;
   onSelect: (fridge: Fridge) => void;
 
   data?: Fridge[];

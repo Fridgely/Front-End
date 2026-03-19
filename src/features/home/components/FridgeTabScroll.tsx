@@ -4,6 +4,8 @@ import { FridgeTabScrollProps } from "../types";
 
 export function FridgeTabScroll({
   selectedId,
+  isAllSelected,
+  onSelectAll,
   onSelect,
   data = [],
 }: FridgeTabScrollProps) {
@@ -14,8 +16,28 @@ export function FridgeTabScroll({
       contentContainerStyle={{ paddingHorizontal: 16 }}
     >
       <XStack gap="$2" ai="center" backgroundColor="$background">
+        <Button
+          onPress={onSelectAll}
+          bg={isAllSelected ? "$secondary" : "$white"}
+          size="$4"
+          br="$4"
+          px="$5"
+          fontSize="$2"
+          hoverStyle={{ scale: 0.95 }}
+          pressStyle={{ scale: 0.9 }}
+        >
+          <Text
+            fontFamily="$baemin"
+            fontSize="$3"
+            color={isAllSelected ? "white" : "$gray"}
+            fontWeight={isAllSelected ? "700" : "400"}
+          >
+            전체
+          </Text>
+        </Button>
+
         {data.map((fridge) => {
-          const isActive = selectedId === fridge.id;
+          const isActive = !isAllSelected && selectedId === fridge.id;
           return (
             <Button
               key={fridge.id}
