@@ -21,9 +21,39 @@ import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { useFonts } from "expo-font";
 import config from "../tamagui.config";
 
+import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
+import {
+  getMessaging,
+  setBackgroundMessageHandler,
+} from "@react-native-firebase/messaging";
+
 if (__DEV__) {
   require("../ReactotronConfig");
 }
+// 백그라운드일때
+const messaging = getMessaging();
+
+setBackgroundMessageHandler(messaging, async (remoteMessage) => {
+  try {
+    if (remoteMessage.notification) {
+      const targetScreen = remoteMessage.data?.target_screen;
+      const state = useNotificationStore.getState();
+
+      // 스토어가 정상적으로 로드된 경우에만 저장
+      if (state && state.addNotification) {
+        state.addNotification({
+          title: remoteMessage.notification.title || "유통기한 임박",
+          body: remoteMessage.notification.body || "",
+          targetScreen:
+            typeof targetScreen === "string" ? targetScreen : undefined,
+          messageId: remoteMessage.messageId ?? undefined,
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Background Store Error:", error);
+  }
+});
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -31,11 +61,15 @@ export const unstable_settings = {
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
+let hasShownAnimatedSplash = false;
+
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
   const isLoaded = useIsAuthLoaded();
   const { hydrate } = useAuthActions();
-  const [animationFinished, setAnimationFinished] = useState(false);
+  const [animationFinished, setAnimationFinished] = useState(
+    hasShownAnimatedSplash,
+  );
   const [fontsLoaded, fontError] = useFonts({
     "GyeonggiBatang-Bold": require("../assets/fonts/GyeonggiBatang-Bold.otf"),
     "GyeonggiTitle-Bold": require("../assets/fonts/GyeonggiTitle-Bold.otf"),
@@ -58,7 +92,10 @@ export default function RootLayout() {
     return (
       <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
         <AnimatedSplashScreen
-          onAnimationFinish={() => setAnimationFinished(true)}
+          onAnimationFinish={() => {
+            hasShownAnimatedSplash = true;
+            setAnimationFinished(true);
+          }}
         />
       </View>
     );
