@@ -6,6 +6,7 @@ import {
 import { useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { useFcmTokenSync } from "../hooks/useFcmTokenSync";
+import { useNotificationHandler } from "../hooks/useNotificationHandler";
 import { getSubFromToken } from "../lib/decodeJwt";
 import { useFcmSync } from "../lib/fcm/useFcmSync";
 
@@ -19,17 +20,18 @@ export function SessionProvider() {
   const { syncFcmToken } = useFcmTokenSync();
 
   useFcmSync(isLoggedIn ? stableUserId : null, syncFcmToken);
+  useNotificationHandler(isLoggedIn);
 
   useEffect(() => {
     if (!isLoaded) return;
-    const inAuthGroup = segments[0] === "(auth)";
+    const inAuthGroup = segments?.[0] === "(auth)";
 
     if (!isLoggedIn && !inAuthGroup) {
       router.replace("/(auth)/login");
-    } else if (isLoggedIn && (inAuthGroup || segments.length === 0)) {
+    } else if (isLoggedIn && inAuthGroup) {
       router.replace("/(tabs)");
     }
-  }, [isLoggedIn, isLoaded, segments]);
+  }, [isLoggedIn, isLoaded, segments, router]);
 
   return null;
 }
