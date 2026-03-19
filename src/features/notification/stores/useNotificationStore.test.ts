@@ -60,6 +60,25 @@ describe("useNotificationStore 테스트", () => {
     expect(notifications[0].title).toBe("첫 번째");
   });
 
+  it("messageId가 없으면 같은 알림은 중복 추가되지 않아야 한다", () => {
+    const { addNotification } = useNotificationStore.getState();
+
+    addNotification({
+      title: "제목",
+      body: "내용",
+    });
+    addNotification({
+      title: "제목",
+      body: "내용",
+    });
+
+    const notifications = useNotificationStore.getState().notifications;
+
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0].title).toBe("제목");
+    expect(notifications[0].body).toBe("내용");
+  });
+
   it("알림은 최신순으로 유지되며 최대 50개까지만 저장되어야 한다", () => {
     const { addNotification } = useNotificationStore.getState();
 
