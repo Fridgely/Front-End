@@ -9,14 +9,14 @@ const getFoodStatusApi = ApiBuilder.create<void, FoodStatusResponse>(
   "/api/v1/foods/status",
 ).setMethod("GET");
 
-const getRefrigeratorFoodsApi = (
-  refrigeratorId: number,
+const getFridgeFoodsApi = (
+  fridgeId: number,
   cursorRequest: FridgeFoodsCursorRequest,
 ) =>
   ApiBuilder.create<void, FridgeFoodsResponseRaw>(
-    `/api/v1/refrigerators/${refrigeratorId}/foods`,
+    `/api/v1/refrigerators/${fridgeId}/foods`,
   )
     .setMethod("GET")
     .setParams(cursorRequest);
 
-export { getFoodStatusApi, getRefrigeratorFoodsApi };
+export { getFoodStatusApi, getFridgeFoodsApi };

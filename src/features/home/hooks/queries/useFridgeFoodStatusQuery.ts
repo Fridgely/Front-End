@@ -2,7 +2,7 @@ import { QUERY_KEYS } from "@/shared/constants/queryKeys";
 import { FoodItem } from "@/shared/types/food";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { getRefrigeratorFoodsApi } from "../../apis/food";
+import { getFridgeFoodsApi } from "../../apis/food";
 import type {
   FoodStatusData,
   FoodStatusResponse,
@@ -102,7 +102,7 @@ const useFridgeFoodStatusQuery = (
     queryKey: QUERY_KEYS.food.statusByRefrigerator(fridgeId ?? 0),
     queryFn: async ({ pageParam }) => {
       // cursorId를 포함하여 api 호출
-      const response = await getRefrigeratorFoodsApi(fridgeId ?? 0, {
+      const response = await getFridgeFoodsApi(fridgeId ?? 0, {
         ...DEFAULT_CURSOR_REQUEST,
         cursorId: pageParam as number | undefined,
       }).execute();
