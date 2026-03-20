@@ -11,8 +11,11 @@ const QUERY_KEYS = {
   },
   food: {
     all: ["foods"] as const,
+    statusAll: () => [...QUERY_KEYS.food.all, "status", "all"] as const,
     status: (fridgeId: number) =>
       [...QUERY_KEYS.food.all, "status", fridgeId] as const,
+    statusByRefrigerator: (fridgeId: number) =>
+      [...QUERY_KEYS.food.all, "statusByRefrigerator", fridgeId] as const,
   },
   notification: {
     all: ["notifications"] as const,
