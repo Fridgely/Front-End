@@ -2,9 +2,11 @@ import { useFridgeQuery } from "@/features/home/hooks/queries/useFridgeQuery";
 import { Header } from "@/shared/components/Header/Header";
 import {
   useFridgeActions,
+  useIsAllFridgeTab,
   useSelectedFridgeId,
 } from "@/shared/stores/useFridgeStore";
-import React, { useEffect, useMemo, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
@@ -20,14 +22,18 @@ import { FoodFormValues } from "../types";
 
 export function FoodAddScreen() {
   const selectedFridgeId = useSelectedFridgeId();
+  const isAllFridgeTab = useIsAllFridgeTab();
   const { setSelectedFridgeId } = useFridgeActions();
+  const isFocused = useIsFocused();
   const { data: fridgeData } = useFridgeQuery();
   const fridges = useMemo(() => fridgeData?.data ?? [], [fridgeData?.data]);
 
-  const [targetFridgeId, setTargetFridgeId] = useState<number | null>(
-    selectedFridgeId,
-  );
-  const { data: categoryData } = useCategoryQuery(targetFridgeId);
+  const [targetFridgeId, setTargetFridgeId] = useState<number | null>(null);
+  const {
+    data: categoryData,
+    isLoading: isCategoryLoading,
+    isFetching: isCategoryFetching,
+  } = useCategoryQuery(targetFridgeId);
   const categories = useMemo(
     () => categoryData?.data ?? [],
     [categoryData?.data],
@@ -36,7 +42,7 @@ export function FoodAddScreen() {
   const { mutate: addFood, isPending } = useAddFoodMutation(
     targetFridgeId ?? 0,
   );
-  const { control, handleSubmit, setValue } = useForm<FoodFormValues>({
+  const { control, handleSubmit, setValue, watch } = useForm<FoodFormValues>({
     mode: "onChange",
     defaultValues: {
       name: "",
@@ -48,27 +54,59 @@ export function FoodAddScreen() {
     },
   });
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const selectedCategoryId = watch("categoryId");
+  const isCategoryValid = categories.some(
+    (category) => category.id === selectedCategoryId,
+  );
+  const isTargetReady = targetFridgeId !== null;
+  const isCategoryReady =
+    isTargetReady &&
+    !isCategoryLoading &&
+    !isCategoryFetching &&
+    categories.length > 0 &&
+    isCategoryValid;
+  const wasFocusedRef = useRef(false);
 
   useEffect(() => {
-    if (targetFridgeId === null && fridges.length > 0) {
-      const firstFridgeId = fridges[0].id;
-      setTargetFridgeId(firstFridgeId);
-      setSelectedFridgeId(firstFridgeId);
+    if (isFocused && !wasFocusedRef.current) {
+      if (isAllFridgeTab) {
+        setTargetFridgeId(null);
+      } else {
+        setTargetFridgeId(selectedFridgeId);
+      }
+
+      setValue("categoryId", 0);
     }
-  }, [fridges, setSelectedFridgeId, targetFridgeId]);
+
+    wasFocusedRef.current = isFocused;
+  }, [isAllFridgeTab, isFocused, selectedFridgeId, setValue]);
+
+  useEffect(() => {
+    if (targetFridgeId !== null) {
+      setValue("categoryId", 0);
+    }
+  }, [targetFridgeId, setValue]);
 
   // 데이터 로드 시 첫 번째 값 설정
   useEffect(() => {
-    if (categories.length > 0) {
+    if (categories.length > 0 && !isCategoryValid) {
       setValue("categoryId", categories[0].id);
     }
-  }, [categories, setValue]);
+  }, [categories, isCategoryValid, setValue]);
 
   const onSubmit = (data: FoodFormValues) => {
-    if (targetFridgeId === null) {
+    if (!isTargetReady) {
       Toast.show({
         type: "error",
         text1: "등록할 냉장고를 선택해주세요.",
+      });
+      return;
+    }
+
+    if (!isCategoryReady) {
+      Toast.show({
+        type: "error",
+        text1: "카테고리 준비 후 다시 시도해주세요.",
       });
       return;
     }
@@ -136,7 +174,7 @@ export function FoodAddScreen() {
             size="$6"
             br="$3"
             onPress={handleSubmit(onSubmit)}
-            disabled={isPending || targetFridgeId === null}
+            disabled={isPending || !isTargetReady || !isCategoryReady}
           >
             <Text
               color="$mainText"
