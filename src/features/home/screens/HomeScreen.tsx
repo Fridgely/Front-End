@@ -1,6 +1,7 @@
 import { Header } from "@/shared/components/Header/Header";
 import {
   useFridgeActions,
+  useIsAllFridgeTab,
   useSelectedFridgeId,
 } from "@/shared/stores/useFridgeStore";
 import { FlashList } from "@shopify/flash-list";
@@ -20,10 +21,9 @@ import { FoodStatus, SortOption } from "../types";
 
 export function HomeScreen() {
   const { data: fridgeData, isLoading: isFridgeLoading } = useFridgeQuery();
-  // 첫번째 냉장고를 기본값으로 설정
   const selectedFridgeId = useSelectedFridgeId();
-  const { setSelectedFridgeId } = useFridgeActions();
-  const [isAllFridgeTab, setIsAllFridgeTab] = useState(true);
+  const isAllFridgeTab = useIsAllFridgeTab();
+  const { setSelectedFridgeId, setIsAllFridgeTab } = useFridgeActions();
 
   // 냉장고 목록 로드 완료 시 첫 번째 ID 설정
   useEffect(() => {
