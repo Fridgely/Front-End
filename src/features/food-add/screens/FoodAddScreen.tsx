@@ -1,8 +1,13 @@
+import { useFridgeQuery } from "@/features/home/hooks/queries/useFridgeQuery";
 import { Header } from "@/shared/components/Header/Header";
-import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
-import React, { useEffect, useState } from "react";
+import {
+  useFridgeActions,
+  useSelectedFridgeId,
+} from "@/shared/stores/useFridgeStore";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, ScrollView, Text, YStack } from "tamagui";
+import Toast from "react-native-toast-message";
+import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
 import { CategorySelector } from "../components/CategorySelector/CategorySelector";
 import { ExpiryDatePicker } from "../components/ExpiryDatePicker/ExpiryDatePicker";
 import { FoodNameInput } from "../components/FoodNameInput";
@@ -15,10 +20,22 @@ import { FoodFormValues } from "../types";
 
 export function FoodAddScreen() {
   const selectedFridgeId = useSelectedFridgeId();
-  const { data: categoryData } = useCategoryQuery(selectedFridgeId!);
-  const categories = categoryData?.data || [];
+  const { setSelectedFridgeId } = useFridgeActions();
+  const { data: fridgeData } = useFridgeQuery();
+  const fridges = useMemo(() => fridgeData?.data ?? [], [fridgeData?.data]);
 
-  const { mutate: addFood, isPending } = useAddFoodMutation(selectedFridgeId!);
+  const [targetFridgeId, setTargetFridgeId] = useState<number | null>(
+    selectedFridgeId,
+  );
+  const { data: categoryData } = useCategoryQuery(targetFridgeId);
+  const categories = useMemo(
+    () => categoryData?.data ?? [],
+    [categoryData?.data],
+  );
+
+  const { mutate: addFood, isPending } = useAddFoodMutation(
+    targetFridgeId ?? 0,
+  );
   const { control, handleSubmit, setValue } = useForm<FoodFormValues>({
     mode: "onChange",
     defaultValues: {
@@ -32,6 +49,14 @@ export function FoodAddScreen() {
   });
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (targetFridgeId === null && fridges.length > 0) {
+      const firstFridgeId = fridges[0].id;
+      setTargetFridgeId(firstFridgeId);
+      setSelectedFridgeId(firstFridgeId);
+    }
+  }, [fridges, setSelectedFridgeId, targetFridgeId]);
+
   // 데이터 로드 시 첫 번째 값 설정
   useEffect(() => {
     if (categories.length > 0) {
@@ -40,6 +65,14 @@ export function FoodAddScreen() {
   }, [categories, setValue]);
 
   const onSubmit = (data: FoodFormValues) => {
+    if (targetFridgeId === null) {
+      Toast.show({
+        type: "error",
+        text1: "등록할 냉장고를 선택해주세요.",
+      });
+      return;
+    }
+
     addFood(data);
   };
 
@@ -48,14 +81,46 @@ export function FoodAddScreen() {
       <Header title="식품 추가" showBackButton />
       <ScrollView f={1} showsVerticalScrollIndicator={false}>
         <YStack p="$4" gap="$5" pb="$10">
+          <YStack gap="$2">
+            <Text fontFamily="$baemin" fontSize="$4" color="$mainText">
+              등록 냉장고
+            </Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <XStack gap="$2">
+                {fridges.map((fridge) => {
+                  const isActive = targetFridgeId === fridge.id;
+                  return (
+                    <Button
+                      key={fridge.id}
+                      onPress={() => {
+                        setTargetFridgeId(fridge.id);
+                        setSelectedFridgeId(fridge.id);
+                      }}
+                      bg={isActive ? "$primary" : "$gray3"}
+                      borderWidth={1}
+                      borderColor={isActive ? "$primary" : "$gray3"}
+                      size="$4"
+                      br="$4"
+                      px="$4"
+                    >
+                      <Text fontFamily="$baemin" color="$mainText">
+                        {fridge.name}
+                      </Text>
+                    </Button>
+                  );
+                })}
+              </XStack>
+            </ScrollView>
+          </YStack>
+
           <ImageUploader control={control} />
           <FoodNameInput control={control} />
-          {selectedFridgeId !== null && (
+          {targetFridgeId !== null && (
             <CategorySelector
               control={control}
               categories={categories}
               onModalOpenChange={setIsCategoryModalOpen}
-              fridgeId={selectedFridgeId!}
+              fridgeId={targetFridgeId}
             />
           )}
           <StorageSelector control={control} />
@@ -71,7 +136,7 @@ export function FoodAddScreen() {
             size="$6"
             br="$3"
             onPress={handleSubmit(onSubmit)}
-            disabled={isPending}
+            disabled={isPending || targetFridgeId === null}
           >
             <Text
               color="$mainText"
