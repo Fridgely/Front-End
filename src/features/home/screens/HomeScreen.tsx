@@ -13,7 +13,8 @@ import { FoodListItem } from "../components/FoodListItem";
 import { FridgeTabScroll } from "../components/FridgeTabScroll";
 import { HomeSkeleton } from "../components/HomeSkeleton";
 import { SortFilter } from "../components/SortFilter";
-import { useFoodStatusQuery } from "../hooks/queries/useFoodStatusQuery";
+import { useAllFoodStatusQuery } from "../hooks/queries/useAllFoodStatusQuery";
+import { useFridgeFoodStatusQuery } from "../hooks/queries/useFridgeFoodStatusQuery";
 import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
 import { FoodStatus, SortOption } from "../types";
 
@@ -22,6 +23,7 @@ export function HomeScreen() {
   // 첫번째 냉장고를 기본값으로 설정
   const selectedFridgeId = useSelectedFridgeId();
   const { setSelectedFridgeId } = useFridgeActions();
+  const [isAllFridgeTab, setIsAllFridgeTab] = useState(true);
 
   // 냉장고 목록 로드 완료 시 첫 번째 ID 설정
   useEffect(() => {
@@ -33,9 +35,23 @@ export function HomeScreen() {
     }
   }, [fridgeData, selectedFridgeId, setSelectedFridgeId]);
 
-  const { data: foodStatusData, isLoading: isFoodLoading } = useFoodStatusQuery(
-    selectedFridgeId || 0,
-  );
+  const { data: allFoodStatusData, isLoading: isAllFoodLoading } =
+    useAllFoodStatusQuery(isAllFridgeTab);
+
+  const {
+    data: fridgeFoodStatusData,
+    isLoading: isRefrigeratorFoodLoading,
+    fetchNextPage: fetchNextFridgePage,
+    hasMore: hasMoreFridgeFood,
+  } = useFridgeFoodStatusQuery(selectedFridgeId, !isAllFridgeTab);
+
+  const foodStatusData = isAllFridgeTab
+    ? allFoodStatusData
+    : fridgeFoodStatusData;
+
+  const isFoodLoading = isAllFridgeTab
+    ? isAllFoodLoading
+    : isRefrigeratorFoodLoading;
 
   const [currentTab, setCurrentTab] = useState("전체");
   const [statusFilter, setStatusFilter] = useState<FoodStatus | null>(null);
@@ -102,8 +118,10 @@ export function HomeScreen() {
     });
   }, [allFoods, currentTab, statusFilter, selectedCategory, sortOption]);
 
-  const currentFridgeName =
-    fridgeData?.data?.find((f) => f.id === selectedFridgeId)?.name || "냉장고";
+  const currentFridgeName = isAllFridgeTab
+    ? "전체"
+    : fridgeData?.data?.find((f) => f.id === selectedFridgeId)?.name ||
+      "냉장고";
 
   if (isFridgeLoading || isFoodLoading) {
     return (
@@ -120,7 +138,12 @@ export function HomeScreen() {
       <YStack gap="$5">
         <FridgeTabScroll
           selectedId={selectedFridgeId}
-          onSelect={(fridge) => setSelectedFridgeId(fridge.id)}
+          isAllSelected={isAllFridgeTab}
+          onSelectAll={() => setIsAllFridgeTab(true)}
+          onSelect={(fridge) => {
+            setSelectedFridgeId(fridge.id);
+            setIsAllFridgeTab(false);
+          }}
           data={fridgeData?.data}
         />
         <Expiry
@@ -159,6 +182,12 @@ export function HomeScreen() {
           keyExtractor={(item) => item.id.toString()}
           //@ts-ignore
           contentContainerStyle={{ paddingBottom: 40 }}
+          onEndReached={() => {
+            if (!isAllFridgeTab && hasMoreFridgeFood) {
+              fetchNextFridgePage();
+            }
+          }}
+          onEndReachedThreshold={0.5}
           ListEmptyComponent={
             <YStack ai="center" jc="center" py="$10">
               <Text color="$gray">해당 카테고리에 음식이 없습니다.</Text>
