@@ -7,7 +7,7 @@ import { getUnitLabel } from "@/shared/utils/food";
 import { Card, Heading, Text, View, XStack, YStack } from "tamagui";
 import { FoodListItemProps } from "../types";
 
-export function FoodListItem({ item }: FoodListItemProps) {
+export function FoodListItem({ item, onPress }: FoodListItemProps) {
   const { foodStatus, expirationDate, daysLeft } = item.condition;
   const statusColor = FOOD_STATUS_LABELS[foodStatus];
   const statusBgColor = FOOD_STATUS_BG_COLORS[foodStatus];
@@ -24,6 +24,8 @@ export function FoodListItem({ item }: FoodListItemProps) {
       mb="$4"
       mx="$4"
       overflow="hidden"
+      onPress={onPress}
+      pressStyle={{ opacity: 0.85 }}
     >
       <XStack p="$4" ai="center" space="$4">
         <View

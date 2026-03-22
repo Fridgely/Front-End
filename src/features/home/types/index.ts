@@ -34,6 +34,7 @@ interface FridgeTabScrollProps {
 
 interface FoodListItemProps {
   item: FoodItem;
+  onPress?: () => void;
 }
 
 type CategoryTabType = (typeof STORAGE_TABS)[number];
