@@ -183,12 +183,20 @@ export function HomeScreen() {
           renderItem={({ item }) => (
             <FoodListItem
               item={item}
-              onPress={() =>
+              onPress={() => {
+                const targetRefrigeratorId =
+                  item.refrigeratorId ?? selectedFridgeId ?? undefined;
+
                 router.push({
                   pathname: "/food/[id]",
-                  params: { id: item.id },
-                })
-              }
+                  params: {
+                    id: item.id.toString(),
+                    ...(targetRefrigeratorId !== undefined
+                      ? { refrigeratorId: targetRefrigeratorId.toString() }
+                      : {}),
+                  },
+                } as any);
+              }}
             />
           )}
           keyExtractor={(item) => item.id.toString()}
