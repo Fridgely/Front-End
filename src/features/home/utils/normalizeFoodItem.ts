@@ -57,7 +57,7 @@ const normalizeFoodItem = (
   fallbackRefrigeratorId?: number,
 ): FoodItem => {
   const normalizedRefrigeratorId =
-    extractRefrigeratorId(food) ?? fallbackRefrigeratorId;
+    extractRefrigeratorId(food) ?? toValidNumber(fallbackRefrigeratorId);
 
   if (normalizedRefrigeratorId === undefined) {
     return food;
