@@ -9,6 +9,7 @@ import type {
   FridgeFoodsCursorRequest,
   FridgeFoodsResponseRaw,
 } from "../../apis/food.types";
+import { normalizeFoodItem } from "../../utils/normalizeFoodItem";
 
 const DEFAULT_CURSOR_REQUEST: FridgeFoodsCursorRequest = {
   size: 50,
@@ -126,7 +127,9 @@ const useFridgeFoodStatusQuery = (
 
     const allFoods: FoodItem[] = [];
     query.data.pages.forEach((page: any) => {
-      const foods = extractFoods(page.data);
+      const foods = extractFoods(page.data).map((food) =>
+        normalizeFoodItem(food, fridgeId ?? undefined),
+      );
       allFoods.push(...foods);
     });
 
@@ -135,7 +138,7 @@ const useFridgeFoodStatusQuery = (
       result: "SUCCESS",
       data: groupFoodsByStatus(allFoods),
     };
-  }, [query.data?.pages]);
+  }, [fridgeId, query.data?.pages]);
 
   const hasMore = query.hasNextPage ?? false;
 

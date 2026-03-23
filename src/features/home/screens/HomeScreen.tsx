@@ -5,6 +5,7 @@ import {
   useSelectedFridgeId,
 } from "@/shared/stores/useFridgeStore";
 import { FlashList } from "@shopify/flash-list";
+import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { Text, XStack, YStack } from "tamagui";
@@ -20,6 +21,7 @@ import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
 import { FoodStatus, SortOption } from "../types";
 
 export function HomeScreen() {
+  const router = useRouter();
   const { data: fridgeData, isLoading: isFridgeLoading } = useFridgeQuery();
   const selectedFridgeId = useSelectedFridgeId();
   const isAllFridgeTab = useIsAllFridgeTab();
@@ -178,7 +180,25 @@ export function HomeScreen() {
       <View style={{ flex: 1, width: "100%" }}>
         <FlashList
           data={sortedAndFilteredFoods}
-          renderItem={({ item }) => <FoodListItem item={item} />}
+          renderItem={({ item }) => (
+            <FoodListItem
+              item={item}
+              onPress={() => {
+                const targetRefrigeratorId =
+                  item.refrigeratorId ?? selectedFridgeId ?? undefined;
+
+                router.push({
+                  pathname: "/food/[id]",
+                  params: {
+                    id: item.id.toString(),
+                    ...(targetRefrigeratorId !== undefined
+                      ? { refrigeratorId: targetRefrigeratorId.toString() }
+                      : {}),
+                  },
+                } as any);
+              }}
+            />
+          )}
           keyExtractor={(item) => item.id.toString()}
           //@ts-ignore
           contentContainerStyle={{ paddingBottom: 40 }}

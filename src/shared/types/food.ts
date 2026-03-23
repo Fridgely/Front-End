@@ -3,8 +3,10 @@ type StorageType = "REFRIGERATION" | "FROZEN" | "ROOM_TEMPERATURE";
 
 interface FoodItem {
   id: number;
+  refrigeratorId?: number;
   name: string;
   categoryName: string;
+  description?: string;
   imageURL?: string;
   quantity: {
     amount: number;
