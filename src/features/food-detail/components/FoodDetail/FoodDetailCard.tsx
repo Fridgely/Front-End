@@ -62,7 +62,13 @@ export function FoodDetailCard({ food }: FoodDetailCardProps) {
       />
       <FoodDetailCardRow
         label="D-Day"
-        value={isExpired ? "만료" : `D-${food.condition.daysLeft}`}
+        value={
+          isExpired
+            ? "만료"
+            : food.condition.daysLeft === 0
+              ? "D-Day"
+              : `D-${food.condition.daysLeft}`
+        }
       />
     </YStack>
   );
