@@ -169,12 +169,25 @@ export function FoodEditScreen() {
     );
   }
 
-  if (isFoodLoading || isCategoryLoading || isCategoryFetching || !food) {
+  if (isFoodLoading || isCategoryLoading || isCategoryFetching) {
     return (
       <YStack f={1} backgroundColor="$background">
         <Header title="식품 수정" showBackButton />
         <YStack f={1} ai="center" jc="center">
           <Spinner color="$primary" size="large" />
+        </YStack>
+      </YStack>
+    );
+  }
+
+  if (!food) {
+    return (
+      <YStack f={1} backgroundColor="$background">
+        <Header title="식품 수정" showBackButton />
+        <YStack f={1} ai="center" jc="center" px="$4">
+          <Text color="$gray10" fontFamily="$baemin">
+            식품 정보를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
+          </Text>
         </YStack>
       </YStack>
     );
