@@ -1,6 +1,6 @@
 import { Header } from "@/shared/components/Header/Header";
-import { useLocalSearchParams } from "expo-router";
-import { ScrollView, Spinner, YStack } from "tamagui";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Button, ScrollView, Spinner, Text, YStack } from "tamagui";
 import { FoodDetailCard } from "../components/FoodDetail/FoodDetailCard";
 import { FoodStatusView } from "../components/FoodStatusView";
 import { ImageSection } from "../components/ImageSection";
@@ -8,6 +8,7 @@ import { useFoodDetailQuery } from "../hooks/queries/useFoodDetailQuery";
 import { parseParamToNumber } from "../utils/params";
 
 export function FoodDetailScreen() {
+  const router = useRouter();
   const { id, refrigeratorId } = useLocalSearchParams<{
     id?: string;
     refrigeratorId?: string;
@@ -75,6 +76,29 @@ export function FoodDetailScreen() {
         <YStack px="$4" py="$5" gap="$4" pb="$10">
           <ImageSection imageURL={food.imageURL} />
           <FoodDetailCard food={food} />
+          <Button
+            backgroundColor="$primary"
+            size="$5"
+            br="$3"
+            onPress={() => {
+              router.push({
+                pathname: "/food-edit",
+                params: {
+                  id: food.id.toString(),
+                  refrigeratorId: targetRefrigeratorId.toString(),
+                },
+              } as any);
+            }}
+          >
+            <Text
+              color="$mainText"
+              fontWeight="700"
+              fontSize="$4"
+              fontFamily="$baemin"
+            >
+              수정하기
+            </Text>
+          </Button>
         </YStack>
       </ScrollView>
     </YStack>
