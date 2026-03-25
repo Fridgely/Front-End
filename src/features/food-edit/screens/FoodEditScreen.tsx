@@ -228,7 +228,7 @@ export function FoodEditScreen() {
             size="$6"
             br="$3"
             onPress={handleSubmit(onSubmit)}
-            disabled={isPending || !isCategoryValid}
+            disabled={isPending}
           >
             <Text
               color="$mainText"
