@@ -5,12 +5,13 @@ import { getFoodDetailApi } from "../../apis/food-detail";
 const useFoodDetailQuery = (
   refrigeratorId: number | null,
   foodId: number | null,
+  enabled = true,
 ) => {
   return useApiQuery(
     getFoodDetailApi(refrigeratorId ?? 0, foodId ?? 0),
     QUERY_KEYS.food.detail(refrigeratorId ?? 0, foodId ?? 0),
     {
-      enabled: refrigeratorId !== null && foodId !== null,
+      enabled: enabled && refrigeratorId !== null && foodId !== null,
     },
   );
 };
