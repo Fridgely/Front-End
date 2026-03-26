@@ -1,5 +1,7 @@
+import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
 import { FlashList } from "@shopify/flash-list";
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Input, Text, View, XStack, YStack } from "tamagui";
@@ -7,6 +9,8 @@ import { SearchResultItem } from "../components/SearchResultItem";
 import { useSearchFood } from "../hooks/useSearchFood";
 
 export function SearchScreen() {
+  const router = useRouter();
+  const selectedFridgeId = useSelectedFridgeId();
   const [searchQuery, setSearchQuery] = useState("");
   const { filteredResult } = useSearchFood(searchQuery);
 
@@ -59,7 +63,25 @@ export function SearchScreen() {
         <View f={1} width="100%">
           <FlashList
             data={filteredResult}
-            renderItem={({ item }) => <SearchResultItem item={item} />}
+            renderItem={({ item }) => (
+              <SearchResultItem
+                item={item}
+                onPress={() => {
+                  const targetRefrigeratorId =
+                    item.refrigeratorId ?? selectedFridgeId ?? undefined;
+
+                  router.push({
+                    pathname: "/food/[id]",
+                    params: {
+                      id: item.id.toString(),
+                      ...(targetRefrigeratorId !== undefined
+                        ? { refrigeratorId: targetRefrigeratorId.toString() }
+                        : {}),
+                    },
+                  } as any);
+                }}
+              />
+            )}
             keyExtractor={(item) => item.id.toString()}
             ItemSeparatorComponent={() => (
               <View backgroundColor="$gray3" mx="$4" height={1} />

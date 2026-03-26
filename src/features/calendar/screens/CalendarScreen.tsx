@@ -1,6 +1,7 @@
 import { Header } from "@/shared/components/Header/Header";
 import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
 import { FoodItem } from "@/shared/types/food";
+import { useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { YStack } from "tamagui";
 import { useFoodStatusQuery } from "../../home/hooks/queries/useFoodStatusQuery";
@@ -21,6 +22,7 @@ const getLocalDateString = () => {
 };
 
 export function CalendarScreen() {
+  const router = useRouter();
   const selectedFridgeId = useSelectedFridgeId();
 
   const [selectedDate, setSelectedDate] = useState(() => getLocalDateString());
@@ -60,6 +62,20 @@ export function CalendarScreen() {
       <CalendarFoodList
         selectedDate={selectedDate}
         foods={foodsOnSelectedDate}
+        onPress={(food) => {
+          const targetRefrigeratorId =
+            food.refrigeratorId ?? selectedFridgeId ?? undefined;
+
+          router.push({
+            pathname: "/food/[id]",
+            params: {
+              id: food.id.toString(),
+              ...(targetRefrigeratorId !== undefined
+                ? { refrigeratorId: targetRefrigeratorId.toString() }
+                : {}),
+            },
+          } as any);
+        }}
       />
     </YStack>
   );

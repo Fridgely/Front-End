@@ -9,6 +9,7 @@ interface CalendarMonthViewProps {
 interface CalendarFoodListProps {
   selectedDate: string;
   foods: FoodItem[];
+  onPress?: (food: FoodItem) => void;
 }
 
 export { CalendarFoodListProps, CalendarMonthViewProps };
