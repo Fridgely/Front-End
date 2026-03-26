@@ -73,7 +73,11 @@ export function HomeScreen() {
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
 
   const { mutate: deleteFood, isPending: isDeletePending } =
-    useDeleteFoodMutation();
+    useDeleteFoodMutation({
+      onSettled: () => {
+        setDeleteTarget(null);
+      },
+    });
 
   const allFoods = useMemo(() => {
     if (!foodStatusData?.data) return [];
@@ -250,7 +254,7 @@ export function HomeScreen() {
         open={isDeleteConfirmOpen}
         onOpenChange={(open) => {
           setIsDeleteConfirmOpen(open);
-          if (!open) {
+          if (!open && !isDeletePending) {
             setDeleteTarget(null);
           }
         }}
@@ -262,9 +266,12 @@ export function HomeScreen() {
         }
         confirmText="삭제"
         onConfirm={() => {
-          if (!deleteTarget) {
+          if (!deleteTarget || isDeletePending) {
             return;
           }
+
+          setIsDeleteConfirmOpen(false);
+
           deleteFood({
             fridgeId: deleteTarget.fridgeId,
             foodId: deleteTarget.foodId,

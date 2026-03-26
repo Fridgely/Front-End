@@ -1,5 +1,9 @@
 import { QUERY_KEYS } from "@/shared/constants/queryKeys";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  useQueryClient,
+} from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { deleteFoodApi } from "../../apis/food";
 
@@ -8,7 +12,9 @@ interface DeleteFoodVariables {
   foodId: number;
 }
 
-const useDeleteFoodMutation = () => {
+const useDeleteFoodMutation = (
+  options?: UseMutationOptions<void, any, DeleteFoodVariables>,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation<void, any, DeleteFoodVariables>({
@@ -16,7 +22,7 @@ const useDeleteFoodMutation = () => {
     mutationFn: async ({ fridgeId, foodId }) => {
       await deleteFoodApi(fridgeId, foodId).execute();
     },
-    onSuccess: (_data, variables) => {
+    onSuccess: (data, variables, onMutateResult, context) => {
       const { fridgeId, foodId } = variables;
 
       queryClient.invalidateQueries({
@@ -32,8 +38,10 @@ const useDeleteFoodMutation = () => {
         text1: "식품 삭제 완료",
         text2: "식품이 성공적으로 삭제되었습니다.",
       });
+
+      options?.onSuccess?.(data, variables, onMutateResult, context);
     },
-    onError: (error: any) => {
+    onError: (error: any, variables, onMutateResult, context) => {
       const serverMessage = error.response?.data?.error?.message;
 
       Toast.show({
@@ -41,6 +49,11 @@ const useDeleteFoodMutation = () => {
         text1: "삭제 실패",
         text2: serverMessage || "식품 삭제 중 오류가 발생했습니다.",
       });
+
+      options?.onError?.(error, variables, onMutateResult, context);
+    },
+    onSettled: (data, error, variables, onMutateResult, context) => {
+      options?.onSettled?.(data, error, variables, onMutateResult, context);
     },
   });
 };
