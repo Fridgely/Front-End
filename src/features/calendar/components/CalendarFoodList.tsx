@@ -11,6 +11,7 @@ import {
 export function CalendarFoodList({
   selectedDate,
   foods,
+  onPress,
 }: CalendarFoodListProps) {
   const selectedDateLabel = getSelectedDateLabel(selectedDate);
 
@@ -41,6 +42,8 @@ export function CalendarFoodList({
                 py="$4"
                 bc="$gray4"
                 backgroundColor="$background"
+                onPress={() => onPress?.(food)}
+                pressStyle={{ opacity: 0.85 }}
               >
                 <XStack ai="center" gap="$3" f={1}>
                   <View
