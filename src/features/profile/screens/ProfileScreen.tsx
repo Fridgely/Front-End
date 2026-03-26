@@ -18,12 +18,20 @@ import {
   XStack,
   YStack,
 } from "tamagui";
+import { useAllFoodStatusQuery } from "../../home/hooks/queries/useAllFoodStatusQuery";
 import { Menu } from "../components/Menu";
 import { useLogoutMutation } from "../hooks/useLogoutMutation";
 
 export function ProfileScreen() {
   const { mutate: logout } = useLogoutMutation();
   const router = useRouter();
+  const { data: allFoodStatusData } = useAllFoodStatusQuery(true);
+
+  const registeredFoodCount =
+    (allFoodStatusData?.data?.blackCount ?? 0) +
+    (allFoodStatusData?.data?.redCount ?? 0) +
+    (allFoodStatusData?.data?.yellowCount ?? 0) +
+    (allFoodStatusData?.data?.greenCount ?? 0);
 
   return (
     <YStack f={1} backgroundColor="$background">
@@ -76,7 +84,7 @@ export function ProfileScreen() {
                   등록한 식품
                 </Text>
                 <Heading color="$mainText" size="$5" fontWeight="700">
-                  42개
+                  {registeredFoodCount}개
                 </Heading>
               </YStack>
             </Card>
