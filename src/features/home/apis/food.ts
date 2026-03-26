@@ -19,4 +19,9 @@ const getFridgeFoodsApi = (
     .setMethod("GET")
     .setParams(cursorRequest);
 
-export { getFoodStatusApi, getFridgeFoodsApi };
+const deleteFoodApi = (fridgeId: number, foodId: number) =>
+  ApiBuilder.create<void, void>(
+    `/api/v1/refrigerators/${fridgeId}/foods/${foodId}`,
+  ).setMethod("DELETE");
+
+export { deleteFoodApi, getFoodStatusApi, getFridgeFoodsApi };
