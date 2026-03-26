@@ -198,7 +198,9 @@ export function HomeScreen() {
             <SwipeableFoodListItem
               item={item}
               onDelete={() => {
-                const targetFridgeId = item.refrigeratorId ?? selectedFridgeId;
+                const targetFridgeId =
+                  item.refrigeratorId ||
+                  (!isAllFridgeTab ? selectedFridgeId : null);
                 if (!targetFridgeId) {
                   return;
                 }
