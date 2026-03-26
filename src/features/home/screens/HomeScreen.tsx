@@ -254,9 +254,6 @@ export function HomeScreen() {
         open={isDeleteConfirmOpen}
         onOpenChange={(open) => {
           setIsDeleteConfirmOpen(open);
-          if (!open && !isDeletePending) {
-            setDeleteTarget(null);
-          }
         }}
         title="정말 삭제하시겠습니까?"
         description={
@@ -269,8 +266,6 @@ export function HomeScreen() {
           if (!deleteTarget || isDeletePending) {
             return;
           }
-
-          setIsDeleteConfirmOpen(false);
 
           deleteFood({
             fridgeId: deleteTarget.fridgeId,
