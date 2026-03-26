@@ -3,9 +3,10 @@ import { Image, Text, View, XStack, YStack } from "tamagui";
 
 interface Props {
   item: FoodItem;
+  onPress?: () => void;
 }
 
-export function SearchResultItem({ item }: Props) {
+export function SearchResultItem({ item, onPress }: Props) {
   const statusColors = {
     GREEN: "$success",
     YELLOW: "$alert",
@@ -17,7 +18,15 @@ export function SearchResultItem({ item }: Props) {
     item.condition.foodStatus === "BLACK" || item.condition.daysLeft < 0;
 
   return (
-    <XStack ai="center" py="$3" px="$4" gap="$3" backgroundColor="$background">
+    <XStack
+      ai="center"
+      py="$3"
+      px="$4"
+      gap="$3"
+      backgroundColor="$background"
+      onPress={onPress}
+      pressStyle={{ opacity: 0.8 }}
+    >
       <View
         w={50}
         h={50}
