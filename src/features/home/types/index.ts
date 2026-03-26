@@ -37,6 +37,11 @@ interface FoodListItemProps {
   onPress?: () => void;
 }
 
+interface SwipeableFoodListItemProps extends FoodListItemProps {
+  onDelete?: (foodId: number) => void;
+  isDeleting?: boolean;
+}
+
 type CategoryTabType = (typeof STORAGE_TABS)[number];
 
 interface CategoryTabsProps {
@@ -64,4 +69,5 @@ export {
   SortFilterProps,
   SortOption,
   StatusItemProps,
+  SwipeableFoodListItemProps,
 };

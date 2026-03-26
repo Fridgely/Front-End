@@ -5,7 +5,7 @@ import {
 import { getExpiryLabel } from "@/shared/utils/date";
 import { getUnitLabel } from "@/shared/utils/food";
 import { Card, Heading, Text, View, XStack, YStack } from "tamagui";
-import { FoodListItemProps } from "../types";
+import { FoodListItemProps } from "../../types";
 
 export function FoodListItem({ item, onPress }: FoodListItemProps) {
   const { foodStatus, expirationDate, daysLeft } = item.condition;
