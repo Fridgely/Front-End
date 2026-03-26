@@ -103,7 +103,11 @@ export function ProfileScreen() {
               title="알림 설정"
               onPress={() => router.push("/profile/notification-setting")}
             />
-            <Menu icon={<Refrigerator />} title="냉장고 관리" />
+            <Menu
+              icon={<Refrigerator />}
+              title="냉장고 관리"
+              onPress={() => router.push("/fridge-management")}
+            />
             <Menu icon={<Palette />} title="테마 설정" />
             <Menu icon={<Headphones />} title="고객센터" />
             <Menu
