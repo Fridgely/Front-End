@@ -26,6 +26,7 @@ import {
   getMessaging,
   setBackgroundMessageHandler,
 } from "@react-native-firebase/messaging";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 if (__DEV__) {
   require("../ReactotronConfig");
@@ -90,36 +91,40 @@ export default function RootLayout() {
 
   if (!isAppReady || !animationFinished) {
     return (
-      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <AnimatedSplashScreen
-          onAnimationFinish={() => {
-            hasShownAnimatedSplash = true;
-            setAnimationFinished(true);
-          }}
-        />
-      </View>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <AnimatedSplashScreen
+            onAnimationFinish={() => {
+              hasShownAnimatedSplash = true;
+              setAnimationFinished(true);
+            }}
+          />
+        </View>
+      </GestureHandlerRootView>
     );
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider>
-        <TamaguiProvider config={config} defaultTheme="light">
-          {/* 세션 관리 로직을 위해 스택 위에 배치 */}
-          <SessionProvider />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <TamaguiProvider config={config} defaultTheme="light">
+            {/* 세션 관리 로직을 위해 스택 위에 배치 */}
+            <SessionProvider />
 
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen
-              name="modal"
-              options={{ presentation: "modal", title: "Modal" }}
-            />
-          </Stack>
-          <StatusBar style="auto" />
-          <Toast config={toastConfig} />
-        </TamaguiProvider>
-      </SafeAreaProvider>
-    </QueryClientProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="(auth)" />
+              <Stack.Screen
+                name="modal"
+                options={{ presentation: "modal", title: "Modal" }}
+              />
+            </Stack>
+            <StatusBar style="auto" />
+            <Toast config={toastConfig} />
+          </TamaguiProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

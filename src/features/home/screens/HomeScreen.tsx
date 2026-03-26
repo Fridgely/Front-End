@@ -1,4 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
+import { ConfirmModal } from "@/shared/components/Modal/ConfirmModal";
 import {
   useFridgeActions,
   useIsAllFridgeTab,
@@ -11,14 +12,22 @@ import { View } from "react-native";
 import { Text, XStack, YStack } from "tamagui";
 import { CategoryTabs } from "../components/CategoryTabs";
 import { Expiry } from "../components/Expiry/Expiry";
-import { FoodListItem } from "../components/FoodListItem";
+import { SwipeableFoodListItem } from "../components/FoodListItem/SwipeableFoodListItem";
 import { FridgeTabScroll } from "../components/FridgeTabScroll";
 import { HomeSkeleton } from "../components/HomeSkeleton";
 import { SortFilter } from "../components/SortFilter";
+import { useDeleteFoodMutation } from "../hooks/mutations/useDeleteFoodMutation";
 import { useAllFoodStatusQuery } from "../hooks/queries/useAllFoodStatusQuery";
 import { useFridgeFoodStatusQuery } from "../hooks/queries/useFridgeFoodStatusQuery";
 import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
 import { FoodStatus, SortOption } from "../types";
+
+interface DeleteTarget {
+  // foodName은 삭제 확인 모달에 표시할지 말지 고민
+  fridgeId: number;
+  foodId: number;
+  // foodName: string;
+}
 
 export function HomeScreen() {
   const router = useRouter();
@@ -60,6 +69,15 @@ export function HomeScreen() {
   const [sortOption, setSortOption] = useState<SortOption>("EXPIRY_ASC");
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
+
+  const { mutate: deleteFood, isPending: isDeletePending } =
+    useDeleteFoodMutation({
+      onSettled: () => {
+        setDeleteTarget(null);
+      },
+    });
 
   const allFoods = useMemo(() => {
     if (!foodStatusData?.data) return [];
@@ -181,8 +199,24 @@ export function HomeScreen() {
         <FlashList
           data={sortedAndFilteredFoods}
           renderItem={({ item }) => (
-            <FoodListItem
+            <SwipeableFoodListItem
               item={item}
+              onDelete={() => {
+                const targetFridgeId =
+                  item.refrigeratorId ||
+                  (!isAllFridgeTab ? selectedFridgeId : null);
+                if (!targetFridgeId) {
+                  return;
+                }
+
+                setDeleteTarget({
+                  fridgeId: targetFridgeId,
+                  foodId: item.id,
+                  // foodName: item.name,
+                });
+                setIsDeleteConfirmOpen(true);
+              }}
+              isDeleting={isDeletePending && deleteTarget?.foodId === item.id}
               onPress={() => {
                 const targetRefrigeratorId =
                   item.refrigeratorId ?? selectedFridgeId ?? undefined;
@@ -215,6 +249,31 @@ export function HomeScreen() {
           }
         />
       </View>
+
+      <ConfirmModal
+        open={isDeleteConfirmOpen}
+        onOpenChange={(open) => {
+          setIsDeleteConfirmOpen(open);
+        }}
+        title="정말 삭제하시겠습니까?"
+        description={
+          deleteTarget
+            ? `삭제된 식품은 복구할 수 없습니다. 신중하게 선택해 주세요.`
+            : "선택한 식품을 삭제하시겠어요?"
+        }
+        confirmText="삭제"
+        onConfirm={() => {
+          if (!deleteTarget || isDeletePending) {
+            return;
+          }
+
+          deleteFood({
+            fridgeId: deleteTarget.fridgeId,
+            foodId: deleteTarget.foodId,
+          });
+        }}
+        confirmColor="$warning"
+      />
 
       <SortFilter
         visible={isFilterOpen}
