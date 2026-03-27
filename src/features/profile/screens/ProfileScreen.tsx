@@ -9,6 +9,7 @@ import {
 } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React from "react";
+import { Linking } from "react-native";
 import {
   Avatar,
   Button,
@@ -35,6 +36,13 @@ export function ProfileScreen() {
     (allFoodStatusData?.data?.redCount ?? 0) +
     (allFoodStatusData?.data?.yellowCount ?? 0) +
     (allFoodStatusData?.data?.greenCount ?? 0);
+
+  const handleCustomerSupport = () => {
+    // TODO 추후에 건의사항 이메일 변경
+    const email = "example@fridgely.com";
+    const subject = "Fridgely 건의사항";
+    Linking.openURL(`mailto:${email}?subject=${subject}`);
+  };
 
   return (
     <YStack f={1} backgroundColor="$background">
@@ -118,7 +126,11 @@ export function ProfileScreen() {
               }
               onPress={toggleTheme}
             />
-            <Menu icon={<Headphones />} title="고객센터" />
+            <Menu
+              icon={<Headphones />}
+              title="문의하기"
+              onPress={handleCustomerSupport}
+            />
             <Menu
               icon={<LogOut />}
               iconColor="$warning"
