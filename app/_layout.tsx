@@ -2,19 +2,16 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 
-import {
-  useAuthActions,
-  useIsAuthLoaded,
-} from "@/features/auth/store/useAuthStore";
 import AnimatedSplashScreen from "@/shared/components/AnimatedSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
+import { useAppHydration } from "@/shared/hooks/useAppHydration";
 import { queryClient } from "@/shared/lib/queryClient";
 import { SessionProvider } from "@/shared/providers/SessionProvider";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
@@ -22,7 +19,6 @@ import { useFonts } from "expo-font";
 import config from "../tamagui.config";
 
 import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
-import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   getMessaging,
   setBackgroundMessageHandler,
@@ -67,10 +63,7 @@ let hasShownAnimatedSplash = false;
 
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
-  const isLoaded = useIsAuthLoaded();
-  const { hydrate } = useAuthActions();
-  const theme = useThemeStore((state) => state.theme);
-  const [themeLoaded, setThemeLoaded] = useState(false);
+  const { isHydrated, theme } = useAppHydration();
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -80,12 +73,7 @@ export default function RootLayout() {
     BMJUA: require("../assets/fonts/BMJUA.otf"),
   });
 
-  useEffect(() => {
-    hydrate();
-    setThemeLoaded(true);
-  }, []);
-
-  const isAppReady = (isLoaded && fontsLoaded && themeLoaded) || !!fontError;
+  const isAppReady = (isHydrated && fontsLoaded) || !!fontError;
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
