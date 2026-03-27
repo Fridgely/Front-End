@@ -1,3 +1,4 @@
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import { ArrowLeft } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
@@ -11,6 +12,7 @@ import { AuthFormData } from "../types/auth.types";
 
 export function SignupScreen() {
   const router = useRouter();
+  const theme = useThemeStore((state) => state.theme);
   const { mutate: signUp, isPending: isSignupPending } = useSignupMutation();
 
   const {
@@ -40,7 +42,12 @@ export function SignupScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: theme === "dark" ? "#0B1110" : "#F9FAFB",
+      }}
+    >
       <KeyboardAwareScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}

@@ -131,7 +131,7 @@ export const TimePickerSelect = ({ value, onValueChange }: any) => {
               onPress={handleConfirm}
               backgroundColor="$primary"
             >
-              <Text color="white" fontWeight="bold" fontSize="$4">
+              <Text color="$white" fontWeight="bold" fontSize="$4">
                 확인
               </Text>
             </Button>

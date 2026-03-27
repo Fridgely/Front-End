@@ -66,7 +66,7 @@ export function SearchResultItem({ item, onPress }: Props) {
           br="$3"
           bc={statusColors[item.condition.foodStatus]}
         >
-          <Text fontSize={10} color="white" fontWeight="bold">
+          <Text fontSize={10} color="$white" fontWeight="bold">
             {isExpired ? "만료" : `D-${item.condition.daysLeft}`}
           </Text>
         </View>

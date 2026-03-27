@@ -21,7 +21,7 @@ export const ConfirmModal = ({
           opacity={0.5}
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
-          backgroundColor="black"
+          backgroundColor="$black"
         />
         <Dialog.Content
           bordered
@@ -81,7 +81,7 @@ export const ConfirmModal = ({
                 pressStyle={{ opacity: 0.8, scale: 0.98 }}
                 br="$2"
               >
-                <Text color="white" fontWeight="700" fontSize="$5">
+                <Text color="$white" fontWeight="700" fontSize="$5">
                   {confirmText}
                 </Text>
               </Button>

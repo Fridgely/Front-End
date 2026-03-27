@@ -45,7 +45,7 @@ export function FridgeAddScreen() {
 
         <Button
           bc="$primary"
-          color="white"
+          color="$white"
           h={56}
           br="$4"
           fontWeight="700"

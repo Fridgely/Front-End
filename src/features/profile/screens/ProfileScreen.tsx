@@ -1,4 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   Bell,
   Headphones,
@@ -8,6 +9,7 @@ import {
 } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React from "react";
+import { Linking } from "react-native";
 import {
   Avatar,
   Button,
@@ -18,12 +20,29 @@ import {
   XStack,
   YStack,
 } from "tamagui";
+import { useAllFoodStatusQuery } from "../../home/hooks/queries/useAllFoodStatusQuery";
 import { Menu } from "../components/Menu";
 import { useLogoutMutation } from "../hooks/useLogoutMutation";
 
 export function ProfileScreen() {
   const { mutate: logout } = useLogoutMutation();
   const router = useRouter();
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const { data: allFoodStatusData } = useAllFoodStatusQuery(true);
+
+  const registeredFoodCount =
+    (allFoodStatusData?.data?.blackCount ?? 0) +
+    (allFoodStatusData?.data?.redCount ?? 0) +
+    (allFoodStatusData?.data?.yellowCount ?? 0) +
+    (allFoodStatusData?.data?.greenCount ?? 0);
+
+  const handleCustomerSupport = () => {
+    // TODO 추후에 건의사항 이메일 변경
+    const email = "example@fridgely.com";
+    const subject = "Fridgely 건의사항";
+    Linking.openURL(`mailto:${email}?subject=${subject}`);
+  };
 
   return (
     <YStack f={1} backgroundColor="$background">
@@ -68,7 +87,7 @@ export function ProfileScreen() {
               borderRadius="$4"
               borderWidth={1}
               borderColor="$gray3"
-              backgroundColor="$white"
+              backgroundColor="$surface"
               f={1}
             >
               <YStack gap="$2">
@@ -76,7 +95,7 @@ export function ProfileScreen() {
                   등록한 식품
                 </Text>
                 <Heading color="$mainText" size="$5" fontWeight="700">
-                  42개
+                  {registeredFoodCount}개
                 </Heading>
               </YStack>
             </Card>
@@ -84,7 +103,7 @@ export function ProfileScreen() {
 
           {/* 메뉴  */}
           <YStack
-            backgroundColor="$white"
+            backgroundColor="$surface"
             borderRadius="$4"
             overflow="hidden"
             borderWidth={1}
@@ -95,9 +114,23 @@ export function ProfileScreen() {
               title="알림 설정"
               onPress={() => router.push("/profile/notification-setting")}
             />
-            <Menu icon={<Refrigerator />} title="냉장고 관리" />
-            <Menu icon={<Palette />} title="테마 설정" />
-            <Menu icon={<Headphones />} title="고객센터" />
+            <Menu
+              icon={<Refrigerator />}
+              title="냉장고 관리"
+              onPress={() => router.push("/fridge-management")}
+            />
+            <Menu
+              icon={<Palette />}
+              title={
+                theme === "light" ? "다크 모드로 변경" : "라이트 모드로 변경"
+              }
+              onPress={toggleTheme}
+            />
+            <Menu
+              icon={<Headphones />}
+              title="문의하기"
+              onPress={handleCustomerSupport}
+            />
             <Menu
               icon={<LogOut />}
               iconColor="$warning"

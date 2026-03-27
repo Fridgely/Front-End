@@ -34,20 +34,20 @@ export function MenuIcon({
     >
       <Circle
         size={ICON_SIZE}
-        backgroundColor="white"
+        backgroundColor="$surface"
         elevation={8}
-        shadowColor="#000"
+        shadowColor="$black"
         shadowOpacity={0.2}
         shadowRadius={10}
         onPress={isDisabled ? undefined : onPress}
       >
         {React.cloneElement(icon as any, {
-          color: "#2BEEAD",
+          color: "$primary",
           size: ICON_SIZE * 0.5,
         })}
       </Circle>
       <Text
-        color="white"
+        color="$white"
         fontSize="$3"
         fontWeight="400"
         textAlign="center"

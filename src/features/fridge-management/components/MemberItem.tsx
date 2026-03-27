@@ -9,10 +9,10 @@ export function MemberItem({ member, isLast }: FridgeMembersProps) {
       ai="center"
       px="$4"
       py="$3"
-      backgroundColor="white"
+      backgroundColor="$surface"
       borderBottomWidth={isLast ? 0 : 1}
       borderBottomColor="$gray3"
-      bc="$white"
+      bc="$surface"
     >
       <YStack f={1} ml="$3" gap="$1">
         <Text

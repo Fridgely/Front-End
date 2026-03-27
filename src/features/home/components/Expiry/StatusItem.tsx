@@ -27,7 +27,7 @@ export function StatusItem({
       <Text fontSize="$5" fontWeight="700" py="$1">
         {count}
       </Text>
-      <Text fontFamily="$baemin" fontSize={10} fontWeight="400" color="$gray10">
+      <Text fontFamily="$baemin" fontSize={10} fontWeight="400" color="$gray9">
         {sub}
       </Text>
     </YStack>

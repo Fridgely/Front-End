@@ -2,19 +2,16 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 
-import {
-  useAuthActions,
-  useIsAuthLoaded,
-} from "@/features/auth/store/useAuthStore";
 import AnimatedSplashScreen from "@/shared/components/AnimatedSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
+import { useAppHydration } from "@/shared/hooks/useAppHydration";
 import { queryClient } from "@/shared/lib/queryClient";
 import { SessionProvider } from "@/shared/providers/SessionProvider";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
@@ -66,8 +63,7 @@ let hasShownAnimatedSplash = false;
 
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
-  const isLoaded = useIsAuthLoaded();
-  const { hydrate } = useAuthActions();
+  const { isHydrated, theme } = useAppHydration();
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -77,11 +73,7 @@ export default function RootLayout() {
     BMJUA: require("../assets/fonts/BMJUA.otf"),
   });
 
-  useEffect(() => {
-    hydrate();
-  }, []);
-
-  const isAppReady = (isLoaded && fontsLoaded) || !!fontError;
+  const isAppReady = (isHydrated && fontsLoaded) || !!fontError;
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
@@ -108,7 +100,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
-          <TamaguiProvider config={config} defaultTheme="light">
+          <TamaguiProvider config={config} defaultTheme={theme}>
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 

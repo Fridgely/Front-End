@@ -19,7 +19,7 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
     <Card
       elevate
       bordered
-      backgroundColor="white"
+      backgroundColor="$surface"
       borderRadius="$4"
       mb="$4"
       mx="$4"

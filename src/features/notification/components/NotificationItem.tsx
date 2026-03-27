@@ -57,7 +57,12 @@ export const NotificationItem = ({ item }: { item: NotificationItemProps }) => {
             </XStack>
           </XStack>
 
-          <Text fontSize="$3" fontWeight="700" color="$black" numberOfLines={1}>
+          <Text
+            fontSize="$3"
+            fontWeight="700"
+            color="$mainText"
+            numberOfLines={1}
+          >
             {item.title}
           </Text>
           <Text fontSize="$3" color="$gray10" lineHeight={18}>

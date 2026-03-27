@@ -1,4 +1,5 @@
-import { calendarTheme } from "@/features/calendar/constants/calendarTheme";
+import { getCalendarTheme } from "@/features/calendar/constants/calendarTheme";
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import { ChevronLeft, ChevronRight } from "@tamagui/lucide-icons";
 import React from "react";
 import {
@@ -16,6 +17,14 @@ export function CalendarMonthView({
   markedDates,
   onSelectDate,
 }: CalendarMonthViewProps) {
+  const theme = useThemeStore((state) => state.theme);
+  const isDark = theme === "dark";
+  const arrowColor = isDark ? "#E5EBE9" : "#111111";
+  const selectedDayBg = isDark ? "#26D19B" : "#2EE6A8";
+  const dayTextColor = isDark ? "#E5EBE9" : "#111111";
+  const selectedDayTextColor = "#111111";
+  const disabledDayTextColor = isDark ? "#4A5A56" : "#D0D4D3";
+
   return (
     <View px="$2">
       <Calendar
@@ -23,11 +32,11 @@ export function CalendarMonthView({
         onDayPress={(day: DateData) => onSelectDate(day.dateString)}
         markingType="multi-dot"
         markedDates={markedDates}
-        theme={calendarTheme}
+        theme={getCalendarTheme(theme)}
         hideExtraDays={false}
         enableSwipeMonths
         renderArrow={(direction) => (
-          <RNText style={styles.arrow}>
+          <RNText style={[styles.arrow, { color: arrowColor }]}>
             {direction === "left" ? (
               <ChevronLeft size={24} color="$mainText" />
             ) : (
@@ -54,15 +63,16 @@ export function CalendarMonthView({
               <RNView
                 style={[
                   styles.dayCircle,
-                  isSelected && styles.dayCircleSelected,
+                  isSelected && { backgroundColor: selectedDayBg },
                   isDimmed && styles.dayCircleDisabled,
                 ]}
               >
                 <RNText
                   style={[
                     styles.dayText,
-                    isSelected && styles.dayTextSelected,
-                    isDimmed && styles.dayTextDisabled,
+                    { color: dayTextColor },
+                    isSelected && { color: selectedDayTextColor },
+                    isDimmed && { color: disabledDayTextColor },
                   ]}
                 >
                   {date?.day}
@@ -89,7 +99,6 @@ const styles = StyleSheet.create({
   arrow: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#111111",
     paddingHorizontal: 6,
   },
   dayWrap: {
@@ -105,10 +114,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  dayCircleSelected: {
-    borderRadius: 20,
-    backgroundColor: "#2EE6A8",
-  },
   dayCircleDisabled: {
     opacity: 0.35,
   },
@@ -118,14 +123,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     includeFontPadding: false,
     textAlignVertical: "center",
-    color: "#111111",
-  },
-  dayTextSelected: {
-    fontWeight: "700",
-    color: "#111111",
-  },
-  dayTextDisabled: {
-    color: "#D0D4D3",
   },
   dotRow: {
     minHeight: 8,

@@ -1,3 +1,4 @@
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import { Controller } from "react-hook-form";
 import { Platform } from "react-native";
 import { Heading, Input, Text, YStack } from "tamagui";
@@ -12,9 +13,11 @@ export function AuthInput({
   ...props
 }: AuthInputProps) {
   const error = errors?.[name];
+  const theme = useThemeStore((state) => state.theme);
+
   return (
     <YStack gap="$2">
-      <Heading color="$gray12" fontWeight="700" fontSize="$2" ml="$1">
+      <Heading color="$mainText" fontWeight="700" fontSize="$2" ml="$1">
         {label}
       </Heading>
       <Controller
@@ -25,18 +28,20 @@ export function AuthInput({
           <Input
             h={56}
             fontSize="$3"
-            bc="$gray2"
+            bc="$surface"
             bw={error ? 1.5 : 0}
             boc="$warning"
             br="$3"
             px="$4"
+            color="$mainText"
+            placeholderTextColor={theme === "dark" ? "#4A5A56" : "#9CA3AF"}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
             style={{
               fontFamily: Platform.OS === "ios" ? "System" : "sans-serif",
             }}
-            focusStyle={{ bc: "$white", bw: 2, boc: "$primary" }}
+            focusStyle={{ bc: "$surface", bw: 2, boc: "$primary" }}
             {...props}
           />
         )}

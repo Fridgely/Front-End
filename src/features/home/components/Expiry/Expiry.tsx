@@ -13,7 +13,7 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
     <Card
       elevate
       bordered
-      backgroundColor="white"
+      backgroundColor="$surface"
       borderRadius="$3"
       p="$4"
       mx="$4"

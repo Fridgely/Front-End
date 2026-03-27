@@ -108,7 +108,7 @@ export const FridgeNameEditSheet = ({
                     h={56}
                     br="$4"
                   >
-                    <Text color="$black" fontWeight="700" fontSize={16}>
+                    <Text color="$mainText" fontWeight="700" fontSize={16}>
                       {isLoading ? "수정 중..." : "수정 완료"}
                     </Text>
                   </Button>

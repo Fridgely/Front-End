@@ -31,7 +31,7 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
                   w={25}
                   h={30}
                   br="$2"
-                  bg="white"
+                  bg="$surface"
                   icon={<Minus size={16} />}
                   onPress={() => onChange(Math.max(1, value - 1))}
                 />
@@ -42,7 +42,7 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
                   w={25}
                   h={30}
                   br="$2"
-                  bg="white"
+                  bg="$surface"
                   icon={<Plus size={16} />}
                   onPress={() => onChange(value + 1)}
                 />

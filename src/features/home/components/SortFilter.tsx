@@ -74,7 +74,7 @@ export function SortFilter({
                     <Button
                       key={option.value}
                       h={62}
-                      bg="$white"
+                      bg="$surface"
                       boc="$gray3"
                       bw={1}
                       br="$6"
@@ -122,12 +122,10 @@ export function SortFilter({
                       return (
                         <Button
                           key={category}
-                          backgroundColor={isActive ? "$primary" : "$white"}
-                          boc="$gray3"
-                          bw={1}
-                          br="$6"
+                          backgroundColor={isActive ? "$primary" : "$gray3"}
+                          br="$4"
                           px="$4"
-                          h={48}
+                          size="$4"
                           onPress={() => setDraftCategory(category)}
                           pressStyle={{ scale: 0.97 }}
                         >
