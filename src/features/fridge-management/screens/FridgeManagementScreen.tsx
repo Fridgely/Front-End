@@ -154,7 +154,7 @@ export function FridgeManagementScreen() {
           fridgeInfo && (
             <>
               <YStack ai="center" py="$8" gap="$3">
-                <View p="$4" br="$6" bc="$white" mb="$2">
+                <View p="$4" br="$6" bc="$surface" mb="$2">
                   <Refrigerator size={48} color="$primary" />
                 </View>
 
@@ -195,7 +195,7 @@ export function FridgeManagementScreen() {
               <YStack px="$5" mt="$6" gap="$5">
                 <Button
                   bc="$primary"
-                  color="white"
+                  color="$white"
                   h={56}
                   br="$4"
                   fontWeight="700"

@@ -118,7 +118,7 @@ export const FridgeSelectionSheet = ({
 
                         {isSelected && (
                           <Circle size={24} bc="$primary">
-                            <Check size={16} color="white" />
+                            <Check size={16} color="$white" />
                           </Circle>
                         )}
                       </XStack>

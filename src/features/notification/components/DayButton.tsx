@@ -12,10 +12,10 @@ export const DayButton = ({ day, active, onPress }: DayButtonProps) => (
     backgroundColor={active ? "$primary" : "$gray3"}
     onPress={onPress}
     pressStyle={{ scale: 0.95 }}
-    icon={active ? <Check size={16} color="white" strokeWidth={2} /> : null}
+    icon={active ? <Check size={16} color="$white" strokeWidth={2} /> : null}
     animation="quick"
   >
-    <Text color={active ? "white" : "$mainText"} fontWeight="700">
+    <Text color={active ? "$white" : "$mainText"} fontWeight="700">
       {day}일 전
     </Text>
   </Button>

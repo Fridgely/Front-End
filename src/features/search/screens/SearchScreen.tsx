@@ -1,4 +1,5 @@
 import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import { FlashList } from "@shopify/flash-list";
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
@@ -11,11 +12,17 @@ import { useSearchFood } from "../hooks/useSearchFood";
 export function SearchScreen() {
   const router = useRouter();
   const selectedFridgeId = useSelectedFridgeId();
+  const theme = useThemeStore((state) => state.theme);
   const [searchQuery, setSearchQuery] = useState("");
   const { filteredResult } = useSearchFood(searchQuery);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#F6F8F7" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: theme === "dark" ? "#0B1110" : "#F6F8F7",
+      }}
+    >
       <YStack f={1} backgroundColor="$background">
         <XStack px="$3" py="$2" ai="center" gap="$2">
           <XStack

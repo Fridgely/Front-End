@@ -1,4 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   Bell,
   Headphones,
@@ -25,6 +26,8 @@ import { useLogoutMutation } from "../hooks/useLogoutMutation";
 export function ProfileScreen() {
   const { mutate: logout } = useLogoutMutation();
   const router = useRouter();
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const { data: allFoodStatusData } = useAllFoodStatusQuery(true);
 
   const registeredFoodCount =
@@ -76,7 +79,7 @@ export function ProfileScreen() {
               borderRadius="$4"
               borderWidth={1}
               borderColor="$gray3"
-              backgroundColor="$white"
+              backgroundColor="$surface"
               f={1}
             >
               <YStack gap="$2">
@@ -92,7 +95,7 @@ export function ProfileScreen() {
 
           {/* 메뉴  */}
           <YStack
-            backgroundColor="$white"
+            backgroundColor="$surface"
             borderRadius="$4"
             overflow="hidden"
             borderWidth={1}
@@ -108,7 +111,13 @@ export function ProfileScreen() {
               title="냉장고 관리"
               onPress={() => router.push("/fridge-management")}
             />
-            <Menu icon={<Palette />} title="테마 설정" />
+            <Menu
+              icon={<Palette />}
+              title={
+                theme === "light" ? "다크 모드로 변경" : "라이트 모드로 변경"
+              }
+              onPress={toggleTheme}
+            />
             <Menu icon={<Headphones />} title="고객센터" />
             <Menu
               icon={<LogOut />}

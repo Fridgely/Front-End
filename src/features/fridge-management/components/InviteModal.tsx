@@ -78,9 +78,9 @@ export const InviteModal = ({
               br="$4"
               pressStyle={{ opacity: 0.8 }}
               onPress={onShareKakao}
-              icon={<MessageCircle size={20} color="black" fill="black" />}
+              icon={<MessageCircle size={20} color="$black" fill="black" />}
             >
-              <Text fontWeight="700" color="black">
+              <Text fontWeight="700" color="$black">
                 카카오톡으로 공유
               </Text>
             </Button>
@@ -91,9 +91,9 @@ export const InviteModal = ({
               br="$4"
               pressStyle={{ opacity: 0.8 }}
               onPress={onCopy}
-              icon={<Copy size={20} color="white" />}
+              icon={<Copy size={20} color="$white" />}
             >
-              <Text color="white" fontWeight="700">
+              <Text color="$white" fontWeight="700">
                 코드 복사하기
               </Text>
             </Button>

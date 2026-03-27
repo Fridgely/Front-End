@@ -23,7 +23,7 @@ export function FoodDetailCard({ food }: FoodDetailCardProps) {
   const isExpired = food.condition.daysLeft < 0;
 
   return (
-    <YStack bc="$white" br="$5" p="$4" gap="$3">
+    <YStack bc="$surface" br="$5" p="$4" gap="$3">
       <YStack gap="$2">
         <XStack ai="center" jc="space-between" gap="$2">
           <Text

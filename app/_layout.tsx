@@ -22,6 +22,7 @@ import { useFonts } from "expo-font";
 import config from "../tamagui.config";
 
 import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
+import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   getMessaging,
   setBackgroundMessageHandler,
@@ -68,6 +69,8 @@ export default function RootLayout() {
   useReactQueryDevTools(queryClient);
   const isLoaded = useIsAuthLoaded();
   const { hydrate } = useAuthActions();
+  const theme = useThemeStore((state) => state.theme);
+  const [themeLoaded, setThemeLoaded] = useState(false);
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -79,9 +82,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     hydrate();
+    setThemeLoaded(true);
   }, []);
 
-  const isAppReady = (isLoaded && fontsLoaded) || !!fontError;
+  const isAppReady = (isLoaded && fontsLoaded && themeLoaded) || !!fontError;
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
@@ -108,7 +112,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
-          <TamaguiProvider config={config} defaultTheme="light">
+          <TamaguiProvider config={config} defaultTheme={theme}>
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 
@@ -118,6 +122,10 @@ export default function RootLayout() {
               <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: "Modal" }}
+              />
+              <Stack.Screen
+                name="theme-setting"
+                options={{ headerShown: false }}
               />
             </Stack>
             <StatusBar style="auto" />

@@ -5,7 +5,7 @@ export const toastConfig: ToastConfig = {
   success: ({ text1, text2 }) => (
     <XStack
       width="92%"
-      backgroundColor="$white"
+      backgroundColor="$surface"
       px="$4"
       py="$3"
       borderRadius="$3"
@@ -34,12 +34,12 @@ export const toastConfig: ToastConfig = {
   error: ({ text1, text2 }) => (
     <XStack
       width="92%"
-      backgroundColor="$white"
+      backgroundColor="$surface"
       px="$4"
       py="$3"
       borderRadius="$3"
       borderLeftWidth={6}
-      borderLeftColor="$danger"
+      borderLeftColor="$warning"
       alignItems="center"
       elevation={10}
     >

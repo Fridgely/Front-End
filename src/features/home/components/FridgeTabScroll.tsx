@@ -18,7 +18,7 @@ export function FridgeTabScroll({
       <XStack gap="$2" ai="center" backgroundColor="$background">
         <Button
           onPress={onSelectAll}
-          bg={isAllSelected ? "$secondary" : "$white"}
+          bg={isAllSelected ? "$secondary" : "$surface"}
           size="$4"
           br="$4"
           px="$5"
@@ -42,7 +42,7 @@ export function FridgeTabScroll({
             <Button
               key={fridge.id}
               onPress={() => onSelect(fridge)}
-              bg={isActive ? "$secondary" : "$white"}
+              bg={isActive ? "$secondary" : "$surface"}
               size="$4"
               br="$4"
               px="$5"
@@ -65,7 +65,7 @@ export function FridgeTabScroll({
         <Button
           icon={<Plus size="$1" color="$gray" />}
           size="$4"
-          bg="$white"
+          bg="$surface"
           br="$4"
           px="$3"
           chromeless
