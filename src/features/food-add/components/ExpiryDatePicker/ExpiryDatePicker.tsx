@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import { Button, Text, XStack, styled } from "tamagui";
 import { FoodFormProps } from "../../types";
-import { DateSelectModal } from "./DateSelectModal";
+import { DateSelectSheet } from "./DateSelectSheet";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -53,7 +53,7 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
             </Button>
           </XStack>
 
-          <DateSelectModal
+          <DateSelectSheet
             show={show}
             onClose={() => setShow(false)}
             value={

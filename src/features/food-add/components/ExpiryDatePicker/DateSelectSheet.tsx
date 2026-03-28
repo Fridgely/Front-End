@@ -10,7 +10,7 @@ import {
   YStack,
   styled,
 } from "tamagui";
-import { DateSelectModalProps } from "../../types";
+import { DateSelectSheetProps } from "../../types";
 
 const Overlay = styled(View, {
   position: "absolute",
@@ -24,12 +24,12 @@ const Overlay = styled(View, {
   exitStyle: { opacity: 0 },
 });
 
-export const DateSelectModal = ({
+export const DateSelectSheet = ({
   show,
   onClose,
   value,
   onChange,
-}: DateSelectModalProps) => {
+}: DateSelectSheetProps) => {
   const safeDate = React.useMemo(() => {
     const date = new Date(value);
     return isNaN(date.getTime()) ? new Date() : date;

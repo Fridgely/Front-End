@@ -32,7 +32,7 @@ interface CategoryAddFormValues {
   name: string;
 }
 
-interface CategoryAddModalProps {
+interface CategoryAddSheetProps {
   visible: boolean;
   onClose: () => void;
   onAdd: (name: string) => void | Promise<void>;
@@ -49,7 +49,7 @@ interface UnitSelectorProps {
   onChange: (value: string) => void;
 }
 
-interface DateSelectModalProps {
+interface DateSelectSheetProps {
   show: boolean;
   onClose: () => void;
   value: Date;
@@ -59,9 +59,9 @@ interface DateSelectModalProps {
 export {
   Category,
   CategoryAddFormValues,
-  CategoryAddModalProps,
+  CategoryAddSheetProps,
   CategorySelectorProps,
-  DateSelectModalProps,
+  DateSelectSheetProps,
   FoodFormProps,
   FoodFormValues,
   ImageUploaderProps,
