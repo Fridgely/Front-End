@@ -17,14 +17,14 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { CategoryAddFormValues, CategoryAddModalProps } from "../../types";
+import { CategoryAddFormValues, CategoryAddSheetProps } from "../../types";
 
-export const CategoryAddModal = ({
+export const CategoryAddSheet = ({
   visible,
   onClose,
   onAdd,
   isPending = false,
-}: CategoryAddModalProps) => {
+}: CategoryAddSheetProps) => {
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const {

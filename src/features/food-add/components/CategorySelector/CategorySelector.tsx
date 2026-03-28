@@ -4,7 +4,7 @@ import { Controller } from "react-hook-form";
 import { Button, ScrollView, Text, XStack, YStack, styled } from "tamagui";
 import { useAddCategoryMutation } from "../../hooks/mutations/useAddCategoryMutation";
 import { CategorySelectorProps } from "../../types";
-import { CategoryAddModal } from "./CategoryAddModal";
+import { CategoryAddSheet } from "./CategoryAddSheet";
 
 const LabelText = styled(Text, { fontSize: 18, fontWeight: "700", mb: "$2" });
 
@@ -72,7 +72,7 @@ export const CategorySelector = ({
               </Button>
             </XStack>
           </ScrollView>
-          <CategoryAddModal
+          <CategoryAddSheet
             visible={isAddModalOpen}
             onClose={closeModal}
             onAdd={handleAddCategory}
