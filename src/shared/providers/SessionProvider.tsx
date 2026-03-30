@@ -3,6 +3,7 @@ import {
   useIsAuthLoaded,
   useIsLoggedIn,
 } from "@/features/auth/store/useAuthStore";
+import { setIsLoggedInGetter } from "@/shared/apis/apiClient";
 import { useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { useFcmTokenSync } from "../hooks/useFcmTokenSync";
@@ -21,6 +22,11 @@ export function SessionProvider() {
 
   useFcmSync(isLoggedIn ? stableUserId : null, syncFcmToken);
   useNotificationHandler(isLoggedIn);
+
+  // 불필요한 토큰 재발급 방지를 위해apiClient에 로그인 상태 제공 -
+  useEffect(() => {
+    setIsLoggedInGetter(() => isLoggedIn);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (!isLoaded) return;

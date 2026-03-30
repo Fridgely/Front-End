@@ -1,6 +1,13 @@
 import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import axios from "axios";
 
+// 로그인 상태를 받아옴
+let getIsLoggedIn: (() => boolean) | null = null;
+
+export const setIsLoggedInGetter = (fn: () => boolean) => {
+  getIsLoggedIn = fn;
+};
+
 const apiClient = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL || "http://localhost:8080",
 });
@@ -34,6 +41,12 @@ apiClient.interceptors.response.use(
     }
 
     if (error.response.status === 401 && !originalConfig._retry) {
+      // 로그인되지 않은 상태면 재발급 시도 안함
+      const isLoggedIn = getIsLoggedIn?.() ?? false;
+      if (!isLoggedIn) {
+        return Promise.reject(error);
+      }
+
       originalConfig._retry = true;
       try {
         const refreshToken = await tokenStorage.getRefreshToken();
