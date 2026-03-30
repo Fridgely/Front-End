@@ -23,6 +23,10 @@ const QUERY_KEYS = {
     all: ["notifications"] as const,
     settings: () => [...QUERY_KEYS.notification.all, "settings"] as const,
   },
+  member: {
+    all: ["members"] as const,
+    me: () => [...QUERY_KEYS.member.all, "me"] as const,
+  },
 };
 
 export { QUERY_KEYS };
