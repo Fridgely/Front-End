@@ -45,6 +45,7 @@ export function ProfileScreen() {
     (allFoodStatusData?.data?.yellowCount ?? 0) +
     (allFoodStatusData?.data?.greenCount ?? 0);
 
+  const loginId = memberProfile?.data?.loginId ?? "anonymous";
   const nickname = memberProfile?.data?.nickname ?? "Fridgely";
   const [profileImageSource, setProfileImageSource] = React.useState<
     any | null
@@ -58,7 +59,7 @@ export function ProfileScreen() {
 
       // 1. 업로드된 이미지가 있으면 그것 사용
       if (profileImageUrl && profileImageUrl.trim().length > 0) {
-        await clearSavedProfileImage();
+        await clearSavedProfileImage(loginId);
         if (!cancelled) {
           setProfileImageSource({ uri: profileImageUrl });
         }
@@ -66,7 +67,7 @@ export function ProfileScreen() {
       }
 
       // 2. 저장된 기본 이미지가 있으면 그것 사용
-      const savedImage = await getSavedProfileImage();
+      const savedImage = await getSavedProfileImage(loginId);
       if (cancelled) {
         return;
       }
@@ -80,7 +81,7 @@ export function ProfileScreen() {
       const randomIndex = Math.floor(
         Math.random() * DEFAULT_PROFILE_IMAGES.length,
       );
-      await saveProfileImageIndex(randomIndex);
+      await saveProfileImageIndex(loginId, randomIndex);
       if (!cancelled) {
         setProfileImageSource(DEFAULT_PROFILE_IMAGES[randomIndex]);
       }
@@ -91,7 +92,7 @@ export function ProfileScreen() {
     return () => {
       cancelled = true;
     };
-  }, [memberProfile?.data?.profileImageUrl]);
+  }, [loginId, memberProfile?.data?.profileImageUrl]);
 
   const handleCustomerSupport = () => {
     // TODO 추후에 건의사항 이메일 변경

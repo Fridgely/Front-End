@@ -8,7 +8,10 @@ const DEFAULT_PROFILE_IMAGES: ImageSourcePropType[] = [
   require("../../../../assets/images/profile_fridge.png"),
 ];
 
-const PROFILE_IMAGE_STORAGE_KEY = "default_profile_image";
+const PROFILE_IMAGE_STORAGE_KEY_PREFIX = "default_profile_image";
+
+const getProfileImageStorageKey = (loginId: string) =>
+  `${PROFILE_IMAGE_STORAGE_KEY_PREFIX}:${loginId}`;
 
 // 랜덤으로 기본 프로필 이미지 하나를 반환하는 함수
 const getRandomDefaultProfileImage = () => {
@@ -17,9 +20,13 @@ const getRandomDefaultProfileImage = () => {
 };
 
 // 저장된 프로필 이미지가 없을시 asyncStorage에서 인덱스를 불러와서 사진 반환
-const getSavedProfileImageIndex = async (): Promise<number | null> => {
+const getSavedProfileImageIndex = async (
+  loginId: string,
+): Promise<number | null> => {
   try {
-    const saved = await AsyncStorage.getItem(PROFILE_IMAGE_STORAGE_KEY);
+    const saved = await AsyncStorage.getItem(
+      getProfileImageStorageKey(loginId),
+    );
     return saved ? parseInt(saved, 10) : null;
   } catch (error) {
     console.error("프로필 이미지 인덱스 로드 실패:", error);
@@ -28,17 +35,25 @@ const getSavedProfileImageIndex = async (): Promise<number | null> => {
 };
 
 // 기본 프로필 이미지 인덱스를 storage에  저장
-const saveProfileImageIndex = async (index: number): Promise<void> => {
+const saveProfileImageIndex = async (
+  loginId: string,
+  index: number,
+): Promise<void> => {
   try {
-    await AsyncStorage.setItem(PROFILE_IMAGE_STORAGE_KEY, index.toString());
+    await AsyncStorage.setItem(
+      getProfileImageStorageKey(loginId),
+      index.toString(),
+    );
   } catch (error) {
     console.error("프로필 이미지 인덱스 저장 실패:", error);
   }
 };
 
 // 저장된 기본 프로필 이미지 불러오기
-const getSavedProfileImage = async (): Promise<ImageSourcePropType | null> => {
-  const index = await getSavedProfileImageIndex();
+const getSavedProfileImage = async (
+  loginId: string,
+): Promise<ImageSourcePropType | null> => {
+  const index = await getSavedProfileImageIndex(loginId);
   if (index !== null && index >= 0 && index < DEFAULT_PROFILE_IMAGES.length) {
     return DEFAULT_PROFILE_IMAGES[index];
   }
@@ -46,9 +61,9 @@ const getSavedProfileImage = async (): Promise<ImageSourcePropType | null> => {
 };
 
 // 사용자가 이미지를 업로드했을시 스토리지에서 기본 이미지 제거ㄴ
-const clearSavedProfileImage = async (): Promise<void> => {
+const clearSavedProfileImage = async (loginId: string): Promise<void> => {
   try {
-    await AsyncStorage.removeItem(PROFILE_IMAGE_STORAGE_KEY);
+    await AsyncStorage.removeItem(getProfileImageStorageKey(loginId));
   } catch (error) {
     console.error("프로필 이미지 초기화 실패:", error);
   }
