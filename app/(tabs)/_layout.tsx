@@ -1,6 +1,6 @@
 import { OverlayMenu } from "@/shared/components/OverlayMenu/OverlayMenu";
 import { X } from "@tamagui/lucide-icons";
-import { Tabs } from "expo-router";
+import { Tabs, usePathname } from "expo-router";
 import { Calendar, Home, Plus, Search, User } from "lucide-react-native";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
@@ -8,10 +8,17 @@ import { Circle, useTheme, View } from "tamagui";
 
 export default function TabLayout() {
   const theme = useTheme();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const activeColor = theme.active.get();
   const inactiveColor = theme.inactive.get();
+  const hideFooterRoutes = [
+    "/calendar",
+    "/profile",
+    "/profile/notification-setting",
+  ];
+  const shouldHideFooter = hideFooterRoutes.includes(pathname);
 
   return (
     <View f={1}>
@@ -33,6 +40,7 @@ export default function TabLayout() {
             height: 65,
             paddingTop: 3,
             elevation: 0, // 안드로이드 특유의 그림자 제거
+            display: shouldHideFooter ? "none" : "flex",
           },
         }}
       >
@@ -81,40 +89,41 @@ export default function TabLayout() {
         />
       </Tabs>
       <OverlayMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      {/* 메뉴 오버레이보다 zindex 높게 설정하기 위해 Tab 밖에 배치 */}
-      <View
-        style={{
-          position: "absolute",
-          bottom: 35,
-          alignSelf: "center",
-          zIndex: 2000,
-        }}
-      >
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => setIsMenuOpen(!isMenuOpen)}
+      {!shouldHideFooter && (
+        <View
           style={{
-            justifyContent: "center",
-            alignItems: "center",
+            position: "absolute",
+            bottom: 35,
+            alignSelf: "center",
+            zIndex: 2000,
           }}
         >
-          <Circle
-            size={60}
-            backgroundColor={activeColor}
-            elevation={4}
-            shadowColor="#000"
-            shadowOffset={{ width: 0, height: 4 }}
-            shadowOpacity={0.3}
-            shadowRadius={5}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setIsMenuOpen(!isMenuOpen)}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            {isMenuOpen ? (
-              <X color="white" size={30} />
-            ) : (
-              <Plus color="white" size={30} />
-            )}
-          </Circle>
-        </TouchableOpacity>
-      </View>
+            <Circle
+              size={60}
+              backgroundColor={activeColor}
+              elevation={4}
+              shadowColor="#000"
+              shadowOffset={{ width: 0, height: 4 }}
+              shadowOpacity={0.3}
+              shadowRadius={5}
+            >
+              {isMenuOpen ? (
+                <X color="white" size={30} />
+              ) : (
+                <Plus color="white" size={30} />
+              )}
+            </Circle>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
