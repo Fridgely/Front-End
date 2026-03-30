@@ -8,7 +8,7 @@ import {
   Refrigerator,
 } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Linking } from "react-native";
 import {
   Avatar,
@@ -25,6 +25,7 @@ import { Menu } from "../components/Menu";
 import { useMemberProfileQuery } from "../hooks/queries/useMemberProfileQuery";
 import { useLogoutMutation } from "../hooks/useLogoutMutation";
 import {
+  clearSavedProfileImage,
   DEFAULT_PROFILE_IMAGES,
   getSavedProfileImage,
   saveProfileImageIndex,
@@ -49,18 +50,27 @@ export function ProfileScreen() {
     any | null
   >(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    let cancelled = false;
+
     const initProfileImage = async () => {
       const profileImageUrl = memberProfile?.data?.profileImageUrl;
 
       // 1. 업로드된 이미지가 있으면 그것 사용
       if (profileImageUrl && profileImageUrl.trim().length > 0) {
-        setProfileImageSource({ uri: profileImageUrl });
+        await clearSavedProfileImage();
+        if (!cancelled) {
+          setProfileImageSource({ uri: profileImageUrl });
+        }
         return;
       }
 
       // 2. 저장된 기본 이미지가 있으면 그것 사용
       const savedImage = await getSavedProfileImage();
+      if (cancelled) {
+        return;
+      }
+
       if (savedImage) {
         setProfileImageSource(savedImage);
         return;
@@ -71,10 +81,16 @@ export function ProfileScreen() {
         Math.random() * DEFAULT_PROFILE_IMAGES.length,
       );
       await saveProfileImageIndex(randomIndex);
-      setProfileImageSource(DEFAULT_PROFILE_IMAGES[randomIndex]);
+      if (!cancelled) {
+        setProfileImageSource(DEFAULT_PROFILE_IMAGES[randomIndex]);
+      }
     };
 
     initProfileImage();
+
+    return () => {
+      cancelled = true;
+    };
   }, [memberProfile?.data?.profileImageUrl]);
 
   const handleCustomerSupport = () => {
