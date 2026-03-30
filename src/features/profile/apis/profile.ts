@@ -9,4 +9,8 @@ const getMemberProfileApi = ApiBuilder.create<void, MemberProfileResponse>(
   "/api/v1/members/me",
 ).setMethod("GET");
 
-export { getMemberProfileApi, logoutApi };
+const updateMemberProfileImageApi = ApiBuilder.create<FormData, void>(
+  "/api/v1/members/me/profile-image",
+).setMethod("PATCH");
+
+export { getMemberProfileApi, logoutApi, updateMemberProfileImageApi };

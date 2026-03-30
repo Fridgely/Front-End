@@ -7,9 +7,10 @@ import {
   Palette,
   Refrigerator,
 } from "@tamagui/lucide-icons";
+import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
-import { Linking } from "react-native";
+import { Alert, Linking } from "react-native";
 import {
   Avatar,
   Button,
@@ -24,6 +25,7 @@ import { useAllFoodStatusQuery } from "../../home/hooks/queries/useAllFoodStatus
 import { Menu } from "../components/Menu";
 import { useMemberProfileQuery } from "../hooks/queries/useMemberProfileQuery";
 import { useLogoutMutation } from "../hooks/useLogoutMutation";
+import { useUpdateProfileImageMutation } from "../hooks/useUpdateProfileImageMutation";
 import {
   clearSavedProfileImage,
   DEFAULT_PROFILE_IMAGES,
@@ -47,6 +49,8 @@ export function ProfileScreen() {
 
   const loginId = memberProfile?.data?.loginId ?? "anonymous";
   const nickname = memberProfile?.data?.nickname ?? "Fridgely";
+  const { mutate: updateProfileImage, isPending: isUpdatingProfileImage } =
+    useUpdateProfileImageMutation(loginId);
   const [profileImageSource, setProfileImageSource] = React.useState<
     any | null
   >(null);
@@ -101,6 +105,41 @@ export function ProfileScreen() {
     Linking.openURL(`mailto:${email}?subject=${subject}`);
   };
 
+  const handleProfileImageUpdate = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "권한 필요",
+        "프로필 사진 변경을 위해 사진첩 접근 권한이 필요합니다.",
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "images",
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (result.canceled) {
+      return;
+    }
+
+    const selectedAsset = result.assets?.[0];
+    if (!selectedAsset?.uri) {
+      return;
+    }
+
+    updateProfileImage({
+      uri: selectedAsset.uri,
+      fileName: selectedAsset.fileName,
+      mimeType: selectedAsset.mimeType,
+    });
+  };
+
   return (
     <YStack f={1} backgroundColor="$background">
       <Header title="마이페이지" showBackButton />
@@ -125,8 +164,10 @@ export function ProfileScreen() {
               color="$primary"
               fontWeight="400"
               mt="$2"
+              onPress={handleProfileImageUpdate}
+              disabled={isUpdatingProfileImage}
             >
-              프로필 수정
+              {isUpdatingProfileImage ? "업로드 중..." : "프로필 수정"}
             </Button>
           </YStack>
 
