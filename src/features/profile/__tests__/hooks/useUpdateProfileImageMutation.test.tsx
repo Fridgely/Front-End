@@ -5,7 +5,7 @@ import { renderHook, waitFor } from "@testing-library/react-native";
 import React from "react";
 import Toast from "react-native-toast-message";
 import { useUpdateProfileImageMutation } from "../../hooks/useUpdateProfileImageMutation";
-import * as profileImageUtils from "../../utils/getRandomDefaultProfileImage";
+import { clearSavedProfileImage } from "../../utils/getRandomDefaultProfileImage";
 
 jest.mock("@/shared/lib/tokenStorage/tokenStorage", () => ({
   tokenStorage: {
@@ -17,8 +17,13 @@ jest.mock("react-native-toast-message", () => ({
   show: jest.fn(),
 }));
 
+jest.mock("../../utils/getRandomDefaultProfileImage", () => ({
+  clearSavedProfileImage: jest.fn(),
+}));
+
 const mockedGetAccessToken = tokenStorage.getAccessToken as jest.Mock;
 const mockedToast = Toast.show as jest.Mock;
+const mockedClearSavedProfileImage = clearSavedProfileImage as jest.Mock;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +38,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 describe("useUpdateProfileImageMutation 테스트", () => {
   const fetchMock = jest.fn();
+  const originalFetch = global.fetch;
 
   beforeAll(() => {
     global.fetch = fetchMock as any;
@@ -42,13 +48,12 @@ describe("useUpdateProfileImageMutation 테스트", () => {
     jest.clearAllMocks();
     queryClient.clear();
     mockedGetAccessToken.mockResolvedValue("test-access-token");
-    jest
-      .spyOn(profileImageUtils, "clearSavedProfileImage")
-      .mockResolvedValue(undefined);
+    mockedClearSavedProfileImage.mockResolvedValue(undefined);
   });
 
   afterAll(() => {
     queryClient.clear();
+    global.fetch = originalFetch;
   });
 
   it("업로드 성공 시 fetch 호출, 캐시 무효화, 성공 토스트를 실행해야 한다", async () => {
@@ -84,9 +89,7 @@ describe("useUpdateProfileImageMutation 테스트", () => {
       }),
     );
 
-    expect(profileImageUtils.clearSavedProfileImage).toHaveBeenCalledWith(
-      "test-login-id",
-    );
+    expect(mockedClearSavedProfileImage).toHaveBeenCalledWith("test-login-id");
 
     expect(invalidateSpy).toHaveBeenCalledWith(
       expect.objectContaining({ queryKey: QUERY_KEYS.member.me() }),
@@ -120,7 +123,7 @@ describe("useUpdateProfileImageMutation 테스트", () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(profileImageUtils.clearSavedProfileImage).not.toHaveBeenCalled();
+    expect(mockedClearSavedProfileImage).not.toHaveBeenCalled();
   });
 
   it("업로드 실패 시 서버 에러 메시지를 토스트로 표시해야 한다", async () => {
