@@ -1,10 +1,10 @@
+import { useAuthActions } from "@/features/auth/store/useAuthStore";
 import apiClient from "@/shared/apis/apiClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react-native";
 import React from "react";
 import Toast from "react-native-toast-message";
-import { useAuthActions } from "@/features/auth/store/useAuthStore";
-import { useLogoutMutation } from "./useLogoutMutation";
+import { useLogoutMutation } from "../../hooks/useLogoutMutation";
 
 jest.mock("@/shared/apis/apiClient");
 jest.mock("react-native-toast-message", () => ({ show: jest.fn() }));

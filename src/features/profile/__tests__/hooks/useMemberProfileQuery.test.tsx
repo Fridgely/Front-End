@@ -2,7 +2,7 @@ import apiClient from "@/shared/apis/apiClient";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react-native";
 import React from "react";
-import { useMemberProfileQuery } from "./useMemberProfileQuery";
+import { useMemberProfileQuery } from "../../hooks/queries/useMemberProfileQuery";
 
 jest.mock("@/shared/apis/apiClient");
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
