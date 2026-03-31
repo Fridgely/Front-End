@@ -60,7 +60,7 @@ const useUpdateProfileImageMutation = (loginId: string) => {
         };
       }
     },
-    onSuccess: async () => {
+    onSuccess: async (_data, _variables, _onMutateResult, _context) => {
       if (loginId !== "anonymous") {
         await clearSavedProfileImage(loginId);
       }
@@ -75,7 +75,7 @@ const useUpdateProfileImageMutation = (loginId: string) => {
         text2: "프로필 사진이 변경되었습니다.",
       });
     },
-    onError: (error: any) => {
+    onError: (error: any, _variables, _onMutateResult, _context) => {
       const serverMessage = error.response?.data?.error?.message;
 
       Toast.show({
