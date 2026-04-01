@@ -4,7 +4,7 @@ import {
 } from "@/shared/constants/food";
 import { getExpiryLabel } from "@/shared/utils/date";
 import { getUnitLabel } from "@/shared/utils/food";
-import { Card, Heading, Text, View, XStack, YStack } from "tamagui";
+import { Card, Heading, Image, Text, View, XStack, YStack } from "tamagui";
 import { FoodListItemProps } from "../../types";
 
 export function FoodListItem({ item, onPress }: FoodListItemProps) {
@@ -27,7 +27,7 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
       onPress={onPress}
       pressStyle={{ opacity: 0.85 }}
     >
-      <XStack p="$4" ai="center" space="$4">
+      <XStack p="$4" ai="center" gap="$4">
         <View
           position="absolute"
           left={0}
@@ -37,8 +37,17 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
           backgroundColor={statusColor}
         />
 
-        <View p="$3" br="$3" bg="$gray2">
-          <View w={30} h={30} bg="$gray5" br="$2" />
+        <View ml="$2" w={54} h={54} br="$3" bg="$gray2" ov="hidden">
+          {item.imageURL ? (
+            <Image
+              source={{ uri: item.imageURL }}
+              w="100%"
+              h="100%"
+              objectFit="cover"
+            />
+          ) : (
+            <View w="100%" h="100%" bg="$gray5" />
+          )}
         </View>
 
         <YStack f={1} gap="$1">
