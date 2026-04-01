@@ -1,3 +1,4 @@
+import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
 import { useApiQuery } from "@/shared/apis/builder/ApiBuilder";
 import { QUERY_KEYS } from "@/shared/constants/queryKeys";
 import { getFoodStatusApi } from "../../apis/food";
@@ -5,8 +6,10 @@ import { FoodStatusResponse } from "../../apis/food.types";
 import { normalizeFoodItem } from "../../utils/normalizeFoodItem";
 
 const useAllFoodStatusQuery = (enabled = true) => {
+  const isLoggedIn = useIsLoggedIn();
+
   return useApiQuery(getFoodStatusApi, QUERY_KEYS.food.statusAll(), {
-    enabled,
+    enabled: isLoggedIn && enabled,
     select: (response: FoodStatusResponse) => ({
       ...response,
       data: {
