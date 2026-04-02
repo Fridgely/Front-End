@@ -1,6 +1,7 @@
 import React from "react";
 import { Image } from "react-native";
 import { ScrollView, Text, View, XStack, YStack } from "tamagui";
+import { getDefaultFoodCategoryImage } from "../../../shared/utils/getDefaultFoodCategoryImage";
 import { CalendarFoodListProps } from "../types";
 import {
   getBadge,
@@ -55,12 +56,14 @@ export function CalendarFoodList({
                     jc="center"
                     ov="hidden"
                   >
-                    {food.imageURL ? (
-                      <Image
-                        source={{ uri: food.imageURL }}
-                        style={{ width: 56, height: 56 }}
-                      />
-                    ) : null}
+                    <Image
+                      source={
+                        food.imageURL
+                          ? { uri: food.imageURL }
+                          : getDefaultFoodCategoryImage(food.categoryName)
+                      }
+                      style={{ width: 56, height: 56 }}
+                    />
                   </View>
 
                   <YStack f={1}>

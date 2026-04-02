@@ -5,6 +5,7 @@ import {
 import { getExpiryLabel } from "@/shared/utils/date";
 import { getUnitLabel } from "@/shared/utils/food";
 import { Card, Heading, Image, Text, View, XStack, YStack } from "tamagui";
+import { getDefaultFoodCategoryImage } from "../../../../shared/utils/getDefaultFoodCategoryImage";
 import { FoodListItemProps } from "../../types";
 
 export function FoodListItem({ item, onPress }: FoodListItemProps) {
@@ -38,16 +39,16 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
         />
 
         <View ml="$2" w={54} h={54} br="$3" bg="$gray2" ov="hidden">
-          {item.imageURL ? (
-            <Image
-              source={{ uri: item.imageURL }}
-              w="100%"
-              h="100%"
-              objectFit="cover"
-            />
-          ) : (
-            <View w="100%" h="100%" bg="$gray5" />
-          )}
+          <Image
+            source={
+              item.imageURL
+                ? { uri: item.imageURL }
+                : getDefaultFoodCategoryImage(item.categoryName)
+            }
+            w="100%"
+            h="100%"
+            objectFit="cover"
+          />
         </View>
 
         <YStack f={1} gap="$1">

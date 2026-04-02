@@ -1,5 +1,6 @@
 import { FoodItem } from "@/shared/types/food";
 import { Image, Text, View, XStack, YStack } from "tamagui";
+import { getDefaultFoodCategoryImage } from "../../../shared/utils/getDefaultFoodCategoryImage";
 
 interface Props {
   item: FoodItem;
@@ -36,9 +37,16 @@ export function SearchResultItem({ item, onPress }: Props) {
         jc="center"
         ov="hidden"
       >
-        {item.imageURL && (
-          <Image source={{ uri: item.imageURL, width: 50, height: 50 }} />
-        )}
+        <Image
+          source={
+            item.imageURL
+              ? { uri: item.imageURL }
+              : getDefaultFoodCategoryImage(item.categoryName)
+          }
+          w="100%"
+          h="100%"
+          objectFit="cover"
+        />
       </View>
 
       <YStack f={1} gap="$1">
