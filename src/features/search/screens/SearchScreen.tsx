@@ -40,6 +40,7 @@ export function SearchScreen() {
               borderWidth={0}
               backgroundColor="transparent"
               placeholder="식재료 이름을 검색해보세요"
+              placeholderTextColor={theme === "dark" ? "$gray10" : "$gray5"}
               value={searchQuery}
               onChangeText={setSearchQuery}
               focusStyle={{ borderWidth: 0 }}
