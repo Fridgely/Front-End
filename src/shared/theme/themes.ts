@@ -8,6 +8,9 @@ export const lightTheme = {
   white: tokens.color.white,
   black: tokens.color.black,
   iconBackground: tokens.color.iconBackground,
+  iconThumbnailBackground: tokens.color.iconThumbnailBackground,
+  iconThumbnailBorder: tokens.color.iconThumbnailBorder,
+  iconThumbnailInnerBackground: tokens.color.iconThumbnailInnerBackground,
 
   gray: tokens.color.gray,
   gray1: tokens.color.gray1,
@@ -50,6 +53,9 @@ export const darkTheme = {
   white: tokens.color.white,
   black: tokens.color.black,
   iconBackground: tokens.color.iconBackgroundDark,
+  iconThumbnailBackground: tokens.color.iconThumbnailBackgroundDark,
+  iconThumbnailBorder: tokens.color.iconThumbnailBorderDark,
+  iconThumbnailInnerBackground: tokens.color.iconThumbnailInnerBackgroundDark,
 
   gray: tokens.color.grayDark,
   gray1: tokens.color.gray1Dark,

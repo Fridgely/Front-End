@@ -9,6 +9,7 @@ import { getDefaultFoodCategoryImage } from "../../../../shared/utils/getDefault
 import { FoodListItemProps } from "../../types";
 
 export function FoodListItem({ item, onPress }: FoodListItemProps) {
+  const hasCustomImage = !!item.imageURL;
   const { foodStatus, expirationDate, daysLeft } = item.condition;
   const statusColor = FOOD_STATUS_LABELS[foodStatus];
   const statusBgColor = FOOD_STATUS_BG_COLORS[foodStatus];
@@ -38,17 +39,34 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
           backgroundColor={statusColor}
         />
 
-        <View ml="$2" w={54} h={54} br="$3" bg="$gray2" ov="hidden">
-          <Image
-            source={
-              item.imageURL
-                ? { uri: item.imageURL }
-                : getDefaultFoodCategoryImage(item.categoryName)
-            }
-            w="100%"
-            h="100%"
-            objectFit="cover"
-          />
+        <View
+          ml="$2"
+          w={54}
+          h={54}
+          br="$3"
+          bg="$iconThumbnailBackground"
+          bw={1}
+          boc="$iconThumbnailBorder"
+          ov="hidden"
+        >
+          <View
+            f={1}
+            m={1}
+            br="$2"
+            bg="$iconThumbnailInnerBackground"
+            ov="hidden"
+          >
+            <Image
+              source={
+                hasCustomImage
+                  ? { uri: item.imageURL }
+                  : getDefaultFoodCategoryImage(item.categoryName)
+              }
+              w="100%"
+              h="100%"
+              objectFit={hasCustomImage ? "cover" : "contain"}
+            />
+          </View>
         </View>
 
         <YStack f={1} gap="$1">
