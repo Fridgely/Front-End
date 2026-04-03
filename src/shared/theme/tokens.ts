@@ -15,6 +15,12 @@ export const tokens = createTokens({
 
     iconBackground: "#E9FDF7",
     iconBackgroundDark: "#173A30",
+    iconThumbnailBackground: "rgba(15, 23, 42, 0.06)",
+    iconThumbnailBackgroundDark: "rgba(255, 255, 255, 0.10)",
+    iconThumbnailBorder: "rgba(15, 23, 42, 0.16)",
+    iconThumbnailBorderDark: "rgba(255, 255, 255, 0.28)",
+    iconThumbnailInnerBackground: "rgba(255, 255, 255, 0.70)",
+    iconThumbnailInnerBackgroundDark: "rgba(0, 0, 0, 0.20)",
 
     primary: "#2BEEAD",
     primaryDark: "#26D19B",

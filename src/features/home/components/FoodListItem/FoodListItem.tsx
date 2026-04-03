@@ -5,9 +5,11 @@ import {
 import { getExpiryLabel } from "@/shared/utils/date";
 import { getUnitLabel } from "@/shared/utils/food";
 import { Card, Heading, Image, Text, View, XStack, YStack } from "tamagui";
+import { getDefaultFoodCategoryImage } from "../../../../shared/utils/getDefaultFoodCategoryImage";
 import { FoodListItemProps } from "../../types";
 
 export function FoodListItem({ item, onPress }: FoodListItemProps) {
+  const hasCustomImage = !!item.imageURL;
   const { foodStatus, expirationDate, daysLeft } = item.condition;
   const statusColor = FOOD_STATUS_LABELS[foodStatus];
   const statusBgColor = FOOD_STATUS_BG_COLORS[foodStatus];
@@ -37,17 +39,34 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
           backgroundColor={statusColor}
         />
 
-        <View ml="$2" w={54} h={54} br="$3" bg="$gray2" ov="hidden">
-          {item.imageURL ? (
+        <View
+          ml="$2"
+          w={54}
+          h={54}
+          br="$3"
+          bg="$iconThumbnailBackground"
+          bw={1}
+          boc="$iconThumbnailBorder"
+          ov="hidden"
+        >
+          <View
+            f={1}
+            m={1}
+            br="$2"
+            bg="$iconThumbnailInnerBackground"
+            ov="hidden"
+          >
             <Image
-              source={{ uri: item.imageURL }}
+              source={
+                hasCustomImage
+                  ? { uri: item.imageURL }
+                  : getDefaultFoodCategoryImage(item.categoryName)
+              }
               w="100%"
               h="100%"
-              objectFit="cover"
+              objectFit={hasCustomImage ? "cover" : "contain"}
             />
-          ) : (
-            <View w="100%" h="100%" bg="$gray5" />
-          )}
+          </View>
         </View>
 
         <YStack f={1} gap="$1">

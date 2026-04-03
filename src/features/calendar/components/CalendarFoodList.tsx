@@ -1,6 +1,7 @@
 import React from "react";
 import { Image } from "react-native";
 import { ScrollView, Text, View, XStack, YStack } from "tamagui";
+import { getDefaultFoodCategoryImage } from "../../../shared/utils/getDefaultFoodCategoryImage";
 import { CalendarFoodListProps } from "../types";
 import {
   getBadge,
@@ -32,6 +33,7 @@ export function CalendarFoodList({
         {foods.length > 0 ? (
           foods.map((food) => {
             const badge = getBadge(food.condition.daysLeft);
+            const hasCustomImage = !!food.imageURL;
 
             return (
               <XStack
@@ -50,17 +52,30 @@ export function CalendarFoodList({
                     w={56}
                     h={56}
                     br="$4"
-                    backgroundColor="$gray3"
+                    backgroundColor="$iconThumbnailBackground"
+                    bw={1}
+                    boc="$iconThumbnailBorder"
                     ai="center"
                     jc="center"
                     ov="hidden"
                   >
-                    {food.imageURL ? (
+                    <View
+                      w={54}
+                      h={54}
+                      br="$4"
+                      bg="$iconThumbnailInnerBackground"
+                      ov="hidden"
+                    >
                       <Image
-                        source={{ uri: food.imageURL }}
-                        style={{ width: 56, height: 56 }}
+                        source={
+                          hasCustomImage
+                            ? { uri: food.imageURL }
+                            : getDefaultFoodCategoryImage(food.categoryName)
+                        }
+                        style={{ width: 54, height: 54 }}
+                        resizeMode={hasCustomImage ? "cover" : "contain"}
                       />
-                    ) : null}
+                    </View>
                   </View>
 
                   <YStack f={1}>
