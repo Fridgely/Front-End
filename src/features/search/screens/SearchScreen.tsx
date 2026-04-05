@@ -1,9 +1,10 @@
 import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { FlashList } from "@shopify/flash-list";
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Input, Text, View, XStack, YStack } from "tamagui";
 import { SearchResultItem } from "../components/SearchResultItem";
@@ -13,6 +14,8 @@ export function SearchScreen() {
   const router = useRouter();
   const selectedFridgeId = useSelectedFridgeId();
   const theme = useThemeStore((state) => state.theme);
+  const systemColorScheme = useColorScheme();
+  const isDark = resolveTheme(theme, systemColorScheme) === "dark";
   const [searchQuery, setSearchQuery] = useState("");
   const { filteredResult } = useSearchFood(searchQuery);
 
@@ -20,7 +23,7 @@ export function SearchScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: theme === "dark" ? "#0B1110" : "#F6F8F7",
+        backgroundColor: isDark ? "#0B1110" : "#F6F8F7",
       }}
     >
       <YStack f={1} backgroundColor="$background">
@@ -40,7 +43,7 @@ export function SearchScreen() {
               borderWidth={0}
               backgroundColor="transparent"
               placeholder="식재료 이름을 검색해보세요"
-              placeholderTextColor={theme === "dark" ? "$gray10" : "$gray5"}
+              placeholderTextColor={isDark ? "$gray10" : "$gray5"}
               value={searchQuery}
               onChangeText={setSearchQuery}
               focusStyle={{ borderWidth: 0 }}

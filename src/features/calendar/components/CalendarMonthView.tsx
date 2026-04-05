@@ -1,5 +1,5 @@
 import { getCalendarTheme } from "@/features/calendar/constants/calendarTheme";
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { ChevronLeft, ChevronRight } from "@tamagui/lucide-icons";
 import React from "react";
 import {
@@ -7,6 +7,7 @@ import {
   Text as RNText,
   View as RNView,
   StyleSheet,
+  useColorScheme,
 } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { View } from "tamagui";
@@ -18,7 +19,9 @@ export function CalendarMonthView({
   onSelectDate,
 }: CalendarMonthViewProps) {
   const theme = useThemeStore((state) => state.theme);
-  const isDark = theme === "dark";
+  const systemColorScheme = useColorScheme();
+  const resolvedTheme = resolveTheme(theme, systemColorScheme);
+  const isDark = resolvedTheme === "dark";
   const arrowColor = isDark ? "#E5EBE9" : "#111111";
   const selectedDayBg = isDark ? "#26D19B" : "#2EE6A8";
   const dayTextColor = isDark ? "#E5EBE9" : "#111111";
@@ -32,7 +35,7 @@ export function CalendarMonthView({
         onDayPress={(day: DateData) => onSelectDate(day.dateString)}
         markingType="multi-dot"
         markedDates={markedDates}
-        theme={getCalendarTheme(theme)}
+        theme={getCalendarTheme(resolvedTheme)}
         hideExtraDays={false}
         enableSwipeMonths
         renderArrow={(direction) => (
