@@ -63,7 +63,7 @@ let hasShownAnimatedSplash = false;
 
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
-  const { isHydrated, theme } = useAppHydration();
+  const { isHydrated, resolvedTheme } = useAppHydration();
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -100,7 +100,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
-          <TamaguiProvider config={config} defaultTheme={theme}>
+          <TamaguiProvider config={config} defaultTheme={resolvedTheme}>
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 
