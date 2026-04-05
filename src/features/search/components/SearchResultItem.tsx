@@ -36,11 +36,11 @@ export function SearchResultItem({ item, onPress }: Props) {
         bw={1}
         boc="$iconThumbnailBorder"
         ov="hidden"
+        p={1}
       >
         <View
           w="100%"
           h="100%"
-          m={1}
           br="$3"
           bg="$iconThumbnailInnerBackground"
           ov="hidden"
