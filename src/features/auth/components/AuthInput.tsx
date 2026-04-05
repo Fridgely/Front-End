@@ -1,6 +1,6 @@
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { Controller } from "react-hook-form";
-import { Platform } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import { Heading, Input, Text, YStack } from "tamagui";
 import { AuthInputProps } from "../types/auth.types";
 
@@ -14,6 +14,8 @@ export function AuthInput({
 }: AuthInputProps) {
   const error = errors?.[name];
   const theme = useThemeStore((state) => state.theme);
+  const systemColorScheme = useColorScheme();
+  const isDark = resolveTheme(theme, systemColorScheme) === "dark";
 
   return (
     <YStack gap="$2">
@@ -34,7 +36,7 @@ export function AuthInput({
             br="$3"
             px="$4"
             color="$mainText"
-            placeholderTextColor={theme === "dark" ? "#4A5A56" : "#9CA3AF"}
+            placeholderTextColor={isDark ? "#4A5A56" : "#9CA3AF"}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}

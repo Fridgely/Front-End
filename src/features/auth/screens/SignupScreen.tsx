@@ -1,7 +1,8 @@
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { ArrowLeft } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
+import { useColorScheme } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, H2, Spacer, Text, XStack, YStack } from "tamagui";
@@ -13,6 +14,8 @@ import { AuthFormData } from "../types/auth.types";
 export function SignupScreen() {
   const router = useRouter();
   const theme = useThemeStore((state) => state.theme);
+  const systemColorScheme = useColorScheme();
+  const isDark = resolveTheme(theme, systemColorScheme) === "dark";
   const { mutate: signUp, isPending: isSignupPending } = useSignupMutation();
 
   const {
@@ -45,7 +48,7 @@ export function SignupScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: theme === "dark" ? "#0B1110" : "#F9FAFB",
+        backgroundColor: isDark ? "#0B1110" : "#F9FAFB",
       }}
     >
       <KeyboardAwareScrollView

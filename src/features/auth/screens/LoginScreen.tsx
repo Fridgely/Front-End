@@ -1,5 +1,6 @@
 import { LogIn } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
+import { useColorScheme } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -12,7 +13,7 @@ import {
   YStack,
 } from "tamagui";
 
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { useForm } from "react-hook-form";
 import { AuthInput } from "../components/AuthInput";
 import { useLoginMutation } from "../hooks/useAuthMutation";
@@ -21,6 +22,8 @@ import { AuthFormData } from "../types/auth.types";
 export function LoginScreen() {
   const router = useRouter();
   const theme = useThemeStore((state) => state.theme);
+  const systemColorScheme = useColorScheme();
+  const isDark = resolveTheme(theme, systemColorScheme) === "dark";
   const { mutate: login, isPending: isLoginPending } = useLoginMutation();
 
   const {
@@ -46,7 +49,7 @@ export function LoginScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: theme === "dark" ? "#0B1110" : "#F9FAFB",
+        backgroundColor: isDark ? "#0B1110" : "#F9FAFB",
       }}
     >
       <KeyboardAwareScrollView

@@ -2,8 +2,9 @@ import {
   useAuthActions,
   useIsAuthLoaded,
 } from "@/features/auth/store/useAuthStore";
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
 
 /**
  * 앱 구동 시 필요한 데이터(인증 상태, 테마 설정 등)를
@@ -14,6 +15,8 @@ export function useAppHydration() {
   const isAuthLoaded = useIsAuthLoaded();
   const { hydrate } = useAuthActions();
   const theme = useThemeStore((state) => state.theme);
+  const systemColorScheme = useColorScheme();
+  const resolvedTheme = resolveTheme(theme, systemColorScheme);
   const [themeLoaded, setThemeLoaded] = useState(
     useThemeStore.persist.hasHydrated(),
   );
@@ -61,6 +64,7 @@ export function useAppHydration() {
   return {
     isAuthLoaded,
     theme,
+    resolvedTheme,
     themeLoaded,
     // 앱 전체 하이드레이션 완료 여부: 인증과 테마가 모두 준비되어야 true
     isHydrated: isAuthLoaded && themeLoaded,

@@ -38,6 +38,8 @@ export function ProfileScreen() {
   const router = useRouter();
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const themeLabel =
+    theme === "system" ? "시스템" : theme === "dark" ? "다크" : "라이트";
   const { data: allFoodStatusData } = useAllFoodStatusQuery(true);
   const { data: memberProfile } = useMemberProfileQuery();
 
@@ -212,9 +214,7 @@ export function ProfileScreen() {
             />
             <Menu
               icon={<Palette />}
-              title={
-                theme === "light" ? "다크 모드로 변경" : "라이트 모드로 변경"
-              }
+              title={`테마 : ${themeLabel}`}
               onPress={toggleTheme}
             />
             <Menu
