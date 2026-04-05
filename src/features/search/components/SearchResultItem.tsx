@@ -1,7 +1,6 @@
 import { FoodItem } from "@/shared/types/food";
 import { Image, Text, View, XStack, YStack } from "tamagui";
 import { getDefaultFoodCategoryImage } from "../../../shared/utils/getDefaultFoodCategoryImage";
-
 interface Props {
   item: FoodItem;
   onPress?: () => void;
@@ -36,12 +35,11 @@ export function SearchResultItem({ item, onPress }: Props) {
         backgroundColor="$iconThumbnailBackground"
         bw={1}
         boc="$iconThumbnailBorder"
-        ai="center"
-        jc="center"
         ov="hidden"
       >
         <View
-          f={1}
+          w="100%"
+          h="100%"
           m={1}
           br="$3"
           bg="$iconThumbnailInnerBackground"
