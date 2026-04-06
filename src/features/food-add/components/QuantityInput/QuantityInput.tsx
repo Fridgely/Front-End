@@ -12,6 +12,18 @@ const LabelText = styled(Text, {
   fontWeight: "700",
 });
 
+const MIN_QUANTITY = 1;
+
+const normalizeQuantity = (value: number | null | undefined) => {
+  const numericValue = Number(value ?? MIN_QUANTITY);
+
+  if (!Number.isFinite(numericValue)) {
+    return MIN_QUANTITY;
+  }
+
+  return Math.max(MIN_QUANTITY, numericValue);
+};
+
 export const QuantityInput = ({
   control,
   onInputFocus,
@@ -27,7 +39,8 @@ export const QuantityInput = ({
             name="amount"
             rules={{
               required: "수량을 입력해주세요.",
-              validate: (value) => value > 0 || "수량은 1 이상이어야 합니다.",
+              validate: (value) =>
+                value >= MIN_QUANTITY || "수량은 1 이상이어야 합니다.",
             }}
             render={({ field: { onChange, value } }) => (
               <>
@@ -37,7 +50,7 @@ export const QuantityInput = ({
                   br="$2"
                   bg="$surface"
                   icon={<Minus size={16} />}
-                  onPress={() => onChange(Math.max(1, (value ?? 1) - 1))}
+                  onPress={() => onChange(normalizeQuantity(value) - 1)}
                 />
                 <Input
                   w={56}
@@ -52,7 +65,7 @@ export const QuantityInput = ({
                   selectTextOnFocus
                   borderWidth={0}
                   backgroundColor="transparent"
-                  value={String(value ?? 1)}
+                  value={String(normalizeQuantity(value))}
                   onChangeText={(text) => {
                     const onlyNumbers = text.replace(/[^0-9]/g, "");
 
@@ -65,9 +78,9 @@ export const QuantityInput = ({
                       return;
                     }
 
-                    onChange(Math.max(1, nextValue));
+                    onChange(normalizeQuantity(nextValue));
                   }}
-                  onBlur={() => onChange(Math.max(1, Number(value ?? 1)))}
+                  onBlur={() => onChange(normalizeQuantity(value))}
                   onFocus={onInputFocus}
                   onSubmitEditing={() => Keyboard.dismiss()}
                 />
@@ -77,7 +90,7 @@ export const QuantityInput = ({
                   br="$2"
                   bg="$surface"
                   icon={<Plus size={16} />}
-                  onPress={() => onChange((value ?? 1) + 1)}
+                  onPress={() => onChange(normalizeQuantity(value) + 1)}
                 />
               </>
             )}

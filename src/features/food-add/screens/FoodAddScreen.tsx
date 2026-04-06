@@ -22,6 +22,8 @@ import { useAddFoodMutation } from "../hooks/mutations/useAddFoodMutation";
 import { useCategoryQuery } from "../hooks/queries/useCategoryQuery";
 import { FoodFormValues } from "../types";
 
+const EXTRA_SCROLL_HEIGHT = 180;
+
 export function FoodAddScreen() {
   const selectedFridgeId = useSelectedFridgeId();
   const isAllFridgeTab = useIsAllFridgeTab();
@@ -149,7 +151,7 @@ export function FoodAddScreen() {
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
-        extraScrollHeight={180}
+        extraScrollHeight={EXTRA_SCROLL_HEIGHT}
         showsVerticalScrollIndicator={false}
       >
         <YStack p="$4" gap="$5" pb="$10">
