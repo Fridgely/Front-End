@@ -22,6 +22,10 @@ interface FoodFormProps {
   control: Control<FoodFormValues>;
 }
 
+interface QuantityInputProps extends FoodFormProps {
+  onInputFocus?: () => void;
+}
+
 interface CategorySelectorProps extends FoodFormProps {
   categories: Category[];
   onModalOpenChange?: (open: boolean) => void;
@@ -65,5 +69,6 @@ export {
   FoodFormProps,
   FoodFormValues,
   ImageUploaderProps,
+  QuantityInputProps,
   UnitSelectorProps,
 };

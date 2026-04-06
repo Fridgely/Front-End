@@ -8,6 +8,8 @@ import {
 import { useIsFocused } from "@react-navigation/native";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Keyboard } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Toast from "react-native-toast-message";
 import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
 import { CategorySelector } from "../components/CategorySelector/CategorySelector";
@@ -66,6 +68,8 @@ export function FoodAddScreen() {
     categories.length > 0 &&
     isCategoryValid;
   const wasFocusedRef = useRef(false);
+  const keyboardScrollRef = useRef<any>(null);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   useEffect(() => {
     if (isFocused && !wasFocusedRef.current) {
@@ -94,6 +98,20 @@ export function FoodAddScreen() {
     }
   }, [categories, isCategoryValid, setValue]);
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   const onSubmit = (data: FoodFormValues) => {
     if (!isTargetReady) {
       Toast.show({
@@ -114,10 +132,26 @@ export function FoodAddScreen() {
     addFood(data);
   };
 
+  const handleAmountFocus = () => {
+    // 키보드가 올라올 때 수량 입력란이 가려지는 문제 해결을 위해 스크롤뷰를 맨 아래로 스크롤
+    keyboardScrollRef.current?.scrollToEnd?.({ animated: true });
+  };
+
   return (
     <YStack f={1} backgroundColor="$background">
       <Header title="식품 추가" showBackButton />
-      <ScrollView f={1} showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        // 폼이 길어서 KeyboardAvoidingView 말고 AwareScrollView 사용
+        innerRef={(ref) => {
+          keyboardScrollRef.current = ref;
+        }}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={180}
+        showsVerticalScrollIndicator={false}
+      >
         <YStack p="$4" gap="$5" pb="$10">
           <YStack gap="$2">
             <Text fontFamily="$baemin" fontSize="$4" color="$mainText">
@@ -163,11 +197,11 @@ export function FoodAddScreen() {
           )}
           <StorageSelector control={control} />
           <ExpiryDatePicker control={control} />
-          <QuantityInput control={control} />
+          <QuantityInput control={control} onInputFocus={handleAmountFocus} />
         </YStack>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
-      {!isCategoryModalOpen && (
+      {!isCategoryModalOpen && !isKeyboardVisible && (
         <YStack p="$4" pb="$6" backgroundColor="$background">
           <Button
             backgroundColor="$primary"

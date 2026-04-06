@@ -1,8 +1,9 @@
 import { Minus, Plus } from "@tamagui/lucide-icons";
 import React from "react";
 import { Controller } from "react-hook-form";
-import { Button, Text, XStack, styled } from "tamagui";
-import { FoodFormProps } from "../../types";
+import { Keyboard } from "react-native";
+import { Button, Input, Text, XStack, styled } from "tamagui";
+import { QuantityInputProps } from "../../types";
 import { UnitSelector } from "./UnitSelector";
 
 const LabelText = styled(Text, {
@@ -11,7 +12,10 @@ const LabelText = styled(Text, {
   fontWeight: "700",
 });
 
-export const QuantityInput = ({ control }: FoodFormProps) => {
+export const QuantityInput = ({
+  control,
+  onInputFocus,
+}: QuantityInputProps) => {
   return (
     <XStack ai="center" jc="space-between">
       <LabelText>수량 및 단위</LabelText>
@@ -33,18 +37,47 @@ export const QuantityInput = ({ control }: FoodFormProps) => {
                   br="$2"
                   bg="$surface"
                   icon={<Minus size={16} />}
-                  onPress={() => onChange(Math.max(1, value - 1))}
+                  onPress={() => onChange(Math.max(1, (value ?? 1) - 1))}
                 />
-                <Text fontSize="$5" fontWeight="600" minWidth={20} ta="center">
-                  {value}
-                </Text>
+                <Input
+                  w={56}
+                  h={36}
+                  p={0}
+                  ta="center"
+                  fontFamily="$baemin"
+                  fontSize="$4"
+                  fontWeight="700"
+                  keyboardType="number-pad"
+                  returnKeyType="done"
+                  selectTextOnFocus
+                  borderWidth={0}
+                  backgroundColor="transparent"
+                  value={String(value ?? 1)}
+                  onChangeText={(text) => {
+                    const onlyNumbers = text.replace(/[^0-9]/g, "");
+
+                    if (onlyNumbers.length === 0) {
+                      return;
+                    }
+
+                    const nextValue = Number(onlyNumbers);
+                    if (!Number.isFinite(nextValue)) {
+                      return;
+                    }
+
+                    onChange(Math.max(1, nextValue));
+                  }}
+                  onBlur={() => onChange(Math.max(1, Number(value ?? 1)))}
+                  onFocus={onInputFocus}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                />
                 <Button
                   w={25}
                   h={30}
                   br="$2"
                   bg="$surface"
                   icon={<Plus size={16} />}
-                  onPress={() => onChange(value + 1)}
+                  onPress={() => onChange((value ?? 1) + 1)}
                 />
               </>
             )}
