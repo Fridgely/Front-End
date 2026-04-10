@@ -2,14 +2,14 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 
-import AnimatedSplashScreen from "@/shared/components/AnimatedSplashScreen";
+import FridgeSplashScreen from "@/shared/components/FridgeSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
 import { useAppHydration } from "@/shared/hooks/useAppHydration";
 import { queryClient } from "@/shared/lib/queryClient";
@@ -26,7 +26,7 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 if (__DEV__) {
-  require("../ReactotronConfig");
+  void import("../ReactotronConfig");
 }
 // 백그라운드일때
 const messaging = getMessaging();
@@ -74,23 +74,20 @@ export default function RootLayout() {
   });
 
   const isAppReady = (isHydrated && fontsLoaded) || !!fontError;
+  const handleAnimationFinish = useCallback(() => {
+    hasShownAnimatedSplash = true;
+    setAnimationFinished(true);
+  }, []);
 
-  const onLayoutRootView = useCallback(async () => {
-    if (isAppReady) {
-      await SplashScreen.hideAsync().catch(() => {});
-    }
-  }, [isAppReady]);
+  useEffect(() => {
+    SplashScreen.hideAsync().catch(() => {});
+  }, []);
 
   if (!isAppReady || !animationFinished) {
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <AnimatedSplashScreen
-            onAnimationFinish={() => {
-              hasShownAnimatedSplash = true;
-              setAnimationFinished(true);
-            }}
-          />
+        <View style={{ flex: 1 }}>
+          <FridgeSplashScreen onAnimationFinish={handleAnimationFinish} />
         </View>
       </GestureHandlerRootView>
     );
