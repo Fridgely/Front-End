@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Stack, useSegments } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
@@ -54,10 +54,6 @@ setBackgroundMessageHandler(messaging, async (remoteMessage) => {
   }
 });
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
-
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 let hasShownAnimatedSplash = false;
@@ -66,7 +62,6 @@ export default function RootLayout() {
   useReactQueryDevTools(queryClient);
   const { isHydrated, resolvedTheme } = useAppHydration();
   const isLoggedIn = useIsLoggedIn();
-  const segments = useSegments();
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -82,12 +77,7 @@ export default function RootLayout() {
     setAnimationFinished(true);
   }, []);
 
-  const currentGroup = segments?.[0];
-  const isRouteSettled =
-    isHydrated &&
-    typeof currentGroup === "string" &&
-    (isLoggedIn ? currentGroup !== "(auth)" : currentGroup === "(auth)");
-  const shouldShowSplash = !isAppReady || !animationFinished || !isRouteSettled;
+  const shouldShowSplash = !isAppReady || !animationFinished;
 
   useEffect(() => {
     SplashScreen.hideAsync().catch(() => {});
@@ -101,9 +91,15 @@ export default function RootLayout() {
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="(auth)" />
+            <Stack
+              key={isLoggedIn ? "logged-in" : "logged-out"}
+              screenOptions={{ headerShown: false }}
+            >
+              {isLoggedIn ? (
+                <Stack.Screen name="(tabs)" />
+              ) : (
+                <Stack.Screen name="(auth)" />
+              )}
               <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: "Modal" }}
