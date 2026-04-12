@@ -1,14 +1,15 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { Stack, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 
+import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
 import FridgeSplashScreen from "@/shared/components/FridgeSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
 import { useAppHydration } from "@/shared/hooks/useAppHydration";
@@ -64,6 +65,8 @@ let hasShownAnimatedSplash = false;
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
   const { isHydrated, resolvedTheme } = useAppHydration();
+  const isLoggedIn = useIsLoggedIn();
+  const segments = useSegments();
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -79,19 +82,16 @@ export default function RootLayout() {
     setAnimationFinished(true);
   }, []);
 
+  const currentGroup = segments?.[0];
+  const isRouteSettled =
+    isHydrated &&
+    typeof currentGroup === "string" &&
+    (isLoggedIn ? currentGroup !== "(auth)" : currentGroup === "(auth)");
+  const shouldShowSplash = !isAppReady || !animationFinished || !isRouteSettled;
+
   useEffect(() => {
     SplashScreen.hideAsync().catch(() => {});
   }, []);
-
-  if (!isAppReady || !animationFinished) {
-    return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <FridgeSplashScreen onAnimationFinish={handleAnimationFinish} />
-        </View>
-      </GestureHandlerRootView>
-    );
-  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -109,6 +109,11 @@ export default function RootLayout() {
                 options={{ presentation: "modal", title: "Modal" }}
               />
             </Stack>
+            {shouldShowSplash && (
+              <View style={styles.splashOverlay}>
+                <FridgeSplashScreen onAnimationFinish={handleAnimationFinish} />
+              </View>
+            )}
             <StatusBar style="auto" />
             <Toast config={toastConfig} />
           </TamaguiProvider>
@@ -117,3 +122,10 @@ export default function RootLayout() {
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  splashOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999,
+  },
+});
