@@ -3,12 +3,13 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { TamaguiProvider } from "tamagui";
 
+import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
 import FridgeSplashScreen from "@/shared/components/FridgeSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
 import { useAppHydration } from "@/shared/hooks/useAppHydration";
@@ -53,10 +54,6 @@ setBackgroundMessageHandler(messaging, async (remoteMessage) => {
   }
 });
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
-
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 let hasShownAnimatedSplash = false;
@@ -64,6 +61,7 @@ let hasShownAnimatedSplash = false;
 export default function RootLayout() {
   useReactQueryDevTools(queryClient);
   const { isHydrated, resolvedTheme } = useAppHydration();
+  const isLoggedIn = useIsLoggedIn();
   const [animationFinished, setAnimationFinished] = useState(
     hasShownAnimatedSplash,
   );
@@ -79,19 +77,11 @@ export default function RootLayout() {
     setAnimationFinished(true);
   }, []);
 
+  const shouldShowSplash = !isAppReady || !animationFinished;
+
   useEffect(() => {
     SplashScreen.hideAsync().catch(() => {});
   }, []);
-
-  if (!isAppReady || !animationFinished) {
-    return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <FridgeSplashScreen onAnimationFinish={handleAnimationFinish} />
-        </View>
-      </GestureHandlerRootView>
-    );
-  }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -101,14 +91,25 @@ export default function RootLayout() {
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" />
-              <Stack.Screen name="(auth)" />
+            <Stack
+              key={isLoggedIn ? "logged-in" : "logged-out"}
+              screenOptions={{ headerShown: false }}
+            >
+              {isLoggedIn ? (
+                <Stack.Screen name="(tabs)" />
+              ) : (
+                <Stack.Screen name="(auth)" />
+              )}
               <Stack.Screen
                 name="modal"
                 options={{ presentation: "modal", title: "Modal" }}
               />
             </Stack>
+            {shouldShowSplash && (
+              <View style={styles.splashOverlay}>
+                <FridgeSplashScreen onAnimationFinish={handleAnimationFinish} />
+              </View>
+            )}
             <StatusBar style="auto" />
             <Toast config={toastConfig} />
           </TamaguiProvider>
@@ -117,3 +118,10 @@ export default function RootLayout() {
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  splashOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999,
+  },
+});
