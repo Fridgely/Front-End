@@ -83,6 +83,24 @@ describe("useUpdateFoodMutation 테스트", () => {
       }),
     );
 
+    expect(invalidateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryKey: expect.arrayContaining(["foods", "status", TEST_FRIDGE_ID]),
+        refetchType: "all",
+      }),
+    );
+
+    expect(invalidateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryKey: expect.arrayContaining([
+          "foods",
+          "statusByRefrigerator",
+          TEST_FRIDGE_ID,
+        ]),
+        refetchType: "all",
+      }),
+    );
+
     // 상세 쿼리는 즉시 재조회
     expect(invalidateSpy).toHaveBeenCalledWith(
       expect.objectContaining({
