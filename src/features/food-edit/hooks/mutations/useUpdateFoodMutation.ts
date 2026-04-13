@@ -22,17 +22,17 @@ const useUpdateFoodMutation = (fridgeId: number, foodId: number) => {
 
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.food.statusAll(),
-          refetchType: "inactive",
+          refetchType: "all",
         });
 
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.food.status(fridgeId),
-          refetchType: "inactive",
+          refetchType: "all",
         });
 
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.food.statusByRefrigerator(fridgeId),
-          refetchType: "inactive",
+          refetchType: "all",
         });
 
         queryClient.invalidateQueries({
