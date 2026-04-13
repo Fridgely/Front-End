@@ -4,7 +4,7 @@
     "slug": "FrontEnd",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/splash-screen.png",
+    "icon": "./assets/images/app-icon.png",
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -17,7 +17,7 @@
       "package": "com.chacha.fridgely",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/splash-screen.png",
+        "foregroundImage": "./assets/images/app-icon.png",
         "backgroundColor": "#E0F6EA"
       },
       "edgeToEdgeEnabled": true,
@@ -26,7 +26,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/splash-screen.png"
+      "favicon": "./assets/images/app-icon.png"
     },
     "splash": {
       "image": "./assets/images/splash-screen.png",
