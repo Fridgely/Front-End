@@ -75,11 +75,29 @@ describe("useUpdateFoodMutation 테스트", () => {
       expect.objectContaining({ type: "success", text1: "식품 수정 완료" }),
     );
 
-    // 상태 목록 쿼리들은 refetchType: inactive로 처리
+    // 상태 목록 쿼리들은 active/inactive 상관없이 즉시 재조회
     expect(invalidateSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         queryKey: expect.arrayContaining(["foods", "status", "all"]),
-        refetchType: "inactive",
+        refetchType: "all",
+      }),
+    );
+
+    expect(invalidateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryKey: expect.arrayContaining(["foods", "status", TEST_FRIDGE_ID]),
+        refetchType: "all",
+      }),
+    );
+
+    expect(invalidateSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        queryKey: expect.arrayContaining([
+          "foods",
+          "statusByRefrigerator",
+          TEST_FRIDGE_ID,
+        ]),
+        refetchType: "all",
       }),
     );
 
