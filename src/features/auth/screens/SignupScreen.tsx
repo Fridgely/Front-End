@@ -22,7 +22,7 @@ export function SignupScreen() {
     control,
     handleSubmit,
     watch,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<AuthFormData>({
     mode: "onChange",
     defaultValues: {
@@ -76,7 +76,6 @@ export function SignupScreen() {
               label="닉네임"
               name="nickname"
               control={control}
-              errors={errors}
               placeholder="닉네임을 입력하세요."
               rules={{
                 required: "닉네임을 입력해주세요.",
@@ -99,7 +98,6 @@ export function SignupScreen() {
               label="아이디"
               name="id"
               control={control}
-              errors={errors}
               placeholder="아이디를 입력하세요."
               keyboardType="default"
               rules={{
@@ -119,7 +117,6 @@ export function SignupScreen() {
               label="비밀번호"
               name="password"
               control={control}
-              errors={errors}
               placeholder="비밀번호를 입력하세요."
               secureTextEntry
               rules={{
@@ -136,13 +133,23 @@ export function SignupScreen() {
               label="비밀번호 확인"
               name="confirmPassword"
               control={control}
-              errors={errors}
               placeholder="비밀번호를 다시 입력하세요."
               secureTextEntry
               rules={{
                 required: "비밀번호를 다시 입력해주세요.",
-                validate: (value: string) =>
-                  value === password || "비밀번호가 일치하지 않습니다.",
+                validate: (value: string) => {
+                  const isMatch = value === password;
+                  const isLongEnough = value.length >= 6;
+
+                  // 일치 및 6글자 이상이면 통과
+                  if (isMatch && isLongEnough) return true;
+
+                  // 6자 미만일떄 (minLength)
+                  if (!isLongEnough) return " ";
+
+                  // 6자 이상인데 틀렸을 때
+                  return "비밀번호가 일치하지 않습니다.";
+                },
               }}
             />
 
