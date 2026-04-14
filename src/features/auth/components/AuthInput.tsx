@@ -25,7 +25,8 @@ export function AuthInput({
         name={name}
         rules={rules}
         render={({ field: { onChange, onBlur, value }, fieldState }) => {
-          const hasError = !!fieldState.error;
+          const hasError =
+            !!fieldState.error && fieldState.error.message?.trim() !== "";
 
           return (
             <YStack>
