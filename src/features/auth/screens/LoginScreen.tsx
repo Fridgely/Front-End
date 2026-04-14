@@ -29,7 +29,7 @@ export function LoginScreen() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<AuthFormData>({
     mode: "onChange",
     defaultValues: {
@@ -83,7 +83,6 @@ export function LoginScreen() {
               label="아이디"
               name="id"
               control={control}
-              errors={errors}
               placeholder="아이디를 입력하세요."
               keyboardType="default"
               rules={{
@@ -103,7 +102,6 @@ export function LoginScreen() {
               label="비밀번호"
               name="password"
               control={control}
-              errors={errors}
               placeholder="비밀번호를 입력하세요."
               secureTextEntry
               rules={{

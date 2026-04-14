@@ -22,7 +22,7 @@ export function SignupScreen() {
     control,
     handleSubmit,
     watch,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<AuthFormData>({
     mode: "onChange",
     defaultValues: {
@@ -76,7 +76,6 @@ export function SignupScreen() {
               label="닉네임"
               name="nickname"
               control={control}
-              errors={errors}
               placeholder="닉네임을 입력하세요."
               rules={{
                 required: "닉네임을 입력해주세요.",
@@ -99,7 +98,6 @@ export function SignupScreen() {
               label="아이디"
               name="id"
               control={control}
-              errors={errors}
               placeholder="아이디를 입력하세요."
               keyboardType="default"
               rules={{
@@ -119,7 +117,6 @@ export function SignupScreen() {
               label="비밀번호"
               name="password"
               control={control}
-              errors={errors}
               placeholder="비밀번호를 입력하세요."
               secureTextEntry
               rules={{
@@ -136,7 +133,6 @@ export function SignupScreen() {
               label="비밀번호 확인"
               name="confirmPassword"
               control={control}
-              errors={errors}
               placeholder="비밀번호를 다시 입력하세요."
               secureTextEntry
               rules={{
