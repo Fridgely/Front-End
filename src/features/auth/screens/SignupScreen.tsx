@@ -137,8 +137,13 @@ export function SignupScreen() {
               secureTextEntry
               rules={{
                 required: "비밀번호를 다시 입력해주세요.",
-                validate: (value: string) =>
-                  value === password || "비밀번호가 일치하지 않습니다.",
+                validate: (value: string) => {
+                  // 만약 비밀번호 확인 값이 아직 6자 미만이라면 에러를 띄우지 않음
+                  if (value.length < 6) return true;
+
+                  // 6자 이상일 때만 일치 여부를 검사
+                  return value === password || "비밀번호가 일치하지 않습니다.";
+                },
               }}
             />
 
