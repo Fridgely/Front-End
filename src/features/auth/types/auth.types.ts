@@ -1,4 +1,4 @@
-import { Control, FieldErrors } from "react-hook-form";
+import { Control } from "react-hook-form";
 
 interface AuthFormData {
   id: string;
@@ -11,7 +11,6 @@ interface AuthInputProps {
   label: string;
   name: keyof AuthFormData; // AuthFormData의 키값만 허용
   control: Control<any>;
-  errors: FieldErrors;
   rules?: object;
   placeholder?: string;
   secureTextEntry?: boolean;
