@@ -1,13 +1,12 @@
 import { Image } from "expo-image";
-import { Dimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 import { Paragraph, Text, View, YStack } from "tamagui";
 import { OnboardingItemProps } from "../types";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-
 export function OnboardingItem({ item, isDark }: OnboardingItemProps) {
+  const { width: screenWidth } = useWindowDimensions();
   return (
-    <View w={SCREEN_WIDTH} px="$6">
+    <View w={screenWidth} px="$6">
       <YStack pt="$6" ai="center">
         <View
           w="100%"
