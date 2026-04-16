@@ -1,8 +1,9 @@
+import type { ImageProps } from "expo-image";
 interface OnboardingSlide {
   key: string;
   title: string;
   description: string;
-  image: any;
+  image: ImageProps["source"];
 }
 
 interface OnboardingItemProps {
