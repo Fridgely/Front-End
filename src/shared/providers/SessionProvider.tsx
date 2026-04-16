@@ -31,8 +31,9 @@ export function SessionProvider() {
   useEffect(() => {
     if (!isLoaded) return;
     const inAuthGroup = segments?.[0] === "(auth)";
+    const inOnboarding = String(segments?.[0] ?? "") === "onboarding";
 
-    if (!isLoggedIn && !inAuthGroup) {
+    if (!isLoggedIn && !inAuthGroup && !inOnboarding) {
       router.replace("/(auth)/login");
     } else if (isLoggedIn && inAuthGroup) {
       router.replace("/(tabs)");
