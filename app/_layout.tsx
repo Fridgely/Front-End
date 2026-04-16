@@ -14,6 +14,7 @@ import FridgeSplashScreen from "@/shared/components/FridgeSplashScreen";
 import { toastConfig } from "@/shared/components/ui/ToastConfig";
 import { useAppHydration } from "@/shared/hooks/useAppHydration";
 import { queryClient } from "@/shared/lib/queryClient";
+import { OnboardingGate } from "@/shared/providers/OnboardingProvider";
 import { SessionProvider } from "@/shared/providers/SessionProvider";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { useFonts } from "expo-font";
@@ -88,6 +89,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <TamaguiProvider config={config} defaultTheme={resolvedTheme}>
+            <OnboardingGate />
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 
@@ -95,6 +97,7 @@ export default function RootLayout() {
               key={isLoggedIn ? "logged-in" : "logged-out"}
               screenOptions={{ headerShown: false }}
             >
+              <Stack.Screen name="onboarding" />
               {isLoggedIn ? (
                 <Stack.Screen name="(tabs)" />
               ) : (
