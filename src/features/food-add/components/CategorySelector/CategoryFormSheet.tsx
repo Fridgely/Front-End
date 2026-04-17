@@ -17,14 +17,17 @@ import {
   XStack,
   YStack,
 } from "tamagui";
-import { CategoryAddFormValues, CategoryAddSheetProps } from "../../types";
+import { CategoryFormSheetProps, CategoryFormValues } from "../../types";
 
-export const CategoryAddSheet = ({
+export const CategoryFormSheet = ({
   visible,
   onClose,
   onAdd,
+  editTarget = null,
+  onUpdate,
   isPending = false,
-}: CategoryAddSheetProps) => {
+}: CategoryFormSheetProps) => {
+  const isEditMode = Boolean(editTarget);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   const {
@@ -32,7 +35,7 @@ export const CategoryAddSheet = ({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CategoryAddFormValues>({
+  } = useForm<CategoryFormValues>({
     mode: "onChange",
     defaultValues: { name: "" },
   });
@@ -41,8 +44,10 @@ export const CategoryAddSheet = ({
     if (!visible) {
       reset({ name: "" });
       setIsKeyboardVisible(false);
+    } else {
+      reset({ name: editTarget?.name ?? "" });
     }
-  }, [visible, reset]);
+  }, [visible, editTarget, reset]);
 
   useEffect(() => {
     const showSub = Keyboard.addListener("keyboardDidShow", () =>
@@ -58,16 +63,23 @@ export const CategoryAddSheet = ({
     };
   }, []);
 
-  const onSubmit = async ({ name }: CategoryAddFormValues) => {
+  const onSubmit = async ({ name }: CategoryFormValues) => {
     if (isPending) return;
 
     const trimmedName = name.trim();
     if (!trimmedName) return;
 
     try {
-      await onAdd(trimmedName);
+      if (isEditMode && editTarget && onUpdate) {
+        await onUpdate(editTarget.id, trimmedName);
+      } else {
+        await onAdd(trimmedName);
+      }
     } catch (error) {
-      console.error("카테고리 추가 실패:", error);
+      console.error(
+        isEditMode ? "카테고리 수정 실패:" : "카테고리 추가 실패:",
+        error,
+      );
     }
   };
 
@@ -102,7 +114,7 @@ export const CategoryAddSheet = ({
           <AnimatePresence>
             {visible && (
               <YStack
-                key="category-add-sheet"
+                key="category-form-sheet"
                 bg="$background"
                 p="$5"
                 pb="$5"
@@ -127,7 +139,7 @@ export const CategoryAddSheet = ({
                 />
 
                 <Text fontSize="$5" fontWeight="700" fontFamily="$baemin">
-                  카테고리 추가
+                  {isEditMode ? "카테고리 수정" : "카테고리 추가"}
                 </Text>
 
                 <YStack gap="$2">
@@ -141,9 +153,11 @@ export const CategoryAddSheet = ({
                     }}
                     render={({ field: { onChange, value } }) => (
                       <Input
-                        autoFocus
+                        autoFocus={!isEditMode}
                         h={52}
-                        placeholder="새 카테고리 이름"
+                        placeholder={
+                          isEditMode ? "카테고리 이름" : "새 카테고리 이름"
+                        }
                         value={value}
                         onChangeText={onChange}
                         backgroundColor="$gray3"
@@ -175,7 +189,7 @@ export const CategoryAddSheet = ({
                       fontSize="$4"
                       fontFamily="$baemin"
                     >
-                      추가하기
+                      {isEditMode ? "저장하기" : "추가하기"}
                     </Text>
                   </Button>
                 </XStack>
