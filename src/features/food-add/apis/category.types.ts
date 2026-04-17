@@ -9,4 +9,12 @@ interface AddCategoryRequest {
   name: string;
 }
 
-export type { AddCategoryRequest, CategoryListResponse };
+interface UpdateCategoryRequest {
+  newName: string;
+}
+
+export type {
+  AddCategoryRequest,
+  CategoryListResponse,
+  UpdateCategoryRequest,
+};

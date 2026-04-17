@@ -1,5 +1,9 @@
 import ApiBuilder from "@/shared/apis/builder/ApiBuilder";
-import { AddCategoryRequest, CategoryListResponse } from "./category.types";
+import {
+  AddCategoryRequest,
+  CategoryListResponse,
+  UpdateCategoryRequest,
+} from "./category.types";
 
 const getCategoryApi = (refrigeratorId: number) =>
   ApiBuilder.create<void, CategoryListResponse>(
@@ -11,4 +15,19 @@ const addCategoryApi = (refrigeratorId: number) =>
     `/api/v1/refrigerators/${refrigeratorId}/categories`,
   ).setMethod("POST");
 
-export { addCategoryApi, getCategoryApi };
+const updateCategoryApi = (refrigeratorId: number, categoryId: number) =>
+  ApiBuilder.create<UpdateCategoryRequest, void>(
+    `/api/v1/refrigerators/${refrigeratorId}/categories/${categoryId}`,
+  ).setMethod("PATCH");
+
+const deleteCategoryApi = (refrigeratorId: number, categoryId: number) =>
+  ApiBuilder.create<void, void>(
+    `/api/v1/refrigerators/${refrigeratorId}/categories/${categoryId}`,
+  ).setMethod("DELETE");
+
+export {
+  addCategoryApi,
+  deleteCategoryApi,
+  getCategoryApi,
+  updateCategoryApi,
+};

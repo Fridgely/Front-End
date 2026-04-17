@@ -32,15 +32,25 @@ interface CategorySelectorProps extends FoodFormProps {
   fridgeId: number;
 }
 
-interface CategoryAddFormValues {
+interface CategoryFormValues {
   name: string;
 }
 
-interface CategoryAddSheetProps {
+interface CategoryFormSheetProps {
   visible: boolean;
   onClose: () => void;
   onAdd: (name: string) => void | Promise<void>;
+  editTarget?: Category | null;
+  onUpdate?: (categoryId: number, name: string) => void | Promise<void>;
   isPending?: boolean;
+}
+
+interface CategoryActionSheetProps {
+  visible: boolean;
+  onClose: () => void;
+  target: Category | null;
+  onEdit: (target: Category) => void;
+  onDelete: (target: Category) => void;
 }
 
 interface ImageUploaderProps {
@@ -62,8 +72,9 @@ interface DateSelectSheetProps {
 
 export {
   Category,
-  CategoryAddFormValues,
-  CategoryAddSheetProps,
+  CategoryActionSheetProps,
+  CategoryFormSheetProps,
+  CategoryFormValues,
   CategorySelectorProps,
   DateSelectSheetProps,
   FoodFormProps,
