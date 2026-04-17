@@ -11,6 +11,8 @@ export const ConfirmModal = ({
   confirmText,
   onConfirm,
   confirmColor = "$warning",
+  closeOnConfirm = true,
+  confirmDisabled = false,
 }: ConfirmModalProps) => {
   return (
     <Dialog modal open={open} onOpenChange={onOpenChange}>
@@ -74,9 +76,12 @@ export const ConfirmModal = ({
               <Button
                 size="$5"
                 backgroundColor={confirmColor}
+                disabled={confirmDisabled}
                 onPress={() => {
                   onConfirm();
-                  onOpenChange(false);
+                  if (closeOnConfirm) {
+                    onOpenChange(false);
+                  }
                 }}
                 pressStyle={{ opacity: 0.8, scale: 0.98 }}
                 br="$2"

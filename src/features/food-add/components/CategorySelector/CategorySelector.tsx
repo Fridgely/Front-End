@@ -34,7 +34,8 @@ export const CategorySelector = ({
     useAddCategoryMutation(fridgeId);
   const { mutate: updateCategory, isPending: isUpdatePending } =
     useUpdateCategoryMutation(fridgeId);
-  const { mutate: deleteCategory } = useDeleteCategoryMutation(fridgeId);
+  const { mutate: deleteCategory, isPending: isDeletePending } =
+    useDeleteCategoryMutation(fridgeId);
 
   const isSheetPending = isAddPending || isUpdatePending;
 
@@ -80,16 +81,27 @@ export const CategorySelector = ({
   };
 
   const handleConfirmDelete = () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget || isDeletePending) return;
     const catId = deleteTarget.id;
+
     deleteCategory(
       { categoryId: catId },
       {
         onSuccess: () => {
           if (value === catId) {
-            const next = categories.find((c) => c.id !== catId);
-            if (next) onChange(next.id);
+            const idx = categories.findIndex((c) => c.id === catId);
+            const nextCategory =
+              idx >= 0
+                ? (categories[idx + 1] ?? categories[idx - 1] ?? null)
+                : null;
+            onChange(nextCategory?.id ?? 0);
           }
+          setDeleteConfirmOpen(false);
+          setDeleteTarget(null);
+        },
+        onError: () => {
+          setDeleteConfirmOpen(false);
+          setDeleteTarget(null);
         },
       },
     );
@@ -172,6 +184,8 @@ export const CategorySelector = ({
         confirmText="삭제하기"
         onConfirm={handleConfirmDelete}
         confirmColor="$warning"
+        closeOnConfirm={false}
+        confirmDisabled={isDeletePending}
       />
     </YStack>
   );
