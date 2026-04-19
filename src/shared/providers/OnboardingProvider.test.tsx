@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react-native";
+import { act, render, waitFor } from "@testing-library/react-native";
 import { useRouter, useSegments } from "expo-router";
 
 import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
@@ -74,5 +74,23 @@ describe("OnboardingGate 테스트", () => {
     await waitFor(() => {
       expect(mockReplace).toHaveBeenCalledWith("/onboarding");
     });
+  });
+
+  it("온보딩 완료 후 로그인 화면이면 스토리지 기준으로 완료로 인식해 온보딩으로 되돌리지 않는다", async () => {
+    (useIsLoggedIn as jest.Mock).mockReturnValue(false);
+    (useSegments as jest.Mock).mockReturnValue(["(auth)", "login"]);
+    (getOnboardingCompleted as jest.Mock).mockResolvedValue(true);
+
+    render(<OnboardingGate />);
+
+    await waitFor(() => {
+      expect(getOnboardingCompleted).toHaveBeenCalled();
+    });
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 });
