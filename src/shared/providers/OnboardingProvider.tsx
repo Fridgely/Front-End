@@ -1,52 +1,45 @@
 import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
 import { getOnboardingCompleted } from "@/shared/lib/onboarding/onboardingStorage";
 import { useRouter, useSegments } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export function OnboardingGate() {
   const router = useRouter();
   const segments = useSegments();
   const isLoggedIn = useIsLoggedIn();
 
-  const [isReady, setIsReady] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
-
+  // 완료 여부는 스토리지 기준으로 매번 조회
   useEffect(() => {
-    let mounted = true;
-    getOnboardingCompleted()
-      .then((completed) => {
-        if (!mounted) return;
-        setIsCompleted(completed);
-        setIsReady(true);
-      })
-      .catch(() => {
-        if (!mounted) return;
-        setIsCompleted(false);
-        setIsReady(true);
-      });
+    let cancelled = false;
+
+    (async () => {
+      let completed = false;
+      try {
+        completed = await getOnboardingCompleted();
+      } catch {
+        completed = false;
+      }
+      if (cancelled) return;
+
+      const currentRootSegment = String(segments?.[0] ?? "");
+      const inOnboarding = currentRootSegment === "onboarding";
+
+      if (!completed && !inOnboarding) {
+        router.replace("/onboarding" as any);
+        return;
+      }
+
+      if (completed && inOnboarding) {
+        if (isLoggedIn) router.replace("/(tabs)");
+        else router.replace("/(auth)/login");
+        return;
+      }
+    })();
 
     return () => {
-      mounted = false;
+      cancelled = true;
     };
-  }, []);
-
-  useEffect(() => {
-    if (!isReady) return;
-
-    const currentRootSegment = String(segments?.[0] ?? "");
-    const inOnboarding = currentRootSegment === "onboarding";
-
-    if (!isCompleted && !inOnboarding) {
-      router.replace("/onboarding" as any);
-      return;
-    }
-
-    if (isCompleted && inOnboarding) {
-      if (isLoggedIn) router.replace("/(tabs)");
-      else router.replace("/(auth)/login");
-      return;
-    }
-  }, [isReady, isCompleted, isLoggedIn, router, segments]);
+  }, [isLoggedIn, router, segments]);
 
   return null;
 }
