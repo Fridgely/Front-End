@@ -105,7 +105,7 @@ export function SearchScreen() {
               <View backgroundColor="$gray3" mx="$4" height={1} />
             )}
             contentContainerStyle={{
-              paddingBottom: insets.bottom + 65 + 60,
+              paddingBottom: insets.bottom + 24,
             }}
             style={{ backgroundColor }}
             ListEmptyComponent={

@@ -1,4 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   Bell,
@@ -149,7 +150,13 @@ export function ProfileScreen() {
       <Header title="마이페이지" showBackButton />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <YStack padding="$4" gap="$6" style={{ paddingBottom: insets.bottom + 24 }}>
+        <YStack
+          padding="$4"
+          gap="$6"
+          style={{
+            paddingBottom: getBottomPaddingForSheet({ bottomInset: insets.bottom }),
+          }}
+        >
           {/* 프로필 */}
           <YStack alignItems="center" gap="$2" marginTop="$4">
             <Avatar circular size={100}>

@@ -8,6 +8,7 @@ import { FoodFormValues } from "@/features/food-add/types";
 import { useFoodDetailQuery } from "@/features/food-detail/hooks/queries/useFoodDetailQuery";
 import { parseParamToNumber } from "@/features/food-detail/utils/params";
 import { Header } from "@/shared/components/Header/Header";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -240,7 +241,9 @@ export function FoodEditScreen() {
         <YStack
           p="$4"
           backgroundColor="$background"
-          style={{ paddingBottom: insets.bottom + 24 }}
+          style={{
+            paddingBottom: getBottomPaddingForSheet({ bottomInset: insets.bottom }),
+          }}
         >
           <Button
             backgroundColor="$primary"

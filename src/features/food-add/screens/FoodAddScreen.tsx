@@ -13,6 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 import { CategorySelector } from "../components/CategorySelector/CategorySelector";
 import { ExpiryDatePicker } from "../components/ExpiryDatePicker/ExpiryDatePicker";
 import { FoodNameInput } from "../components/FoodNameInput";
@@ -152,7 +153,7 @@ export function FoodAddScreen() {
         style={{ flex: 1 }}
         contentContainerStyle={{
           flexGrow: 1,
-          paddingBottom: insets.bottom + 24,
+          paddingBottom: getBottomPaddingForSheet({ bottomInset: insets.bottom }),
         }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
@@ -212,7 +213,9 @@ export function FoodAddScreen() {
         <YStack
           p="$4"
           backgroundColor="$background"
-          style={{ paddingBottom: insets.bottom + 24 }}
+          style={{
+            paddingBottom: getBottomPaddingForSheet({ bottomInset: insets.bottom }),
+          }}
         >
           <Button
             backgroundColor="$primary"
