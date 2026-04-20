@@ -1,12 +1,15 @@
 import { ChevronRight } from "@tamagui/lucide-icons";
 import React, { useEffect, useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Sheet, Text, View, XStack, YStack } from "tamagui";
 import { AM_PM, HOURS, MINUTES, PICKER_ITEM_HEIGHT } from "../../constants";
 import { PickerColumn } from "./PickerColumn";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 export const TimePickerSelect = ({ value, onValueChange }: any) => {
   const [open, setOpen] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (open) setTempValue(value);
@@ -68,7 +71,14 @@ export const TimePickerSelect = ({ value, onValueChange }: any) => {
           exitStyle={{ opacity: 0 }}
           backgroundColor="rgba(0, 0, 0, 0.5)"
         />
-        <Sheet.Frame p="$4" backgroundColor="$background" br="$5">
+        <Sheet.Frame
+          p="$4"
+          pb={getBottomPaddingForSheet({
+            bottomInset: insets.bottom,
+          })}
+          backgroundColor="$background"
+          br="$5"
+        >
           <Sheet.Handle />
           <YStack f={1} gap="$4" mt="$3" jc="center" ai="center">
             <Text fontSize="$5" fontWeight="700" color="$mainText">

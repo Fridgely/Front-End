@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable, ScrollView, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Text, View, XStack, YStack } from "tamagui";
 import { SortFilterProps, SortOption } from "../types";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
   { label: "유통기한 임박순", value: "EXPIRY_ASC" },
@@ -20,6 +22,7 @@ export function SortFilter({
   // selected 겹치므로 draft
   const [draftSort, setDraftSort] = useState<SortOption>(selectedSort);
   const [draftCategory, setDraftCategory] = useState(selectedCategory);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (!visible) return;
@@ -44,7 +47,7 @@ export function SortFilter({
               key="sort-filter-sheet"
               bg="$background"
               p="$5"
-              pb="$6"
+              pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
               gap="$5"
               br="$6"
               borderBottomLeftRadius={0}

@@ -1,7 +1,9 @@
 import { UNIT_OPTIONS } from "@/shared/constants/food";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 import { ChevronDown } from "@tamagui/lucide-icons";
 import React, { useState } from "react";
 import { Modal } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   AnimatePresence,
   Button,
@@ -28,6 +30,7 @@ const Overlay = styled(View, {
 
 export const UnitSelector = ({ value, onChange }: any) => {
   const [show, setShow] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const currentLabel =
     UNIT_OPTIONS.find((opt) => opt.value === value)?.label || value;
@@ -63,7 +66,7 @@ export const UnitSelector = ({ value, onChange }: any) => {
                   key="unit-sheet"
                   bg="$background"
                   p="$5"
-                  pb="$10"
+                  pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
                   gap="$4"
                   br="$6"
                   borderBottomLeftRadius={0}
