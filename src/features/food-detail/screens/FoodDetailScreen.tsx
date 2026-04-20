@@ -1,5 +1,6 @@
 import { Header } from "@/shared/components/Header/Header";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, ScrollView, Spinner, Text, YStack } from "tamagui";
 import { FoodDetailCard } from "../components/FoodDetail/FoodDetailCard";
 import { FoodStatusView } from "../components/FoodStatusView";
@@ -9,6 +10,7 @@ import { parseParamToNumber } from "../utils/params";
 
 export function FoodDetailScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { id, refrigeratorId } = useLocalSearchParams<{
     id?: string;
     refrigeratorId?: string;
@@ -68,12 +70,19 @@ export function FoodDetailScreen() {
     );
   }
 
+  const bottomPadding = insets.bottom + 24;
+
   return (
     <YStack f={1} backgroundColor="$background">
       <Header title="식품 상세" showBackButton />
 
       <ScrollView f={1} showsVerticalScrollIndicator={false}>
-        <YStack px="$4" py="$5" gap="$4" pb="$10">
+        <YStack
+          px="$4"
+          py="$5"
+          gap="$4"
+          style={{ paddingBottom: bottomPadding }}
+        >
           <ImageSection imageURL={food.imageURL} />
           <FoodDetailCard food={food} />
           <Button

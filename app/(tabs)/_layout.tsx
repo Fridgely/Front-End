@@ -4,11 +4,13 @@ import { Tabs, usePathname } from "expo-router";
 import { Calendar, Home, Plus, Search, User } from "lucide-react-native";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Circle, useTheme, View } from "tamagui";
 
 export default function TabLayout() {
   const theme = useTheme();
   const pathname = usePathname();
+  const insets = useSafeAreaInsets();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const activeColor = theme.active.get();
@@ -37,8 +39,9 @@ export default function TabLayout() {
             backgroundColor: theme.background.get(),
             borderTopWidth: 1,
             borderTopColor: theme.borderColor.get(),
-            height: 65,
+            height: 65 + insets.bottom,
             paddingTop: 3,
+            paddingBottom: insets.bottom,
             elevation: 0, // 안드로이드 특유의 그림자 제거
             display: shouldHideFooter ? "none" : "flex",
           },
@@ -93,7 +96,7 @@ export default function TabLayout() {
         <View
           style={{
             position: "absolute",
-            bottom: 35,
+            bottom: insets.bottom + 35,
             alignSelf: "center",
             zIndex: 2000,
           }}

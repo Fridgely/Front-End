@@ -41,8 +41,8 @@ describe("useOnboarding 테스트", () => {
 
     act(() => {
       result.current.onScrollEnd({
-        nativeEvent: { contentOffset: { x } },
-      });
+        nativeEvent: { contentOffset: { x, y: 0 } },
+      } as any);
     });
 
     await waitFor(() => {
