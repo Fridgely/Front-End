@@ -1,7 +1,9 @@
 import React from "react";
 import { Modal, Pressable, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Text, View, XStack, YStack } from "tamagui";
 import { CategoryActionSheetProps } from "../../types";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 export const CategoryActionSheet = ({
   visible,
@@ -11,6 +13,7 @@ export const CategoryActionSheet = ({
   onDelete,
 }: CategoryActionSheetProps) => {
   const isDefaultType = Boolean(target?.isDefaultType);
+  const insets = useSafeAreaInsets();
 
   return (
     <Modal
@@ -29,7 +32,7 @@ export const CategoryActionSheet = ({
               key="category-action-sheet"
               bg="$background"
               p="$5"
-              pb="$5"
+              pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
               gap="$4"
               br="$6"
               borderBottomLeftRadius={0}

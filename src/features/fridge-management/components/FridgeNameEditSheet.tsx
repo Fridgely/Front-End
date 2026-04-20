@@ -6,8 +6,10 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Input, Text, View, YStack } from "tamagui";
 import { FridgeNameEditSheetProps } from "../types";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 export const FridgeNameEditSheet = ({
   visible,
@@ -17,6 +19,7 @@ export const FridgeNameEditSheet = ({
   isLoading,
 }: FridgeNameEditSheetProps) => {
   const [newName, setNewName] = useState(currentName);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
@@ -63,7 +66,7 @@ export const FridgeNameEditSheet = ({
                 key="fridge-name-edit-sheet"
                 bg="$background"
                 p="$5"
-                pb={Platform.OS === "ios" ? "$10" : "$5"}
+                pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
                 gap="$5"
                 br="$6"
                 borderBottomLeftRadius={0}

@@ -1,7 +1,8 @@
 import { Check, PlusCircle, Refrigerator } from "@tamagui/lucide-icons";
 import { router } from "expo-router";
 import React from "react";
-import { Modal, Platform, Pressable, StyleSheet } from "react-native";
+import { Modal, Pressable, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   AnimatePresence,
   Circle,
@@ -12,6 +13,7 @@ import {
   YStack,
 } from "tamagui";
 import { FridgeSelectionProps } from "../types";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 export const FridgeSelectionSheet = ({
   visible,
@@ -20,6 +22,8 @@ export const FridgeSelectionSheet = ({
   selectedId,
   onSelect,
 }: FridgeSelectionProps) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Modal
       visible={visible}
@@ -49,7 +53,7 @@ export const FridgeSelectionSheet = ({
               key="fridge-selection-sheet"
               bg="$background"
               p="$5"
-              pb={Platform.OS === "ios" ? "$8" : "$5"}
+              pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
               gap="$4"
               br="$6"
               borderBottomLeftRadius={0}

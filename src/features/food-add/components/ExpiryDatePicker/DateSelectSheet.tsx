@@ -1,6 +1,7 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import { Modal, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   AnimatePresence,
   Button,
@@ -11,6 +12,7 @@ import {
   styled,
 } from "tamagui";
 import { DateSelectSheetProps } from "../../types";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 const Overlay = styled(View, {
   position: "absolute",
@@ -30,6 +32,7 @@ export const DateSelectSheet = ({
   value,
   onChange,
 }: DateSelectSheetProps) => {
+  const insets = useSafeAreaInsets();
   const safeDate = React.useMemo(() => {
     const date = new Date(value);
     return isNaN(date.getTime()) ? new Date() : date;
@@ -75,7 +78,7 @@ export const DateSelectSheet = ({
               <YStack
                 key="date-sheet"
                 bg="$background"
-                pb="$8"
+                pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
                 br="$6"
                 borderBottomLeftRadius={0}
                 borderBottomRightRadius={0}

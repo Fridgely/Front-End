@@ -1,4 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, ScrollView, Spinner, Text, YStack } from "tamagui";
@@ -70,7 +71,7 @@ export function FoodDetailScreen() {
     );
   }
 
-  const bottomPadding = insets.bottom + 24;
+  const bottomPadding = getBottomPaddingForSheet({ bottomInset: insets.bottom });
 
   return (
     <YStack f={1} backgroundColor="$background">

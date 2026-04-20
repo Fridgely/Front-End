@@ -8,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   AnimatePresence,
   Button,
@@ -18,6 +19,7 @@ import {
   YStack,
 } from "tamagui";
 import { CategoryFormSheetProps, CategoryFormValues } from "../../types";
+import { getBottomPaddingForSheet } from "@/shared/constants/layout";
 
 export const CategoryFormSheet = ({
   visible,
@@ -29,6 +31,7 @@ export const CategoryFormSheet = ({
 }: CategoryFormSheetProps) => {
   const isEditMode = Boolean(editTarget);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const {
     control,
@@ -117,7 +120,7 @@ export const CategoryFormSheet = ({
                 key="category-form-sheet"
                 bg="$background"
                 p="$5"
-                pb="$5"
+                pb={getBottomPaddingForSheet({ bottomInset: insets.bottom })}
                 gap="$4"
                 br="$6"
                 borderBottomLeftRadius={0}
