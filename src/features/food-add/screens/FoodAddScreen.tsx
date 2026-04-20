@@ -152,7 +152,7 @@ export function FoodAddScreen() {
         style={{ flex: 1 }}
         contentContainerStyle={{
           flexGrow: 1,
-          paddingBottom: insets.bottom + 65 + 24,
+          paddingBottom: insets.bottom + 24,
         }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
