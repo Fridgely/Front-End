@@ -13,6 +13,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View } from "tamagui";
 import { MenuIcon } from "./MenuIcon";
 
@@ -24,6 +25,7 @@ export function OverlayMenu({
   onClose: () => void;
 }) {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   // 0 애니메이션 시작 전, 1 애니메이션 완료
   const progress = useSharedValue(0);
 
@@ -95,7 +97,13 @@ export function OverlayMenu({
       </TouchableWithoutFeedback>
 
       <View f={1} jc="flex-end" ai="center" pointerEvents="box-none">
-        <Animated.View style={[menuGroupStyle, styles.menuContainer]}>
+        <Animated.View
+          style={[
+            menuGroupStyle,
+            styles.menuContainer,
+            { marginBottom: insets.bottom + 35 },
+          ]}
+        >
           {MENU_ITEMS.map((item, index) => (
             <MenuIcon
               key={index}

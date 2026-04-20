@@ -10,6 +10,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
 import { CategorySelector } from "../components/CategorySelector/CategorySelector";
@@ -25,6 +26,7 @@ import { FoodFormValues } from "../types";
 const EXTRA_SCROLL_HEIGHT = 180;
 
 export function FoodAddScreen() {
+  const insets = useSafeAreaInsets();
   const selectedFridgeId = useSelectedFridgeId();
   const isAllFridgeTab = useIsAllFridgeTab();
   const { setSelectedFridgeId } = useFridgeActions();
@@ -148,7 +150,10 @@ export function FoodAddScreen() {
           keyboardScrollRef.current = ref;
         }}
         style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: insets.bottom + 65 + 24,
+        }}
         keyboardShouldPersistTaps="handled"
         enableOnAndroid
         extraScrollHeight={EXTRA_SCROLL_HEIGHT}
@@ -204,7 +209,11 @@ export function FoodAddScreen() {
       </KeyboardAwareScrollView>
 
       {!isCategoryModalOpen && !isKeyboardVisible && (
-        <YStack p="$4" pb="$6" backgroundColor="$background">
+        <YStack
+          p="$4"
+          backgroundColor="$background"
+          style={{ paddingBottom: insets.bottom + 24 }}
+        >
           <Button
             backgroundColor="$primary"
             size="$6"

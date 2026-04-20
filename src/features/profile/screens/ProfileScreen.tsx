@@ -11,6 +11,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
 import { Alert, Linking } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Avatar,
   Button,
@@ -34,6 +35,7 @@ import {
 } from "../utils/getRandomDefaultProfileImage";
 
 export function ProfileScreen() {
+  const insets = useSafeAreaInsets();
   const { mutate: logout } = useLogoutMutation();
   const router = useRouter();
   const theme = useThemeStore((state) => state.theme);
@@ -147,7 +149,7 @@ export function ProfileScreen() {
       <Header title="마이페이지" showBackButton />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <YStack padding="$4" gap="$6" paddingBottom="$8">
+        <YStack padding="$4" gap="$6" style={{ paddingBottom: insets.bottom + 24 }}>
           {/* 프로필 */}
           <YStack alignItems="center" gap="$2" marginTop="$4">
             <Avatar circular size={100}>

@@ -5,28 +5,35 @@ import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useColorScheme } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Input, Text, View, XStack, YStack } from "tamagui";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { Button, Input, Text, View, XStack, YStack, useTheme } from "tamagui";
 import { SearchResultItem } from "../components/SearchResultItem";
 import { useSearchFood } from "../hooks/useSearchFood";
 
 export function SearchScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const selectedFridgeId = useSelectedFridgeId();
+  const themeTokens = useTheme();
   const theme = useThemeStore((state) => state.theme);
   const systemColorScheme = useColorScheme();
   const isDark = resolveTheme(theme, systemColorScheme) === "dark";
   const [searchQuery, setSearchQuery] = useState("");
   const { filteredResult } = useSearchFood(searchQuery);
+  const backgroundColor = themeTokens.background.get();
 
   return (
     <SafeAreaView
+      edges={["top"]}
       style={{
         flex: 1,
-        backgroundColor: isDark ? "#0B1110" : "#F6F8F7",
+        backgroundColor,
       }}
     >
-      <YStack f={1} backgroundColor="$background">
+      <YStack f={1} backgroundColor={backgroundColor}>
         <XStack px="$3" py="$2" ai="center" gap="$2">
           <XStack
             f={1}
@@ -98,8 +105,9 @@ export function SearchScreen() {
               <View backgroundColor="$gray3" mx="$4" height={1} />
             )}
             contentContainerStyle={{
-              paddingBottom: 100,
+              paddingBottom: insets.bottom + 65 + 60,
             }}
+            style={{ backgroundColor }}
             ListEmptyComponent={
               searchQuery ? (
                 <YStack f={1} ai="center" jc="center" mt="$10">
