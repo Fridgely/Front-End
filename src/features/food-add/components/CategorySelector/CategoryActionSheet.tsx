@@ -3,7 +3,7 @@ import { Modal, Pressable, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Text, View, XStack, YStack } from "tamagui";
 import { CategoryActionSheetProps } from "../../types";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const CategoryActionSheet = ({
   visible,
@@ -45,8 +45,8 @@ export const CategoryActionSheet = ({
               opacity={1}
             >
               <View
-                w={40}
-                h={5}
+                w={s(40)}
+                h={s(5)}
                 bg="$gray4"
                 br="$4"
                 alignSelf="center"
@@ -74,7 +74,7 @@ export const CategoryActionSheet = ({
                   <Button
                     flex={1}
                     backgroundColor="$gray3"
-                    h={52}
+                    h={ms(48)}
                     br="$4"
                     onPress={onClose}
                     pressStyle={{ scale: 0.97 }}
@@ -88,7 +88,7 @@ export const CategoryActionSheet = ({
                 <YStack gap="$2">
                   <Button
                     backgroundColor="$primary"
-                    h={52}
+                    h={ms(48)}
                     br="$4"
                     onPress={() => {
                       if (!target) return;
@@ -109,7 +109,7 @@ export const CategoryActionSheet = ({
 
                   <Button
                     backgroundColor="$warning"
-                    h={52}
+                    h={ms(48)}
                     br="$4"
                     onPress={() => {
                       if (!target) return;
@@ -125,7 +125,7 @@ export const CategoryActionSheet = ({
 
                   <Button
                     backgroundColor="$gray3"
-                    h={52}
+                    h={ms(48)}
                     br="$4"
                     onPress={onClose}
                     pressStyle={{ scale: 0.97 }}

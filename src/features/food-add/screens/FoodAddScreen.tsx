@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, vs } from "@/shared/constants/layout";
 import { CategorySelector } from "../components/CategorySelector/CategorySelector";
 import { ExpiryDatePicker } from "../components/ExpiryDatePicker/ExpiryDatePicker";
 import { FoodNameInput } from "../components/FoodNameInput";
@@ -24,7 +24,7 @@ import { useAddFoodMutation } from "../hooks/mutations/useAddFoodMutation";
 import { useCategoryQuery } from "../hooks/queries/useCategoryQuery";
 import { FoodFormValues } from "../types";
 
-const EXTRA_SCROLL_HEIGHT = 180;
+const EXTRA_SCROLL_HEIGHT = vs(150);
 
 export function FoodAddScreen() {
   const insets = useSafeAreaInsets();
@@ -227,7 +227,7 @@ export function FoodAddScreen() {
             <Text
               color="$mainText"
               fontWeight="700"
-              fontSize="$5"
+              fontSize={fs(16)}
               fontFamily="$baemin"
             >
               식품 등록

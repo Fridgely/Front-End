@@ -1,3 +1,4 @@
+import { fs, ms } from "@/shared/constants/layout";
 import { StorageType } from "@/shared/types/food";
 import React from "react";
 import { Control, Controller } from "react-hook-form";
@@ -39,9 +40,12 @@ export const StorageSelector = ({
               onPress={() => onChange(storageValue)}
               chromeless={value !== storageValue}
               br="$3"
-              size="$5"
+              size="$4"
+              h={ms(44)}
             >
-              {label}
+              <Text fontFamily="$baemin" fontSize={fs(14)} fontWeight="700">
+                {label}
+              </Text>
             </Button>
           ))}
         </XStack>

@@ -2,15 +2,17 @@ import { Image } from "expo-image";
 import { useWindowDimensions } from "react-native";
 import { Paragraph, Text, View, YStack } from "tamagui";
 import { OnboardingItemProps } from "../types";
+import { fs, ms } from "@/shared/constants/layout";
 
 export function OnboardingItem({ item, isDark }: OnboardingItemProps) {
   const { width: screenWidth } = useWindowDimensions();
+  const imageHeight = ms(280);
   return (
     <View w={screenWidth} px="$6">
-      <YStack pt="$6" ai="center">
+      <YStack pt="$5" ai="center">
         <View
           w="100%"
-          h={360}
+          h={imageHeight}
           br="$6"
           bg="#E9E8EB"
           overflow="hidden"
@@ -23,14 +25,14 @@ export function OnboardingItem({ item, isDark }: OnboardingItemProps) {
             contentFit="cover"
           />
         </View>
-        <YStack mt="$6" ai="center">
+        <YStack mt="$5" ai="center">
           <Text
             fontFamily="$heading"
-            fontSize={26}
+            fontSize={fs(20)}
             fontWeight="800"
             color={isDark ? "#FFFFFF" : "#0B1110"}
             textAlign="center"
-            lineHeight={34}
+            lineHeight={ms(28)}
           >
             {item.title}
           </Text>
@@ -40,7 +42,7 @@ export function OnboardingItem({ item, isDark }: OnboardingItemProps) {
             fontSize="$3"
             color={isDark ? "#B6C2BF" : "#667085"}
             textAlign="center"
-            lineHeight={22}
+            lineHeight={ms(18)}
           >
             {item.description}
           </Paragraph>

@@ -1,3 +1,4 @@
+import { ms, rv, s } from "@/shared/constants/layout";
 import {
   AlertCircle,
   AlertTriangle,
@@ -15,49 +16,81 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
       bordered
       backgroundColor="$surface"
       borderRadius="$3"
-      p="$4"
+      p={rv({ sm: "$2", md: "$3", lg: "$3" })}
       mx="$4"
     >
-      <XStack jc="space-around" ai="center">
-        <StatusItem
-          icon={<XCircle size={14} color="$expired" />}
-          label="만료"
-          count={counts.BLACK.toString()}
-          sub="만료"
-          color="$expired"
-          onPress={() => onStatusChange("BLACK")}
-          opacity={activeStatus && activeStatus !== "BLACK" ? 0.3 : 1}
+      <XStack ai="center" jc="space-between">
+        <XStack f={1} minWidth={0} jc="center">
+          <StatusItem
+            icon={<XCircle size={s(13)} color="$expired" />}
+            label="만료"
+            count={counts.BLACK.toString()}
+            sub="만료"
+            color="$expired"
+            onPress={() => onStatusChange("BLACK")}
+            opacity={activeStatus && activeStatus !== "BLACK" ? 0.3 : 1}
+          />
+        </XStack>
+        <Separator
+          vertical
+          alignSelf="center"
+          height={rv({ sm: ms(40), md: ms(46), lg: ms(46) })}
+          opacity={0.6}
+          f={0}
+          flexGrow={0}
+          flexShrink={0}
         />
-        <Separator vertical height={60} opacity={1} />
-        <StatusItem
-          icon={<AlertCircle size={14} color="$warning" />}
-          label="임박"
-          count={counts.RED.toString()}
-          sub="10일 이내"
-          color="$warning"
-          onPress={() => onStatusChange("RED")}
-          opacity={activeStatus && activeStatus !== "RED" ? 0.3 : 1}
+        <XStack f={1} minWidth={0} jc="center">
+          <StatusItem
+            icon={<AlertCircle size={s(13)} color="$warning" />}
+            label="임박"
+            count={counts.RED.toString()}
+            sub="10일 이내"
+            color="$warning"
+            onPress={() => onStatusChange("RED")}
+            opacity={activeStatus && activeStatus !== "RED" ? 0.3 : 1}
+          />
+        </XStack>
+        <Separator
+          vertical
+          alignSelf="center"
+          height={rv({ sm: ms(40), md: ms(46), lg: ms(46) })}
+          opacity={0.6}
+          f={0}
+          flexGrow={0}
+          flexShrink={0}
         />
-        <Separator vertical height={60} opacity={1} />
-        <StatusItem
-          icon={<AlertTriangle size={14} color="$alert" />}
-          label="주의"
-          count={counts.YELLOW.toString()}
-          sub="20일 이내"
-          color="$alert"
-          onPress={() => onStatusChange("YELLOW")}
-          opacity={activeStatus && activeStatus !== "YELLOW" ? 0.3 : 1}
+        <XStack f={1} minWidth={0} jc="center">
+          <StatusItem
+            icon={<AlertTriangle size={s(13)} color="$alert" />}
+            label="주의"
+            count={counts.YELLOW.toString()}
+            sub="20일 이내"
+            color="$alert"
+            onPress={() => onStatusChange("YELLOW")}
+            opacity={activeStatus && activeStatus !== "YELLOW" ? 0.3 : 1}
+          />
+        </XStack>
+        <Separator
+          vertical
+          alignSelf="center"
+          height={rv({ sm: ms(40), md: ms(46), lg: ms(46) })}
+          opacity={0.6}
+          f={0}
+          flexGrow={0}
+          flexShrink={0}
         />
-        <Separator vertical height={60} opacity={1} />
-        <StatusItem
-          icon={<CheckCircle size={14} color="$success" />}
-          label="양호"
-          count={counts.GREEN.toString()}
-          sub="양호"
-          color="$success"
-          onPress={() => onStatusChange("GREEN")}
-          opacity={activeStatus && activeStatus !== "GREEN" ? 0.3 : 1}
-        />
+        <XStack f={1} minWidth={0} jc="center">
+          <StatusItem
+            icon={<CheckCircle size={s(13)} color="$success" />}
+            label="양호"
+            count={counts.GREEN.toString()}
+            sub="20일 이상"
+            color="$success"
+            onPress={() => onStatusChange("GREEN")}
+            opacity={activeStatus && activeStatus !== "GREEN" ? 0.3 : 1}
+          />
+        </XStack>
       </XStack>
     </Card>
   );

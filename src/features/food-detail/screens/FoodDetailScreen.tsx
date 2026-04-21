@@ -1,5 +1,5 @@
 import { Header } from "@/shared/components/Header/Header";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, ms } from "@/shared/constants/layout";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, ScrollView, Spinner, Text, YStack } from "tamagui";
@@ -90,6 +90,7 @@ export function FoodDetailScreen() {
             backgroundColor="$primary"
             size="$5"
             br="$3"
+            h={ms(48)}
             onPress={() => {
               router.push({
                 pathname: "/food-edit",
@@ -103,7 +104,7 @@ export function FoodDetailScreen() {
             <Text
               color="$mainText"
               fontWeight="700"
-              fontSize="$4"
+              fontSize={fs(14)}
               fontFamily="$baemin"
             >
               수정하기

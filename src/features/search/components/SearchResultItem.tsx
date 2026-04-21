@@ -1,6 +1,7 @@
 import { FoodItem } from "@/shared/types/food";
 import { Image, Text, View, XStack, YStack } from "tamagui";
 import { getDefaultFoodCategoryImage } from "../../../shared/utils/getDefaultFoodCategoryImage";
+import { fs, ms } from "@/shared/constants/layout";
 interface Props {
   item: FoodItem;
   onPress?: () => void;
@@ -29,8 +30,8 @@ export function SearchResultItem({ item, onPress }: Props) {
       pressStyle={{ opacity: 0.8 }}
     >
       <View
-        w={50}
-        h={50}
+        w={ms(46)}
+        h={ms(46)}
         br="$4"
         backgroundColor="$iconThumbnailBackground"
         bw={1}
@@ -60,14 +61,14 @@ export function SearchResultItem({ item, onPress }: Props) {
 
       <YStack f={1} gap="$1">
         <Text
-          fontSize="$4"
+          fontSize={fs(15)}
           fontWeight="700"
           fontFamily="$heading"
           color="$mainText"
         >
           {item.name}
         </Text>
-        <Text fontSize={13} color="$gray10">
+        <Text fontSize={fs(12)} color="$gray10">
           {item.condition.storageType === "REFRIGERATION"
             ? "냉장고"
             : item.condition.storageType === "FROZEN"
@@ -83,11 +84,11 @@ export function SearchResultItem({ item, onPress }: Props) {
           br="$3"
           bc={statusColors[item.condition.foodStatus]}
         >
-          <Text fontSize={10} color="$white" fontWeight="bold">
+          <Text fontSize={fs(10)} color="$white" fontWeight="bold">
             {isExpired ? "만료" : `D-${item.condition.daysLeft}`}
           </Text>
         </View>
-        <Text fontSize={10} color="$gray10">
+        <Text fontSize={fs(10)} color="$gray10">
           {item.condition.expirationDate.split("T")[0]}
         </Text>
       </YStack>

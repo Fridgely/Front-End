@@ -12,7 +12,7 @@ import {
   styled,
 } from "tamagui";
 import { DateSelectSheetProps } from "../../types";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, s } from "@/shared/constants/layout";
 
 const Overlay = styled(View, {
   position: "absolute",
@@ -89,8 +89,8 @@ export const DateSelectSheet = ({
                 opacity={1}
               >
                 <View
-                  w={40}
-                  h={5}
+                  w={s(40)}
+                  h={s(5)}
                   bg="$gray5"
                   br="$4"
                   alignSelf="center"
@@ -99,13 +99,15 @@ export const DateSelectSheet = ({
                 />
                 <XStack jc="space-between" ai="center" p="$4">
                   <Button chromeless onPress={onClose}>
-                    <Text color="$gray10">취소</Text>
+                    <Text color="$gray10" fontSize={fs(14)}>
+                      취소
+                    </Text>
                   </Button>
-                  <Text fontWeight="800" fontSize="$5">
+                  <Text fontWeight="800" fontSize={fs(16)}>
                     날짜 선택
                   </Text>
                   <Button chromeless onPress={onClose}>
-                    <Text color="$primary" fontWeight="800">
+                    <Text color="$primary" fontWeight="800" fontSize={fs(14)}>
                       확인
                     </Text>
                   </Button>

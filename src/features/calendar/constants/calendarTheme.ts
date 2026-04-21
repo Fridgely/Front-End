@@ -1,11 +1,13 @@
+import { fs, ms, rv } from "@/shared/constants/layout";
+
 export type CalendarThemeMode = "light" | "dark";
 
 const baseCalendarTheme = {
   textMonthFontFamily: "BMJUA",
   textDayFontFamily: "BMJUA",
   textDayHeaderFontFamily: "BMJUA",
-  textDayFontSize: 16,
-  textMonthFontSize: 22,
+  textDayFontSize: rv({ sm: fs(12), md: fs(14), lg: fs(14) }),
+  textMonthFontSize: rv({ sm: fs(16), md: fs(18), lg: fs(18) }),
 } as const;
 
 const lightCalendarTheme = {
@@ -24,17 +26,17 @@ const lightCalendarTheme = {
     "stylesheet.calendar.header": {
       monthText: {
         fontFamily: "BMJUA",
-        fontSize: 22,
+        fontSize: rv({ sm: fs(16), md: fs(18), lg: fs(18) }),
         color: "#111111",
         fontWeight: "700",
       },
       dayHeader: {
-        marginTop: 8,
-        marginBottom: 10,
-        width: 32,
+        marginTop: ms(8),
+        marginBottom: ms(10),
+        width: ms(30),
         textAlign: "center",
         fontFamily: "BMJUA",
-        fontSize: 16,
+        fontSize: rv({ sm: fs(11), md: fs(13), lg: fs(13) }),
         color: "#111111",
       },
       dayTextAtIndex0: { color: "#8FA7A0" },
@@ -59,17 +61,17 @@ const darkCalendarTheme = {
     "stylesheet.calendar.header": {
       monthText: {
         fontFamily: "BMJUA",
-        fontSize: 22,
+        fontSize: rv({ sm: fs(16), md: fs(18), lg: fs(18) }),
         color: "#E5EBE9",
         fontWeight: "700",
       },
       dayHeader: {
-        marginTop: 8,
-        marginBottom: 10,
-        width: 32,
+        marginTop: ms(8),
+        marginBottom: ms(10),
+        width: ms(30),
         textAlign: "center",
         fontFamily: "BMJUA",
-        fontSize: 16,
+        fontSize: rv({ sm: fs(11), md: fs(13), lg: fs(13) }),
         color: "#E5EBE9",
       },
       dayTextAtIndex0: { color: "#8FA7A0" },

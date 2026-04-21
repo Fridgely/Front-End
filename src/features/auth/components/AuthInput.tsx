@@ -3,6 +3,7 @@ import { Controller } from "react-hook-form";
 import { Platform, useColorScheme } from "react-native";
 import { Heading, Input, Text, YStack } from "tamagui";
 import { AuthInputProps } from "../types/auth.types";
+import { fs, ms, rv } from "@/shared/constants/layout";
 
 export function AuthInput({
   label,
@@ -17,7 +18,12 @@ export function AuthInput({
 
   return (
     <YStack gap="$2">
-      <Heading color="$mainText" fontWeight="700" fontSize="$2" ml="$1">
+      <Heading
+        color="$mainText"
+        fontWeight="700"
+        fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+        ml="$1"
+      >
         {label}
       </Heading>
       <Controller
@@ -31,8 +37,8 @@ export function AuthInput({
           return (
             <YStack>
               <Input
-                h={56}
-                fontSize="$3"
+                h={rv({ sm: ms(44), md: ms(52), lg: ms(52) })}
+                fontSize={rv({ sm: fs(13), md: fs(14), lg: fs(14) })}
                 bc="$surface"
                 bw={hasError ? 1.5 : 0}
                 boc="$warning"
@@ -54,7 +60,12 @@ export function AuthInput({
                 {...props}
               />
               {hasError && (
-                <Text color="$warning" fontSize="$3" ml="$1" mt="$2">
+                <Text
+                  color="$warning"
+                  fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+                  ml="$1"
+                  mt="$2"
+                >
                   {fieldState.error?.message}
                 </Text>
               )}

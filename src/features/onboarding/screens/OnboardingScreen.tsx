@@ -6,6 +6,7 @@ import { Button, Circle, Text, XStack, YStack } from "tamagui";
 import { OnboardingItem } from "../components/OnboardingItem";
 import { SLIDES } from "../constants/slides";
 import { useOnboarding } from "../hooks/useOnboarding";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 export function OnboardingScreen() {
   const { theme, toggleTheme } = useThemeStore();
@@ -26,7 +27,7 @@ export function OnboardingScreen() {
       <YStack f={1}>
         <XStack px="$6" pt="$2" jc="flex-end">
           <Button unstyled onPress={toggleTheme}>
-            <Moon size={20} color={isDark ? "#FFFFFF" : "#0B1110"} />
+            <Moon size={s(18)} color={isDark ? "#FFFFFF" : "#0B1110"} />
           </Button>
         </XStack>
 
@@ -48,7 +49,7 @@ export function OnboardingScreen() {
             {SLIDES.map((_, i) => (
               <Circle
                 key={i}
-                size={8}
+                size={s(7)}
                 bg={i === index ? "$primary" : "$gray10"}
                 opacity={i === index ? 1 : 0.6}
               />
@@ -58,12 +59,14 @@ export function OnboardingScreen() {
           <Button
             bc="$primary"
             color="$white"
-            h={56}
+            h={ms(48)}
             br="$4"
             fontWeight="800"
             onPress={isLastSlide ? completeAndGoNext : handleNext}
           >
-            {isLastSlide ? "Fridgely 시작하기" : "다음"}
+            <Text fontFamily="$baemin" fontWeight="800" fontSize={fs(15)} color="$white">
+              {isLastSlide ? "Fridgely 시작하기" : "다음"}
+            </Text>
           </Button>
 
           <Button unstyled onPress={completeAndGoNext} alignSelf="center">
@@ -71,6 +74,7 @@ export function OnboardingScreen() {
               fontFamily="$baemin"
               color={isDark ? "#B6C2BF" : "#667085"}
               textDecorationLine="underline"
+              fontSize={fs(13)}
             >
               건너뛰기
             </Text>

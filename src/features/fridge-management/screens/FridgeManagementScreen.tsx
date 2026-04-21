@@ -25,6 +25,7 @@ import { useUpdateFridgeNameMutation } from "../hooks/mutations/useUpdateFridgeN
 import { useFridgeDetailQuery } from "../hooks/queries/useFridgeDetailQuery";
 import { useFridgeListQuery } from "../hooks/queries/useFridgeListQuery";
 import { useFridgeMembersQuery } from "../hooks/queries/useFridgeMembersQuery";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 // NOTE: 카카오톡 공유 기능은 후에 고도화 예정
 
@@ -155,7 +156,7 @@ export function FridgeManagementScreen() {
             <>
               <YStack ai="center" py="$8" gap="$3">
                 <View p="$4" br="$6" bc="$surface" mb="$2">
-                  <Refrigerator size={48} color="$primary" />
+                  <Refrigerator size={s(40)} color="$primary" />
                 </View>
 
                 <XStack
@@ -164,19 +165,19 @@ export function FridgeManagementScreen() {
                   onPress={() => setSheetOpen(true)}
                   pressStyle={{ opacity: 0.7 }}
                 >
-                  <Text fontSize={24} fontWeight="900" fontFamily="$baemin">
+                  <Text fontSize={fs(20)} fontWeight="900" fontFamily="$baemin">
                     {fridgeInfo.data.name}
                   </Text>
-                  <ChevronDown size={20} color="$mainText" />
+                  <ChevronDown size={s(18)} color="$mainText" />
                 </XStack>
               </YStack>
 
               <YStack px="$5" gap="$3">
                 <XStack jc="space-between" ai="center">
-                  <Text fontSize={16} fontWeight="700" fontFamily="$baemin">
+                  <Text fontSize={fs(15)} fontWeight="700" fontFamily="$baemin">
                     참여 멤버
                   </Text>
-                  <Text color="$gray9" fontSize={14}>
+                  <Text color="$gray9" fontSize={fs(13)} fontFamily="$baemin">
                     {members.length}명
                   </Text>
                 </XStack>
@@ -196,10 +197,10 @@ export function FridgeManagementScreen() {
                 <Button
                   bc="$primary"
                   color="$white"
-                  h={56}
+                  h={ms(48)}
                   br="$4"
                   fontWeight="700"
-                  fontSize={16}
+                  fontSize={fs(15)}
                   onPress={handleGenerateInviteCode}
                   disabled={isGenerating}
                 >
@@ -209,7 +210,7 @@ export function FridgeManagementScreen() {
                 <YStack ai="center" gap="$4" py="$2">
                   <Text
                     color="$gray10"
-                    fontSize={14}
+                    fontSize={fs(13)}
                     onPress={() => openConfirmModal("leave")}
                   >
                     냉장고 나가기
@@ -217,7 +218,7 @@ export function FridgeManagementScreen() {
                   {fridgeInfo.data.isOwner && (
                     <Text
                       color="$gray10"
-                      fontSize={14}
+                      fontSize={fs(13)}
                       onPress={handleEditName}
                     >
                       냉장고 이름 수정
@@ -226,7 +227,7 @@ export function FridgeManagementScreen() {
                   {fridgeInfo.data.isOwner && (
                     <Text
                       color="$warning"
-                      fontSize={14}
+                      fontSize={fs(13)}
                       onPress={() => openConfirmModal("delete")}
                     >
                       냉장고 삭제

@@ -5,6 +5,7 @@ import { Keyboard } from "react-native";
 import { Button, Input, Text, XStack, styled } from "tamagui";
 import { QuantityInputProps } from "../../types";
 import { UnitSelector } from "./UnitSelector";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -30,7 +31,9 @@ export const QuantityInput = ({
 }: QuantityInputProps) => {
   return (
     <XStack ai="center" jc="space-between">
-      <LabelText>수량 및 단위</LabelText>
+      <LabelText fontFamily="$baemin" fontSize={fs(14)}>
+        수량 및 단위
+      </LabelText>
 
       <XStack gap="$3" ai="center">
         <XStack backgroundColor="$gray3" br="$4" p="$2" ai="center" gap="$3">
@@ -45,20 +48,23 @@ export const QuantityInput = ({
             render={({ field: { onChange, value } }) => (
               <>
                 <Button
-                  w={25}
-                  h={30}
+                  w={ms(20)}
+                  h={ms(26)}
                   br="$2"
                   bg="$surface"
-                  icon={<Minus size={16} />}
-                  onPress={() => onChange(normalizeQuantity(value) - 1)}
+                  icon={<Minus size={s(14)} />}
+                  onPress={() => {
+                    const next = normalizeQuantity(value) - 1;
+                    onChange(normalizeQuantity(next));
+                  }}
                 />
                 <Input
-                  w={56}
-                  h={36}
+                  w={ms(46)}
+                  h={ms(28)}
                   p={0}
                   ta="center"
                   fontFamily="$baemin"
-                  fontSize="$4"
+                  fontSize={fs(14)}
                   fontWeight="700"
                   keyboardType="number-pad"
                   returnKeyType="done"
@@ -85,12 +91,15 @@ export const QuantityInput = ({
                   onSubmitEditing={() => Keyboard.dismiss()}
                 />
                 <Button
-                  w={25}
-                  h={30}
+                  w={ms(20)}
+                  h={ms(26)}
                   br="$2"
                   bg="$surface"
-                  icon={<Plus size={16} />}
-                  onPress={() => onChange(normalizeQuantity(value) + 1)}
+                  icon={<Plus size={s(14)} />}
+                  onPress={() => {
+                    const next = normalizeQuantity(value) + 1;
+                    onChange(normalizeQuantity(next));
+                  }}
                 />
               </>
             )}

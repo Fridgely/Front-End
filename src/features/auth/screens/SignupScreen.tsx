@@ -10,6 +10,7 @@ import { Button, H2, Spacer, Text, XStack, YStack } from "tamagui";
 import { AuthInput } from "../components/AuthInput";
 import { useSignupMutation } from "../hooks/useAuthMutation";
 import { AuthFormData } from "../types/auth.types";
+import { fs, ms, rv } from "@/shared/constants/layout";
 
 export function SignupScreen() {
   const router = useRouter();
@@ -55,10 +56,16 @@ export function SignupScreen() {
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
         enableOnAndroid={true}
-        extraScrollHeight={30}
+        extraScrollHeight={rv({ sm: ms(16), md: ms(30), lg: ms(30) })}
         keyboardShouldPersistTaps="handled"
       >
-        <YStack f={1} px="$6" jc="center" bc="$gray1" py="$10">
+        <YStack
+          f={1}
+          px={rv({ sm: "$5", md: "$6", lg: "$6" })}
+          jc="center"
+          bc="$gray1"
+          py={rv({ sm: "$8", md: "$10", lg: "$10" })}
+        >
           <YStack mb="$6">
             <XStack ai="center" ml="$-2" mb="$4" onPress={() => router.back()}>
               <ArrowLeft size="$1" color="$gray10" />
@@ -66,7 +73,12 @@ export function SignupScreen() {
                 로그인으로 돌아가기
               </Text>
             </XStack>
-            <H2 fontWeight="900" color="$primary" fontSize={32} ls={-1}>
+            <H2
+              fontWeight="900"
+              color="$primary"
+              fontSize={rv({ sm: fs(24), md: fs(32), lg: fs(32) })}
+              ls={-1}
+            >
               회원가입
             </H2>
           </YStack>
@@ -158,10 +170,10 @@ export function SignupScreen() {
             <Button
               bc="$primary"
               color="$white"
-              h={56}
+              h={rv({ sm: ms(48), md: ms(56), lg: ms(56) })}
               br="$3"
               fontWeight="700"
-              fontSize="$4"
+              fontSize={rv({ sm: fs(14), md: fs(16), lg: fs(16) })}
               pressStyle={{ opacity: 0.8, scale: 0.98 }}
               onPress={handleSubmit(onSignUpClick)}
               disabled={!isValid || isSignupPending}

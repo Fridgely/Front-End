@@ -8,7 +8,7 @@ import { FoodFormValues } from "@/features/food-add/types";
 import { useFoodDetailQuery } from "@/features/food-detail/hooks/queries/useFoodDetailQuery";
 import { parseParamToNumber } from "@/features/food-detail/utils/params";
 import { Header } from "@/shared/components/Header/Header";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { getBottomPaddingForSheet, ms } from "@/shared/constants/layout";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -220,7 +220,7 @@ export function FoodEditScreen() {
               <YStack>
                 <LabelText>메모</LabelText>
                 <Input
-                  h={50}
+                  h={ms(44)}
                   value={value || ""}
                   onChangeText={onChange}
                   placeholder="메모를 입력하세요"

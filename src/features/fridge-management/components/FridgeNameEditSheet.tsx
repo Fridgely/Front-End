@@ -9,7 +9,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Input, Text, View, YStack } from "tamagui";
 import { FridgeNameEditSheetProps } from "../types";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const FridgeNameEditSheet = ({
   visible,
@@ -78,7 +78,13 @@ export const FridgeNameEditSheet = ({
                 y={0}
                 opacity={1}
               >
-                <View w={40} h={5} bg="$gray4" br="$4" alignSelf="center" />
+                <View
+                  w={s(40)}
+                  h={s(5)}
+                  bg="$gray4"
+                  br="$4"
+                  alignSelf="center"
+                />
 
                 <YStack gap="$2">
                   <Text fontSize="$6" fontWeight="700" fontFamily="$baemin">
@@ -108,10 +114,15 @@ export const FridgeNameEditSheet = ({
                       !newName.trim() || newName === currentName || isLoading
                     }
                     onPress={handleSave}
-                    h={56}
+                    h={ms(48)}
                     br="$4"
                   >
-                    <Text color="$mainText" fontWeight="700" fontSize={16}>
+                    <Text
+                      color="$mainText"
+                      fontWeight="700"
+                      fontSize={fs(15)}
+                      fontFamily="$baemin"
+                    >
                       {isLoading ? "수정 중..." : "수정 완료"}
                     </Text>
                   </Button>

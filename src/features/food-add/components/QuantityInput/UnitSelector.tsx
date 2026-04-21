@@ -1,5 +1,5 @@
 import { UNIT_OPTIONS } from "@/shared/constants/food";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 import { ChevronDown } from "@tamagui/lucide-icons";
 import React, { useState } from "react";
 import { Modal } from "react-native";
@@ -38,14 +38,14 @@ export const UnitSelector = ({ value, onChange }: any) => {
   return (
     <>
       <Button
-        h={52}
-        minWidth={90}
+        h={ms(44)}
+        minWidth={ms(76)}
         bg="$gray3"
         br="$4"
         onPress={() => setShow(true)}
-        iconAfter={<ChevronDown size={16} color="$gray9" />}
+        iconAfter={<ChevronDown size={s(13)} color="$gray9" />}
       >
-        <Text fontSize="$4" color="$mainText" fontFamily="$baemin">
+        <Text fontSize={fs(13)} color="$mainText" fontFamily="$baemin">
           {value.label || currentLabel}
         </Text>
       </Button>
@@ -79,8 +79,8 @@ export const UnitSelector = ({ value, onChange }: any) => {
                   opacity={1}
                 >
                   <View
-                    w={40}
-                    h={5}
+                    w={s(40)}
+                    h={s(5)}
                     bg="$gray4"
                     br="$4"
                     alignSelf="center"
@@ -101,10 +101,14 @@ export const UnitSelector = ({ value, onChange }: any) => {
                         bg={value === option.value ? "$primary" : "$gray3"}
                         br="$4"
                         px="$4"
-                        h={45}
+                        h={ms(44)}
                         pressStyle={{ scale: 0.95 }}
                       >
-                        <Text color="$mainText" fontWeight="700">
+                        <Text
+                          color="$mainText"
+                          fontWeight="700"
+                          fontSize={fs(13)}
+                        >
                           {option.label}
                         </Text>
                       </Button>

@@ -6,6 +6,7 @@ import { Pressable } from "react-native";
 import { Circle, Text, XStack, YStack } from "tamagui";
 import { useNotificationStore } from "../stores/useNotificationStore";
 import type { NotificationItemProps } from "../types";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 // 알림 유형에 따른 스타일 (현재는 유통기한)
 const NOTIFICATION_CONFIG = {
@@ -36,14 +37,14 @@ export const NotificationItem = ({ item }: { item: NotificationItemProps }) => {
         ai="flex-start"
         opacity={item.isRead ? 0.3 : 1}
       >
-        <Circle size={40} backgroundColor={NOTIFICATION_CONFIG.bg}>
-          <Icon size={20} color={NOTIFICATION_CONFIG.color} />
+        <Circle size={ms(36)} backgroundColor={NOTIFICATION_CONFIG.bg}>
+          <Icon size={s(18)} color={NOTIFICATION_CONFIG.color} />
         </Circle>
 
         <YStack f={1} gap="$1">
           <XStack jc="space-between" ai="center">
             <Text
-              fontSize={12}
+              fontSize={fs(12)}
               color={NOTIFICATION_CONFIG.color}
               fontWeight="700"
             >
@@ -53,7 +54,9 @@ export const NotificationItem = ({ item }: { item: NotificationItemProps }) => {
               <Text fontSize="$3" color="$gray9">
                 {formatNotificationTime(item.createdAt)}
               </Text>
-              {!item.isRead && <Circle size={6} backgroundColor="$red10" />}
+              {!item.isRead && (
+                <Circle size={s(6)} backgroundColor="$red10" />
+              )}
             </XStack>
           </XStack>
 

@@ -21,6 +21,7 @@ import { useAllFoodStatusQuery } from "../hooks/queries/useAllFoodStatusQuery";
 import { useFridgeFoodStatusQuery } from "../hooks/queries/useFridgeFoodStatusQuery";
 import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
 import { FoodStatus, SortOption } from "../types";
+import { fs, ms } from "@/shared/constants/layout";
 
 interface DeleteTarget {
   // foodName은 삭제 확인 모달에 표시할지 말지 고민
@@ -184,7 +185,7 @@ export function HomeScreen() {
 
           <XStack jc="flex-end" px="$4" py="$2">
             <Text
-              fontSize={12}
+              fontSize={fs(12)}
               color="$gray"
               onPress={() => setIsFilterOpen(true)}
               pressStyle={{ opacity: 0.5 }}
@@ -235,7 +236,7 @@ export function HomeScreen() {
           )}
           keyExtractor={(item) => item.id.toString()}
           //@ts-ignore
-          contentContainerStyle={{ paddingBottom: 40 }}
+          contentContainerStyle={{ paddingBottom: ms(40) }}
           onEndReached={() => {
             if (!isAllFridgeTab && hasMoreFridgeFood) {
               fetchNextFridgePage();
@@ -244,7 +245,9 @@ export function HomeScreen() {
           onEndReachedThreshold={0.5}
           ListEmptyComponent={
             <YStack ai="center" jc="center" py="$10">
-              <Text color="$gray">해당 카테고리에 음식이 없습니다.</Text>
+              <Text color="$gray" fontSize={fs(14)}>
+                해당 카테고리에 음식이 없습니다.
+              </Text>
             </YStack>
           }
         />

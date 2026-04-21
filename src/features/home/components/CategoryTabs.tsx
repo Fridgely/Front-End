@@ -1,4 +1,5 @@
 import { STORAGE_TABS } from "@/shared/constants/food";
+import { fs, rv, s } from "@/shared/constants/layout";
 import { Text, View, XStack, YStack } from "tamagui";
 import { CategoryTabsProps } from "../types";
 
@@ -11,16 +12,16 @@ export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
           return (
             <View
               key={tab}
-              pb="$3"
+              pb={rv({ sm: "$2", md: "$3", lg: "$3" })}
               px="$2"
               onPress={() => onTabChange(tab)}
               style={{ position: "relative" }}
             >
               <Text
                 fontFamily="$baemin"
-                fontSize="$5"
+                fontSize={rv({ sm: fs(14), md: fs(16), lg: fs(16) })}
                 fontWeight="700"
-                color={isActive ? "$secondary" : "$gray"}
+                color={isActive ? "$primary" : "$gray"}
               >
                 {tab}
               </Text>
@@ -31,8 +32,8 @@ export function CategoryTabs({ activeTab, onTabChange }: CategoryTabsProps) {
                   bottom={0}
                   left={0}
                   right={0}
-                  height={3}
-                  backgroundColor="$secondary"
+                  height={s(3)}
+                  backgroundColor="$primary"
                 />
               )}
             </View>
