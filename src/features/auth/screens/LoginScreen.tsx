@@ -72,8 +72,8 @@ export function LoginScreen() {
               fontWeight="700"
               color="$primary"
               fontFamily="$baemin"
-              fontSize={rv({ sm: fs(24), md: fs(30), lg: fs(30) })}
-              lh={rv({ sm: ms(30), md: ms(34), lg: ms(40) })}
+              fontSize={rv({ sm: fs(24), md: fs(28), lg: fs(30) })}
+              lh={rv({ sm: ms(30), md: ms(35), lg: ms(40) })}
             >
               Fridgely
             </Heading>
@@ -145,7 +145,7 @@ export function LoginScreen() {
           </YStack>
 
           <YStack mt="$2" ai="center" gap="$3">
-            <XStack gap="$2" ai="center">
+            <XStack ai="center">
               <Text
                 fontFamily="$baemin"
                 fontWeight="700"
