@@ -53,7 +53,10 @@ export const QuantityInput = ({
                   br="$2"
                   bg="$surface"
                   icon={<Minus size={s(14)} />}
-                  onPress={() => onChange(normalizeQuantity(value) - 1)}
+                  onPress={() => {
+                    const next = normalizeQuantity(value) - 1;
+                    onChange(normalizeQuantity(next));
+                  }}
                 />
                 <Input
                   w={ms(46)}
@@ -93,7 +96,10 @@ export const QuantityInput = ({
                   br="$2"
                   bg="$surface"
                   icon={<Plus size={s(14)} />}
-                  onPress={() => onChange(normalizeQuantity(value) + 1)}
+                  onPress={() => {
+                    const next = normalizeQuantity(value) + 1;
+                    onChange(normalizeQuantity(next));
+                  }}
                 />
               </>
             )}
