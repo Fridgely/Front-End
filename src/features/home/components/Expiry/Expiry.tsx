@@ -19,7 +19,7 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
       p={rv({ sm: "$2", md: "$3", lg: "$3" })}
       mx="$4"
     >
-      <XStack ai="stretch" jc="space-between">
+      <XStack ai="center" jc="space-between">
         <XStack f={1} minWidth={0} jc="center">
           <StatusItem
             icon={<XCircle size={s(13)} color="$expired" />}
@@ -31,7 +31,15 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
             opacity={activeStatus && activeStatus !== "BLACK" ? 0.3 : 1}
           />
         </XStack>
-        <Separator vertical height={ms(46)} opacity={1} />
+        <Separator
+          vertical
+          alignSelf="center"
+          height={rv({ sm: ms(40), md: ms(46), lg: ms(46) })}
+          opacity={0.6}
+          f={0}
+          flexGrow={0}
+          flexShrink={0}
+        />
         <XStack f={1} minWidth={0} jc="center">
           <StatusItem
             icon={<AlertCircle size={s(13)} color="$warning" />}
@@ -43,7 +51,15 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
             opacity={activeStatus && activeStatus !== "RED" ? 0.3 : 1}
           />
         </XStack>
-        <Separator vertical height={ms(46)} opacity={1} />
+        <Separator
+          vertical
+          alignSelf="center"
+          height={rv({ sm: ms(40), md: ms(46), lg: ms(46) })}
+          opacity={0.6}
+          f={0}
+          flexGrow={0}
+          flexShrink={0}
+        />
         <XStack f={1} minWidth={0} jc="center">
           <StatusItem
             icon={<AlertTriangle size={s(13)} color="$alert" />}
@@ -55,7 +71,15 @@ export function Expiry({ activeStatus, onStatusChange, counts }: ExpiryProps) {
             opacity={activeStatus && activeStatus !== "YELLOW" ? 0.3 : 1}
           />
         </XStack>
-        <Separator vertical height={ms(46)} opacity={1} />
+        <Separator
+          vertical
+          alignSelf="center"
+          height={rv({ sm: ms(40), md: ms(46), lg: ms(46) })}
+          opacity={0.6}
+          f={0}
+          flexGrow={0}
+          flexShrink={0}
+        />
         <XStack f={1} minWidth={0} jc="center">
           <StatusItem
             icon={<CheckCircle size={s(13)} color="$success" />}

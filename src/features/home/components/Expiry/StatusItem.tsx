@@ -51,9 +51,9 @@ export function StatusItem({
         </XStack>
       )}
       <Text
-        fontSize={rv({ sm: fs(12), md: fs(16), lg: fs(16) })}
+        fontSize={rv({ sm: fs(13), md: fs(16), lg: fs(16) })}
         fontWeight="800"
-        py="$1"
+        py={rv({ sm: 0, md: 4, lg: 4 })}
         fontFamily="$baemin"
       >
         {count}

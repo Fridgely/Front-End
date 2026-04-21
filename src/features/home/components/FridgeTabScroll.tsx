@@ -32,9 +32,10 @@ export function FridgeTabScroll({
         >
           <Text
             fontFamily="$baemin"
-            fontSize={rv({ sm: "$2", md: "$3", lg: "$3" })}
+            fontSize={rv({ sm: "$2", md: "$2", lg: "$3" })}
             color={isAllSelected ? "white" : "$gray"}
             fontWeight={isAllSelected ? "700" : "400"}
+            pt="$1"
           >
             전체
           </Text>
@@ -77,6 +78,7 @@ export function FridgeTabScroll({
           chromeless
           fontFamily="$baemin"
           fontSize={rv({ sm: "$2", md: "$3", lg: "$3" })}
+          color="$gray"
         >
           추가
         </Button>
