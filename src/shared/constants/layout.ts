@@ -55,15 +55,14 @@ export function ms(size: number, factor = 0.4) {
 
 /**
  * 폰트 크기 정규화(font size normalize).
- * - 작은 폰에서는 확실히 줄이되, OS 접근성 설정(fontScale)은 존중
+ * - 작은 폰에서는 확실히 줄이되, OS 접근성 설정(fontScale)은 React Native가 자동 반영하므로 여기서 나누지 않는다.
  * - 레이아웃 스케일과 분리해서 폰트 전용으로 사용
  */
 export function fs(size: number, options?: { min?: number; max?: number }) {
-  const fontScale = PixelRatio.getFontScale?.() ?? 1;
-  const scaled = ms(size, 0.35) / fontScale;
+  const scaled = ms(size, 0.35);
   const min = options?.min ?? size * 0.88;
   const max = options?.max ?? size * 1.02;
-  return clamp(scaled, min, max);
+  return PixelRatio.roundToNearestPixel(clamp(scaled, min, max));
 }
 
 export function lh(fontSize: number, lineHeightRatio = 1.35) {
