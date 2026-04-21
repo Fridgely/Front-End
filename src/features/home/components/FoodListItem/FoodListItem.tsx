@@ -86,7 +86,7 @@ export function FoodListItem({ item, onPress }: FoodListItemProps) {
 
         <YStack ai="flex-end" gap="$1">
           <View
-            width={rv({ sm: ms(38), md: ms(42), lg: ms(42) })}
+            minWidth={rv({ sm: ms(38), md: ms(42), lg: ms(42) })}
             py="$1"
             br="$2"
             bg={`${statusBgColor}`}
