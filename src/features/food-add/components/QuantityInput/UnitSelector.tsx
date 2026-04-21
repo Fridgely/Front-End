@@ -1,5 +1,5 @@
 import { UNIT_OPTIONS } from "@/shared/constants/food";
-import { getBottomPaddingForSheet, fs, ms, s } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 import { ChevronDown } from "@tamagui/lucide-icons";
 import React, { useState } from "react";
 import { Modal } from "react-native";
@@ -38,7 +38,7 @@ export const UnitSelector = ({ value, onChange }: any) => {
   return (
     <>
       <Button
-        h={ms(38)}
+        h={ms(44)}
         minWidth={ms(76)}
         bg="$gray3"
         br="$4"
@@ -101,10 +101,14 @@ export const UnitSelector = ({ value, onChange }: any) => {
                         bg={value === option.value ? "$primary" : "$gray3"}
                         br="$4"
                         px="$4"
-                        h={ms(40)}
+                        h={ms(44)}
                         pressStyle={{ scale: 0.95 }}
                       >
-                        <Text color="$mainText" fontWeight="700" fontSize={fs(13)}>
+                        <Text
+                          color="$mainText"
+                          fontWeight="700"
+                          fontSize={fs(13)}
+                        >
                           {option.label}
                         </Text>
                       </Button>

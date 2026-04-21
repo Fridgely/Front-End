@@ -1,4 +1,4 @@
-import { fs, rv, s } from "@/shared/constants/layout";
+import { fs, ms, rv, s } from "@/shared/constants/layout";
 import { ChevronRight } from "@tamagui/lucide-icons";
 import React from "react";
 import { Separator, Text, View, XStack } from "tamagui";
@@ -23,7 +23,8 @@ export function Menu({
   return (
     <>
       <XStack
-        padding={rv({ sm: "$1", md: "$4", lg: "$4" })}
+        minHeight={ms(44)}
+        padding={rv({ sm: "$3", md: "$4", lg: "$4" })}
         alignItems="center"
         justifyContent="space-between"
         pressStyle={{ backgroundColor: "$gray2" }}
