@@ -106,15 +106,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: ms(6),
   },
   dayWrap: {
-    width: rv({ sm: ms(24), md: ms(34), lg: ms(34) }),
-    height: rv({ sm: ms(24), md: ms(40), lg: ms(40) }),
+    // sm에서도 dayCircle + dotRow가 겹치지 않도록 wrapper를 충분히 확보
+    width: rv({ sm: ms(34), md: ms(34), lg: ms(34) }),
+    height: rv({ sm: ms(44), md: ms(40), lg: ms(40) }),
     alignItems: "center",
     justifyContent: "center",
   },
   dayCircle: {
     width: rv({ sm: ms(28), md: ms(30), lg: ms(30) }),
     height: rv({ sm: ms(28), md: ms(30), lg: ms(30) }),
-    borderRadius: rv({ sm: ms(16), md: ms(18), lg: ms(18) }),
+    // 기기별 스케일/반올림 차이로 원형이 깨지는 경우를 방지
+    borderRadius: 9999,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -129,16 +131,16 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   dotRow: {
-    minHeight: ms(8),
-    marginTop: ms(2),
+    minHeight: rv({ sm: ms(6), md: ms(8), lg: ms(8) }),
+    marginTop: rv({ sm: ms(1), md: ms(2), lg: ms(2) }),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: ms(2),
+    gap: rv({ sm: ms(1), md: ms(2), lg: ms(2) }),
   },
   dot: {
-    width: s(4),
-    height: s(4),
-    borderRadius: s(2),
+    width: rv({ sm: s(3), md: s(4), lg: s(4) }),
+    height: rv({ sm: s(3), md: s(4), lg: s(4) }),
+    borderRadius: rv({ sm: s(2), md: s(2), lg: s(2) }),
   },
 });
