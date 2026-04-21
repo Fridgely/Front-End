@@ -3,7 +3,7 @@ import { Modal, Pressable, ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Text, View, XStack, YStack } from "tamagui";
 import { SortFilterProps, SortOption } from "../types";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
   { label: "유통기한 임박순", value: "EXPIRY_ASC" },
@@ -58,16 +58,22 @@ export function SortFilter({
               y={0}
               opacity={1}
             >
-              <View w={56} h={6} bg="$gray4" br="$4" alignSelf="center" />
+              <View
+                w={s(56)}
+                h={s(6)}
+                bg="$gray4"
+                br="$4"
+                alignSelf="center"
+              />
 
               <XStack ai="center" jc="space-between">
-                <Text fontSize="$5" fontWeight="700" fontFamily="$baemin">
+                <Text fontSize={fs(16)} fontWeight="700" fontFamily="$baemin">
                   정렬 및 필터
                 </Text>
               </XStack>
 
               <YStack gap="$3">
-                <Text fontSize="$4" fontWeight="700" fontFamily="$heading">
+                <Text fontSize={fs(14)} fontWeight="700" fontFamily="$heading">
                   정렬 기준
                 </Text>
 
@@ -76,7 +82,7 @@ export function SortFilter({
                   return (
                     <Button
                       key={option.value}
-                      h={62}
+                      h={ms(52)}
                       bg="$surface"
                       boc="$gray3"
                       bw={1}
@@ -86,7 +92,7 @@ export function SortFilter({
                     >
                       <XStack f={1} ai="center" jc="space-between" px="$1">
                         <Text
-                          fontSize="$4"
+                          fontSize={fs(14)}
                           fontWeight="700"
                           color="$mainText"
                           fontFamily="$baemin"
@@ -95,16 +101,16 @@ export function SortFilter({
                         </Text>
 
                         <View
-                          w={34}
-                          h={34}
+                          w={s(30)}
+                          h={s(30)}
                           br={999}
-                          bw={4}
+                          bw={s(3)}
                           boc={isActive ? "$primary" : "$gray3"}
                           ai="center"
                           jc="center"
                         >
                           {isActive && (
-                            <View w={14} h={14} br={999} bg="$primary" />
+                            <View w={s(12)} h={s(12)} br={999} bg="$primary" />
                           )}
                         </View>
                       </XStack>
@@ -114,7 +120,7 @@ export function SortFilter({
               </YStack>
 
               <YStack gap="$3">
-                <Text fontSize="$4" fontWeight="700" fontFamily="$heading">
+                <Text fontSize={fs(14)} fontWeight="700" fontFamily="$heading">
                   카테고리
                 </Text>
 
@@ -131,10 +137,11 @@ export function SortFilter({
                           size="$4"
                           onPress={() => setDraftCategory(category)}
                           pressStyle={{ scale: 0.97 }}
+                          h={ms(40)}
                         >
                           <Text
                             fontFamily="$baemin"
-                            fontSize="$3"
+                            fontSize={fs(13)}
                             fontWeight="700"
                             color="$mainText"
                           >
@@ -148,7 +155,7 @@ export function SortFilter({
               </YStack>
 
               <Button
-                h={64}
+                h={ms(52)}
                 br="$6"
                 bg="$primary"
                 mt="$2"
@@ -161,7 +168,7 @@ export function SortFilter({
                 }}
                 pressStyle={{ scale: 0.98 }}
               >
-                <Text fontSize="$5" fontWeight="700" fontFamily="$baemin">
+                <Text fontSize={fs(15)} fontWeight="700" fontFamily="$baemin">
                   적용하기
                 </Text>
               </Button>

@@ -13,7 +13,7 @@ import {
   YStack,
 } from "tamagui";
 import { FridgeSelectionProps } from "../types";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const FridgeSelectionSheet = ({
   visible,
@@ -67,8 +67,8 @@ export const FridgeSelectionSheet = ({
               maxHeight="70%"
             >
               <View
-                w={40}
-                h={5}
+                w={s(40)}
+                h={s(5)}
                 bg="$gray4"
                 br="$4"
                 alignSelf="center"
@@ -98,20 +98,20 @@ export const FridgeSelectionSheet = ({
                         <XStack gap="$3" ai="center">
                           <View p="$2" br="$2" backgroundColor="$gray2">
                             <Refrigerator
-                              size={28}
+                              size={s(24)}
                               color={isSelected ? "$primary" : "$gray10"}
                             />
                           </View>
                           <YStack>
                             <Text
                               fontWeight="700"
-                              fontSize={16}
+                              fontSize={fs(14)}
                               fontFamily="$baemin"
                             >
                               {fridge.name}
                             </Text>
                             <Text
-                              fontSize={12}
+                              fontSize={fs(12)}
                               color="$primary"
                               fontWeight="600"
                             >
@@ -121,8 +121,8 @@ export const FridgeSelectionSheet = ({
                         </XStack>
 
                         {isSelected && (
-                          <Circle size={24} bc="$primary">
-                            <Check size={16} color="$white" />
+                          <Circle size={s(22)} bc="$primary">
+                            <Check size={s(14)} color="$white" />
                           </Circle>
                         )}
                       </XStack>
@@ -146,11 +146,12 @@ export const FridgeSelectionSheet = ({
                       router.push("/fridge-add");
                     }}
                   >
-                    <PlusCircle size={20} color="$mainText" />
+                    <PlusCircle size={s(18)} color="$mainText" />
                     <Text
                       color="$mainText"
                       fontWeight="600"
                       fontFamily="$baemin"
+                      fontSize={fs(14)}
                     >
                       새 냉장고 추가
                     </Text>

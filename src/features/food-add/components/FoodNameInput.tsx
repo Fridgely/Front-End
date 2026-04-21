@@ -2,6 +2,7 @@ import React from "react";
 import { Control, Controller } from "react-hook-form";
 import { Input, Text, YStack, styled, useThemeName } from "tamagui";
 import { FoodFormValues } from "../types";
+import { ms } from "@/shared/constants/layout";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -36,7 +37,7 @@ export const FoodNameInput = ({
             </Text>
           )}
           <Input
-            h={50}
+            h={ms(44)}
             value={value}
             onChangeText={onChange}
             placeholder="식품 이름을 입력하세요"

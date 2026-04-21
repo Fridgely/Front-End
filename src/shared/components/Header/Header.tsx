@@ -5,6 +5,7 @@ import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Heading, View, XStack } from "tamagui";
 import { HeaderProps } from "./Header.types";
+import { fs, ms, s } from "@/shared/constants/layout";
 export function Header({
   title = "Fridgely",
   showBackButton = false,
@@ -19,7 +20,7 @@ export function Header({
   return (
     <View backgroundColor="$background" style={{ paddingTop: insets.top }}>
       <XStack
-        height={60}
+        height={ms(56)}
         paddingHorizontal="$4"
         alignItems="center"
         justifyContent="center"
@@ -30,7 +31,7 @@ export function Header({
             <Button
               size="$2"
               chromeless
-              icon={<ChevronLeft size={24} color="$mainText" />}
+              icon={<ChevronLeft size={s(22)} color="$mainText" />}
               onPress={() => router.back()}
               paddingLeft={0}
             />
@@ -40,6 +41,7 @@ export function Header({
               fontWeight="700"
               color="$mainText"
               letterSpacing={-0.5}
+              fontSize={fs(20)}
             >
               {title}
             </Heading>
@@ -47,7 +49,7 @@ export function Header({
         </XStack>
 
         {showBackButton && (
-          <Heading size="$5" fontWeight="700" color="$mainText">
+          <Heading size="$5" fontWeight="700" color="$mainText" fontSize={fs(18)}>
             {title}
           </Heading>
         )}
@@ -60,14 +62,14 @@ export function Header({
               chromeless
               icon={
                 <View position="relative">
-                  <Bell size={24} color="$mainText" />
+                  <Bell size={s(22)} color="$mainText" />
                   {hasUnreadNotifications && (
                     <View
                       position="absolute"
-                      top={-2}
-                      right={-2}
-                      width={8}
-                      height={8}
+                      top={-s(2)}
+                      right={-s(2)}
+                      width={s(8)}
+                      height={s(8)}
                       borderRadius={100}
                       backgroundColor="$warning"
                     />

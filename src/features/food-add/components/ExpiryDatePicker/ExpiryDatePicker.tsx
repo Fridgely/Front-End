@@ -4,6 +4,7 @@ import { Controller } from "react-hook-form";
 import { Button, Text, XStack, styled } from "tamagui";
 import { FoodFormProps } from "../../types";
 import { DateSelectSheet } from "./DateSelectSheet";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -41,13 +42,13 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
               backgroundColor="$gray3"
               br="$4"
               px="$4"
-              h={52}
+              h={ms(44)}
               pressStyle={{ scale: 0.97, bg: "$gray4" }}
-              iconAfter={<Calendar size={18} color="$primary" />}
+              iconAfter={<Calendar size={s(16)} color="$primary" />}
               onPress={() => setShow(true)}
               borderWidth={1}
             >
-              <Text fontSize="$4" fontWeight="600" color="$mainText">
+              <Text fontSize={fs(14)} fontWeight="600" color="$mainText">
                 {formatDate(value || new Date())}
               </Text>
             </Button>

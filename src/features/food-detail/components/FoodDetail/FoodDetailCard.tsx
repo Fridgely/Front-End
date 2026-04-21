@@ -9,6 +9,7 @@ import { Text, View, XStack, YStack } from "tamagui";
 import { FOOD_STATUS_TEXT } from "../../constants";
 import { FoodDetailCardProps } from "../../types";
 import { FoodDetailCardRow } from "./FoodDetailCardRow";
+import { fs, ms } from "@/shared/constants/layout";
 
 export function FoodDetailCard({ food }: FoodDetailCardProps) {
   const statusColor = FOOD_STATUS_LABELS[food.condition.foodStatus];
@@ -29,7 +30,7 @@ export function FoodDetailCard({ food }: FoodDetailCardProps) {
           <Text
             color="$mainText"
             fontWeight="800"
-            fontSize="$6"
+            fontSize={fs(18)}
             fontFamily="$baemin"
             flex={1}
           >
@@ -37,13 +38,23 @@ export function FoodDetailCard({ food }: FoodDetailCardProps) {
           </Text>
 
           <View px="$3" py="$1" br="$6" bg={statusBgColor}>
-            <Text color={statusColor} fontWeight="700" fontFamily="$baemin">
+            <Text
+              color={statusColor}
+              fontWeight="700"
+              fontFamily="$baemin"
+              fontSize={fs(12)}
+            >
               {statusText}
             </Text>
           </View>
         </XStack>
 
-        <Text color="$gray10" fontFamily="$baemin" fontSize="$4">
+        <Text
+          color="$gray10"
+          fontFamily="$baemin"
+          fontSize={fs(13)}
+          lineHeight={ms(18)}
+        >
           {food.description || "식품 설명이 없습니다."}
         </Text>
       </YStack>

@@ -3,6 +3,7 @@ import React from "react";
 import { Modal } from "react-native";
 import { Button, Text, View, XStack, YStack } from "tamagui";
 import { InviteModalProps } from "../types";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 export const InviteModal = ({
   visible,
@@ -30,7 +31,7 @@ export const InviteModal = ({
           elevation={10}
         >
           <XStack w="100%" jc="flex-end">
-            <X size={24} color="$gray10" onPress={onClose} />
+            <X size={s(22)} color="$gray10" onPress={onClose} />
           </XStack>
 
           <YStack ai="center" gap="$2">
@@ -59,41 +60,41 @@ export const InviteModal = ({
             ai="center"
             gap="$2"
           >
-            <Text color="$blue10" fontSize={12} fontWeight="700" ls={1}>
+            <Text color="$blue10" fontSize={fs(12)} fontWeight="700" ls={1}>
               INVITATION CODE
             </Text>
-            <Text fontSize={32} fontWeight="900" fontFamily="$baemin" ls={2}>
+            <Text fontSize={fs(28)} fontWeight="900" fontFamily="$baemin" ls={2}>
               {inviteCode}
             </Text>
           </YStack>
 
-          <Text color="$gray9" fontSize={12}>
+          <Text color="$gray9" fontSize={fs(12)}>
             이 코드는 발급 후 24시간 동안 유효합니다.
           </Text>
 
           <YStack w="100%" gap="$3">
             <Button
               bg="#FEE500"
-              h={56}
+              h={ms(50)}
               br="$4"
               pressStyle={{ opacity: 0.8 }}
               onPress={onShareKakao}
-              icon={<MessageCircle size={20} color="$black" fill="black" />}
+              icon={<MessageCircle size={s(18)} color="$black" fill="black" />}
             >
-              <Text fontWeight="700" color="$black">
+              <Text fontWeight="700" color="$black" fontSize={fs(14)}>
                 카카오톡으로 공유
               </Text>
             </Button>
 
             <Button
               bg="$primary"
-              h={56}
+              h={ms(50)}
               br="$4"
               pressStyle={{ opacity: 0.8 }}
               onPress={onCopy}
-              icon={<Copy size={20} color="$white" />}
+              icon={<Copy size={s(18)} color="$white" />}
             >
-              <Text color="$white" fontWeight="700">
+              <Text color="$white" fontWeight="700" fontSize={fs(14)}>
                 코드 복사하기
               </Text>
             </Button>

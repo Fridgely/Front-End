@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Text, XStack, YStack } from "tamagui";
 import { SettingRowProps } from "../types";
+import { ms } from "@/shared/constants/layout";
 
 export const SettingRow = ({
   icon,
@@ -28,9 +29,9 @@ export const SettingRow = ({
       checked={checked}
       onCheckedChange={onCheckedChange}
       backgroundColor={checked ? "$primary" : "$gray4"}
-      height={30}
-      width={50}
-      p={2}
+      height={ms(28)}
+      width={ms(46)}
+      p={ms(2)}
     >
       <Switch.Thumb size="$4" animation="quick" />
     </Switch>

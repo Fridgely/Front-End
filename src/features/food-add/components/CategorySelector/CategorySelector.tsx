@@ -10,8 +10,13 @@ import { useUpdateCategoryMutation } from "../../hooks/mutations/useUpdateCatego
 import { Category, CategorySelectorProps } from "../../types";
 import { CategoryActionSheet } from "./CategoryActionSheet";
 import { CategoryFormSheet } from "./CategoryFormSheet";
+import { fs, ms } from "@/shared/constants/layout";
 
-const LabelText = styled(Text, { fontSize: 18, fontWeight: "700", mb: "$2" });
+const LabelText = styled(Text, {
+  fontSize: ms(16),
+  fontWeight: "700",
+  mb: "$2",
+});
 
 export const CategorySelector = ({
   control,
@@ -128,8 +133,11 @@ export const CategorySelector = ({
                 fontFamily="$baemin"
                 fontSize="$3"
                 px="$4"
+                h={ms(40)}
               >
-                {cat.name}
+                <Text fontFamily="$baemin" fontSize={fs(13)} fontWeight="700">
+                  {cat.name}
+                </Text>
               </Button>
             </Pressable>
           ))}
@@ -141,8 +149,9 @@ export const CategorySelector = ({
             br="$4"
             px="$4"
             onPress={openAddSheet}
+            h={ms(40)}
           >
-            <Text fontFamily="$baemin" fontSize="$3" color="$mainText">
+            <Text fontFamily="$baemin" fontSize={fs(13)} color="$mainText">
               추가
             </Text>
           </Button>

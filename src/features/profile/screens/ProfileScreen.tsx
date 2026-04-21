@@ -1,5 +1,10 @@
 import { Header } from "@/shared/components/Header/Header";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import {
+  fs,
+  getBottomPaddingForSheet,
+  ms,
+  rv,
+} from "@/shared/constants/layout";
 import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   Bell,
@@ -151,20 +156,30 @@ export function ProfileScreen() {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <YStack
-          padding="$4"
-          gap="$6"
+          padding={rv({ sm: "$3", md: "$4", lg: "$4" })}
+          gap={rv({ sm: "$5", md: "$6", lg: "$6" })}
           style={{
-            paddingBottom: getBottomPaddingForSheet({ bottomInset: insets.bottom }),
+            paddingBottom: getBottomPaddingForSheet({
+              bottomInset: insets.bottom,
+            }),
           }}
         >
           {/* 프로필 */}
-          <YStack alignItems="center" gap="$2" marginTop="$4">
-            <Avatar circular size={100}>
+          <YStack
+            alignItems="center"
+            gap="$2"
+            marginTop={rv({ sm: "$3", md: "$4", lg: "$4" })}
+          >
+            <Avatar circular size={rv({ sm: ms(72), md: ms(86), lg: ms(86) })}>
               <Avatar.Image source={profileImageSource} />
               <Avatar.Fallback bc="$blue10" />
             </Avatar>
             <YStack alignItems="center">
-              <Heading size="$5" fontWeight="700">
+              <Heading
+                size="$5"
+                fontWeight="700"
+                fontSize={rv({ sm: fs(16), md: fs(18), lg: fs(18) })}
+              >
                 {nickname}님
               </Heading>
             </YStack>
@@ -178,14 +193,20 @@ export function ProfileScreen() {
               onPress={handleProfileImageUpdate}
               disabled={isUpdatingProfileImage}
             >
-              {isUpdatingProfileImage ? "업로드 중..." : "프로필 수정"}
+              <Text
+                fontFamily="$baemin"
+                fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+                fontWeight="600"
+              >
+                {isUpdatingProfileImage ? "업로드 중..." : "프로필 수정"}
+              </Text>
             </Button>
           </YStack>
 
           {/* 식품 개수 */}
           <XStack gap="$3" justifyContent="center">
             <Card
-              p="$4"
+              p={rv({ sm: "$3", md: "$4", lg: "$4" })}
               borderRadius="$4"
               borderWidth={1}
               borderColor="$gray3"
@@ -193,10 +214,19 @@ export function ProfileScreen() {
               f={1}
             >
               <YStack gap="$2">
-                <Text color="$gray" fontSize="$4">
+                <Text
+                  color="$gray"
+                  fontSize={rv({ sm: fs(11), md: fs(13), lg: fs(13) })}
+                  fontFamily="$baemin"
+                >
                   등록한 식품
                 </Text>
-                <Heading color="$mainText" size="$5" fontWeight="700">
+                <Heading
+                  color="$mainText"
+                  size="$5"
+                  fontWeight="700"
+                  fontSize={rv({ sm: fs(15), md: fs(18), lg: fs(18) })}
+                >
                   {registeredFoodCount}개
                 </Heading>
               </YStack>
@@ -242,11 +272,21 @@ export function ProfileScreen() {
             />
           </YStack>
 
-          <YStack alignItems="center" gap="$1" marginTop="$4">
-            <Text color="$gray10" fontSize="$3">
+          <YStack
+            alignItems="center"
+            gap="$1"
+            marginTop={rv({ sm: "$3", md: "$4", lg: "$4" })}
+          >
+            <Text
+              color="$gray10"
+              fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+            >
               Fridgely App
             </Text>
-            <Text color="$gray10" fontSize="$3">
+            <Text
+              color="$gray10"
+              fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+            >
               버전 1.0.0
             </Text>
           </YStack>

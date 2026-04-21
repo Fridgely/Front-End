@@ -19,7 +19,7 @@ import {
   YStack,
 } from "tamagui";
 import { CategoryFormSheetProps, CategoryFormValues } from "../../types";
-import { getBottomPaddingForSheet } from "@/shared/constants/layout";
+import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const CategoryFormSheet = ({
   visible,
@@ -133,8 +133,8 @@ export const CategoryFormSheet = ({
                 opacity={1}
               >
                 <View
-                  w={40}
-                  h={5}
+                  w={s(40)}
+                  h={s(5)}
                   bg="$gray4"
                   br="$4"
                   alignSelf="center"
@@ -157,7 +157,7 @@ export const CategoryFormSheet = ({
                     render={({ field: { onChange, value } }) => (
                       <Input
                         autoFocus={!isEditMode}
-                        h={52}
+                        h={ms(48)}
                         placeholder={
                           isEditMode ? "카테고리 이름" : "새 카테고리 이름"
                         }
@@ -180,7 +180,7 @@ export const CategoryFormSheet = ({
                   <Button
                     flex={1}
                     backgroundColor="$primary"
-                    h={52}
+                    h={ms(48)}
                     br="$4"
                     onPress={handleSubmit(onSubmit)}
                     disabled={isPending}

@@ -3,6 +3,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Control, Controller } from "react-hook-form";
 import { Circle, Image, Text, YStack } from "tamagui";
 import { FoodFormValues } from "../types";
+import { fs, ms, s } from "@/shared/constants/layout";
 
 export const ImageUploader = ({
   control,
@@ -37,7 +38,7 @@ export const ImageUploader = ({
       name="imageURL"
       render={({ field: { onChange, value } }) => (
         <YStack
-          h={200}
+          h={ms(170)}
           backgroundColor="$gray3"
           br="$5"
           bw={1}
@@ -57,14 +58,15 @@ export const ImageUploader = ({
             />
           ) : (
             <YStack ai="center">
-              <Circle size={56} backgroundColor="$background" elevation="$1">
-                <Camera size={28} color="$gray" />
+              <Circle size={s(52)} backgroundColor="$background" elevation="$1">
+                <Camera size={s(24)} color="$gray" />
               </Circle>
               <Text
                 fontFamily="$heading"
                 mt="$2"
                 color="$gray"
                 fontWeight="700"
+                fontSize={fs(14)}
               >
                 이미지 등록
               </Text>
