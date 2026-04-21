@@ -13,6 +13,7 @@ import {
   YStack,
 } from "tamagui";
 
+import { fs, ms, rv } from "@/shared/constants/layout";
 import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { useForm } from "react-hook-form";
 import { AuthInput } from "../components/AuthInput";
@@ -58,11 +59,22 @@ export function LoginScreen() {
         resetScrollToCoords={{ x: 0, y: 0 }}
         scrollEnabled={true}
         enableOnAndroid={true}
-        extraScrollHeight={20}
+        extraScrollHeight={rv({ sm: ms(12), md: ms(20), lg: ms(20) })}
       >
-        <YStack f={1} px="$6" jc="center" bc="$gray1">
-          <YStack mb={40}>
-            <Heading fontWeight="700" color="$primary" fontSize={30} lh="$6">
+        <YStack
+          f={1}
+          px={rv({ sm: "$5", md: "$6", lg: "$6" })}
+          jc="center"
+          bc="$gray1"
+        >
+          <YStack mb={rv({ sm: ms(24), md: ms(40), lg: ms(40) })}>
+            <Heading
+              fontWeight="700"
+              color="$primary"
+              fontFamily="$baemin"
+              fontSize={rv({ sm: fs(24), md: fs(30), lg: fs(30) })}
+              lh={rv({ sm: ms(30), md: ms(34), lg: ms(40) })}
+            >
               Fridgely
             </Heading>
             <Spacer size="$2" />
@@ -70,8 +82,8 @@ export function LoginScreen() {
               fontFamily="$baemin"
               fontWeight="400"
               color="$gray10"
-              fontSize="$3"
-              lh={24}
+              fontSize={rv({ sm: fs(13), md: fs(14), lg: fs(14) })}
+              lh={rv({ sm: ms(20), md: ms(24), lg: ms(24) })}
             >
               스마트한 냉장고 관리의 시작.{"\n"}
               버려지는 식재료 없이 신선하게 유지하세요.
@@ -119,10 +131,10 @@ export function LoginScreen() {
             <Button
               bc="$primary"
               color="$white"
-              h={56}
+              h={rv({ sm: ms(48), md: ms(56), lg: ms(56) })}
               br="$3"
               fontWeight="700"
-              fontSize="$4"
+              fontSize={rv({ sm: fs(14), md: fs(16), lg: fs(16) })}
               icon={LogIn}
               pressStyle={{ opacity: 0.8, scale: 0.98 }}
               onPress={handleSubmit(handleLoginClick)}
@@ -136,7 +148,7 @@ export function LoginScreen() {
             <XStack gap="$2" ai="center">
               <Text
                 fontFamily="$baemin"
-                fontWeight="400"
+                fontWeight="700"
                 color="$gray10"
                 fontSize="$3"
               >
