@@ -1,4 +1,5 @@
 import { getCalendarTheme } from "@/features/calendar/constants/calendarTheme";
+import { fs, ms, rv, s } from "@/shared/constants/layout";
 import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { ChevronLeft, ChevronRight } from "@tamagui/lucide-icons";
 import React from "react";
@@ -41,9 +42,9 @@ export function CalendarMonthView({
         renderArrow={(direction) => (
           <RNText style={[styles.arrow, { color: arrowColor }]}>
             {direction === "left" ? (
-              <ChevronLeft size={24} color="$mainText" />
+              <ChevronLeft size={s(22)} color="$mainText" />
             ) : (
-              <ChevronRight size={24} color="$mainText" />
+              <ChevronRight size={s(22)} color="$mainText" />
             )}
           </RNText>
         )}
@@ -100,20 +101,20 @@ export function CalendarMonthView({
 
 const styles = StyleSheet.create({
   arrow: {
-    fontSize: 20,
+    fontSize: rv({ sm: fs(14), md: fs(18), lg: fs(18) }),
     fontWeight: "700",
-    paddingHorizontal: 6,
+    paddingHorizontal: ms(6),
   },
   dayWrap: {
-    width: 36,
-    height: 44,
+    width: rv({ sm: ms(24), md: ms(34), lg: ms(34) }),
+    height: rv({ sm: ms(24), md: ms(40), lg: ms(40) }),
     alignItems: "center",
     justifyContent: "center",
   },
   dayCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 20,
+    width: rv({ sm: ms(28), md: ms(30), lg: ms(30) }),
+    height: rv({ sm: ms(28), md: ms(30), lg: ms(30) }),
+    borderRadius: rv({ sm: ms(16), md: ms(18), lg: ms(18) }),
     alignItems: "center",
     justifyContent: "center",
   },
@@ -122,22 +123,22 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontFamily: "BMJUA",
-    fontSize: 16,
+    fontSize: rv({ sm: fs(10), md: fs(14), lg: fs(14) }),
     textAlign: "center",
     includeFontPadding: false,
     textAlignVertical: "center",
   },
   dotRow: {
-    minHeight: 8,
-    marginTop: 2,
+    minHeight: ms(8),
+    marginTop: ms(2),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 2,
+    gap: ms(2),
   },
   dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
+    width: s(4),
+    height: s(4),
+    borderRadius: s(2),
   },
 });
