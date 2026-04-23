@@ -1,4 +1,6 @@
 import { act, renderHook } from "@testing-library/react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
 import { useUpdateNotificationSettingMutation } from "../../hooks/mutations/useUpdateNotificationSettingMutation";
 import { useNotificationSettingQuery } from "../../hooks/queries/useNotificationSettingQuery";
 import { useNotificationSettings } from "../../hooks/useNotificationSettings";
@@ -18,6 +20,22 @@ const mockedUseUpdateNotificationSettingMutation =
 
 describe("useNotificationSettings 테스트", () => {
   const mockMutate = jest.fn();
+  const createWrapper = () => {
+    const queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+
+    return function Wrapper({ children }: { children: React.ReactNode }) {
+      return (
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      );
+    };
+  };
 
   const mockSettings = {
     notificationTime: "09:00:00",
@@ -47,7 +65,9 @@ describe("useNotificationSettings 테스트", () => {
       isPending: true,
     });
 
-    const { result } = renderHook(() => useNotificationSettings());
+    const { result } = renderHook(() => useNotificationSettings(), {
+      wrapper: createWrapper(),
+    });
 
     expect(result.current.data).toEqual(mockSettings);
     expect(result.current.isUpdating).toBe(true);
@@ -55,7 +75,9 @@ describe("useNotificationSettings 테스트", () => {
   });
 
   it("하나만 변경하여 updateSettings 호출 시 기존 설정을 합쳐셔 mutate를 호출해야 한다", () => {
-    const { result } = renderHook(() => useNotificationSettings());
+    const { result } = renderHook(() => useNotificationSettings(), {
+      wrapper: createWrapper(),
+    });
 
     act(() => {
       result.current.updateSettings({ enabled: false });
@@ -76,7 +98,9 @@ describe("useNotificationSettings 테스트", () => {
       error: null,
     });
 
-    const { result } = renderHook(() => useNotificationSettings());
+    const { result } = renderHook(() => useNotificationSettings(), {
+      wrapper: createWrapper(),
+    });
 
     act(() => {
       result.current.updateSettings({ notificationTime: "10:30:00" });
@@ -87,7 +111,9 @@ describe("useNotificationSettings 테스트", () => {
   });
 
   it("여러 필드를 변경해도 빠진 값은 기존 설정으로 유지해서 mutate를 호출해야 한다", () => {
-    const { result } = renderHook(() => useNotificationSettings());
+    const { result } = renderHook(() => useNotificationSettings(), {
+      wrapper: createWrapper(),
+    });
 
     act(() => {
       result.current.updateSettings({
