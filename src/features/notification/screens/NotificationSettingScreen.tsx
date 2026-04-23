@@ -153,6 +153,7 @@ export function NotificationSettingScreen() {
               <TimePickerSelect
                 value={settings.notificationTime}
                 onValueChange={handleTimeChange}
+                disabled={isUpdating}
               />
             </XStack>
           </Section>

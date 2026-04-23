@@ -11,7 +11,7 @@ type MutationContext = { previous?: NotificationSettingsQueryData };
 const useUpdateNotificationSettingMutation = () => {
   const queryClient = useQueryClient();
 
-  return useApiMutation<NotificationSettingsRequest, void>(
+  return useApiMutation<NotificationSettingsRequest, void, any, MutationContext>(
     updateNotificationSettingsApi(),
     {
       onMutate: async (nextSettings) => {
@@ -43,9 +43,8 @@ const useUpdateNotificationSettingMutation = () => {
       },
       onError: (error: any, _variables, context) => {
         const queryKey = QUERY_KEYS.notification.settings();
-        const ctx = context as MutationContext | undefined;
-        if (ctx?.previous) {
-          queryClient.setQueryData(queryKey, ctx.previous);
+        if (context?.previous) {
+          queryClient.setQueryData(queryKey, context.previous);
         }
 
         const serverMessage = error.response?.data?.error?.message;
@@ -55,7 +54,7 @@ const useUpdateNotificationSettingMutation = () => {
           text2: serverMessage || "알림 설정 업데이트 중 오류가 발생했습니다.",
         });
       },
-      onSettled: () => {
+      onSettled: (_data, _error, _variables, _context) => {
         queryClient.invalidateQueries({
           queryKey: QUERY_KEYS.notification.settings(),
         });

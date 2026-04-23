@@ -37,6 +37,7 @@ interface NotificationItemProps {
 interface TimePickerSelectProps {
   value: string;
   onValueChange: (time: string) => void;
+  disabled?: boolean;
 }
 
 export type {

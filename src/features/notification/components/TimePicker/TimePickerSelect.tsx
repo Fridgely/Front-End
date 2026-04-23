@@ -10,6 +10,7 @@ import { PickerColumn } from "./PickerColumn";
 const TimePickerSelectBase = ({
   value,
   onValueChange,
+  disabled,
 }: TimePickerSelectProps) => {
   const [open, setOpen] = useState(false);
   const [tempValue, setTempValue] = useState(value);
@@ -60,7 +61,11 @@ const TimePickerSelectBase = ({
         iconAfter={<ChevronRight size={16} />}
         jc="space-between"
         px="$3"
-        onPress={() => setOpen(true)}
+        disabled={disabled}
+        onPress={() => {
+          if (disabled) return;
+          setOpen(true);
+        }}
       >
         <Text color="$primary" fontWeight="bold">
           {display.isPm ? "오후" : "오전"}{" "}

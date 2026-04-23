@@ -89,11 +89,11 @@ export function useApiQuery<T, R, TError = Error>(
   });
 }
 
-export function useApiMutation<T, R, TError = Error>(
+export function useApiMutation<T, R, TError = Error, TContext = unknown>(
   apiBuilder: ApiBuilder<T, R>,
-  options?: UseMutationOptions<R, TError, T>,
+  options?: UseMutationOptions<R, TError, T, TContext>,
 ) {
-  return useMutation<R, TError, T>({
+  return useMutation<R, TError, T, TContext>({
     mutationFn: apiBuilder.getMutationFn(),
     ...options,
   });
