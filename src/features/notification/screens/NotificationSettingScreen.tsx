@@ -1,5 +1,5 @@
 import { Bell, Clock, Info, Users } from "@tamagui/lucide-icons";
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import Toast from "react-native-toast-message";
 import {
   Button,
@@ -24,9 +24,10 @@ export function NotificationSettingScreen() {
     data: settings,
     isLoading,
     updateSettings,
+    isUpdating,
   } = useNotificationSettings();
 
-  const handleOpenNotificationSettings = async () => {
+  const handleOpenNotificationSettings = useCallback(async () => {
     try {
       await openNotificationSettings();
     } catch {
@@ -36,7 +37,29 @@ export function NotificationSettingScreen() {
         text2: "시스템 설정을 열 수 없습니다.",
       });
     }
-  };
+  }, []);
+
+  const bellIcon = useMemo(
+    () => <Bell size="$3" color="$primary" />,
+    [],
+  );
+  const usersIcon = useMemo(
+    () => <Users size="$3" color="$primary" />,
+    [],
+  );
+
+  const handleEnabledChange = useCallback(
+    (enabled: boolean) => updateSettings({ enabled }),
+    [updateSettings],
+  );
+  const handleDayPress = useCallback(
+    (day: number) => updateSettings({ daysBeforeExpiration: day }),
+    [updateSettings],
+  );
+  const handleTimeChange = useCallback(
+    (time: string) => updateSettings({ notificationTime: time }),
+    [updateSettings],
+  );
 
   if (isLoading || !settings) {
     return (
@@ -57,11 +80,12 @@ export function NotificationSettingScreen() {
         <YStack gap="$5">
           <Section label="식재료 관리 알림">
             <SettingRow
-              icon={<Bell size="$3" color="$primary" />}
+              icon={bellIcon}
               title="유통기한 임박 알림"
               description="식재료의 신선도를 유지하세요"
               checked={settings.enabled}
-              onCheckedChange={(enabled) => updateSettings({ enabled })}
+              onCheckedChange={handleEnabledChange}
+              disabled={isUpdating}
             />
 
             <YStack
@@ -84,9 +108,8 @@ export function NotificationSettingScreen() {
                     active={
                       settings.enabled && settings.daysBeforeExpiration === day
                     }
-                    onPress={() =>
-                      updateSettings({ daysBeforeExpiration: day })
-                    }
+                    onPress={() => handleDayPress(day)}
+                    disabled={isUpdating}
                   />
                 ))}
               </XStack>
@@ -95,10 +118,11 @@ export function NotificationSettingScreen() {
 
           <Section label="공유 및 활동">
             <SettingRow
-              icon={<Users size="$3" color="$primary" />}
+              icon={usersIcon}
               title="새로운 냉장고 멤버 참여"
               description="초대한 멤버가 수락하면 알려드려요"
               checked={true} //  현재는 고정값
+              disabled
             />
           </Section>
 
@@ -128,9 +152,8 @@ export function NotificationSettingScreen() {
 
               <TimePickerSelect
                 value={settings.notificationTime}
-                onValueChange={(time: string) =>
-                  updateSettings({ notificationTime: time })
-                }
+                onValueChange={handleTimeChange}
+                disabled={isUpdating}
               />
             </XStack>
           </Section>

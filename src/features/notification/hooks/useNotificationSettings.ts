@@ -1,25 +1,35 @@
 import { NotificationSettingsRequest } from "../apis/notification.types";
 import { useUpdateNotificationSettingMutation } from "./mutations/useUpdateNotificationSettingMutation";
 import { useNotificationSettingQuery } from "./queries/useNotificationSettingQuery";
+import { useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/shared/constants/queryKeys";
 
 const useNotificationSettings = () => {
+  const queryClient = useQueryClient();
   const query = useNotificationSettingQuery();
   const mutation = useUpdateNotificationSettingMutation();
 
   const settings = query.data?.data;
 
-  const updateSettings = (changes: Partial<NotificationSettingsRequest>) => {
-    if (!settings || mutation.isPending) {
-      return;
-    }
+  const updateSettings = useCallback(
+    (changes: Partial<NotificationSettingsRequest>) => {
+      const cached =
+        queryClient.getQueryData<{ data: NotificationSettingsRequest }>(
+          QUERY_KEYS.notification.settings(),
+        )?.data ?? settings;
 
-    mutation.mutate({
-      notificationTime: changes.notificationTime ?? settings.notificationTime,
-      daysBeforeExpiration:
-        changes.daysBeforeExpiration ?? settings.daysBeforeExpiration,
-      enabled: changes.enabled ?? settings.enabled,
-    });
-  };
+      if (!cached) return;
+
+      mutation.mutate({
+        notificationTime: changes.notificationTime ?? cached.notificationTime,
+        daysBeforeExpiration:
+          changes.daysBeforeExpiration ?? cached.daysBeforeExpiration,
+        enabled: changes.enabled ?? cached.enabled,
+      });
+    },
+    [mutation, queryClient, settings],
+  );
 
   return {
     ...query,

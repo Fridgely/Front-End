@@ -12,6 +12,7 @@ interface DayButtonProps {
   day: number;
   active: boolean;
   onPress: () => void;
+  disabled?: boolean;
 }
 
 interface SettingRowProps {
@@ -20,6 +21,7 @@ interface SettingRowProps {
   description: string;
   checked: boolean;
   onCheckedChange?: (checked: boolean) => void;
+  disabled?: boolean;
 }
 
 interface NotificationItemProps {
@@ -32,9 +34,16 @@ interface NotificationItemProps {
   messageId?: string;
 }
 
+interface TimePickerSelectProps {
+  value: string;
+  onValueChange: (time: string) => void;
+  disabled?: boolean;
+}
+
 export type {
   DayButtonProps,
   NotificationItemProps,
   PickerColumnProps,
   SettingRowProps,
+  TimePickerSelectProps,
 };
