@@ -1,8 +1,8 @@
 import { Header } from "@/shared/components/Header/Header";
+import { fs, ms } from "@/shared/constants/layout";
 import { useState } from "react";
 import { Button, Input, Text, YStack } from "tamagui";
 import { useJoinFridgeByInviteCodeMutation } from "../hooks/mutations/useJoinFridgeByInviteCodeMutation";
-import { fs, ms } from "@/shared/constants/layout";
 
 export function FridgeAddScreen() {
   const [inviteCode, setInviteCode] = useState("");
@@ -36,7 +36,7 @@ export function FridgeAddScreen() {
           fontFamily="$baemin"
           h={ms(50)}
           br="$4"
-          fontSize="$5"
+          fontSize="$2"
           placeholder="초대코드 입력"
           value={inviteCode}
           onChangeText={handleTextChange}
