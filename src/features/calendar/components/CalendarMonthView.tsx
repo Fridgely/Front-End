@@ -67,7 +67,7 @@ export function CalendarMonthView({
               <RNView
                 style={[
                   styles.dayCircle,
-                  isSelected && { backgroundColor: selectedDayBg },
+                  isSelected && { backgroundColor: selectedDayBg, borderRadius: 9999 },
                   isDimmed && styles.dayCircleDisabled,
                 ]}
               >
