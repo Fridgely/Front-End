@@ -30,7 +30,6 @@ export const buildMarkedDates = (foods: FoodItem[], selectedDate: string) => {
     {
       dots: { key: string; color: string }[];
       selected?: boolean;
-      selectedColor?: string;
     }
   > = {};
 
@@ -49,7 +48,6 @@ export const buildMarkedDates = (foods: FoodItem[], selectedDate: string) => {
   marks[selectedDate] = {
     ...(marks[selectedDate] || { dots: [] }),
     selected: true,
-    selectedColor: "#2EE6A8",
   };
 
   return marks;
