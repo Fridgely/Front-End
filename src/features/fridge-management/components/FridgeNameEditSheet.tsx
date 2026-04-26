@@ -1,3 +1,4 @@
+import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
@@ -9,7 +10,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimatePresence, Button, Input, Text, View, YStack } from "tamagui";
 import { FridgeNameEditSheetProps } from "../types";
-import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const FridgeNameEditSheet = ({
   visible,
@@ -87,7 +87,7 @@ export const FridgeNameEditSheet = ({
                 />
 
                 <YStack gap="$2">
-                  <Text fontSize="$6" fontWeight="700" fontFamily="$baemin">
+                  <Text fontSize="$4" fontWeight="700" fontFamily="$baemin">
                     냉장고 이름 수정
                   </Text>
                   <Text fontSize="$3" color="$gray10">
@@ -104,7 +104,8 @@ export const FridgeNameEditSheet = ({
                     onChangeText={setNewName}
                     autoFocus
                     maxLength={15}
-                    fontSize="$3"
+                    fontSize="$2"
+                    fontFamily="$baemin"
                     backgroundColor="$gray3"
                   />
 

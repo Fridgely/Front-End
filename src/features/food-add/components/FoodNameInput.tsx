@@ -1,8 +1,8 @@
+import { ms } from "@/shared/constants/layout";
 import React from "react";
 import { Control, Controller } from "react-hook-form";
 import { Input, Text, YStack, styled, useThemeName } from "tamagui";
 import { FoodFormValues } from "../types";
-import { ms } from "@/shared/constants/layout";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -43,7 +43,7 @@ export const FoodNameInput = ({
             placeholder="식품 이름을 입력하세요"
             placeholderTextColor={themeName === "dark" ? "$gray10" : "$gray5"}
             backgroundColor="$gray3"
-            fontSize="$3"
+            fontSize="$2"
             fontFamily="$baemin"
             fontWeight="400"
             br="$4"

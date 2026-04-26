@@ -1,3 +1,4 @@
+import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -19,7 +20,6 @@ import {
   YStack,
 } from "tamagui";
 import { CategoryFormSheetProps, CategoryFormValues } from "../../types";
-import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const CategoryFormSheet = ({
   visible,
@@ -167,7 +167,7 @@ export const CategoryFormSheet = ({
                         br="$4"
                         bw={errors.name ? 1 : 0}
                         boc="$warning"
-                        fontSize="$4"
+                        fontSize="$2"
                         fontFamily="$baemin"
                         onSubmitEditing={handleSubmit(onSubmit)}
                         returnKeyType="done"
