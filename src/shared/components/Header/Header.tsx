@@ -42,6 +42,8 @@ export function Header({
               color="$mainText"
               letterSpacing={-0.5}
               fontSize={fs(20)}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
               {title}
             </Heading>
@@ -49,7 +51,15 @@ export function Header({
         </XStack>
 
         {showBackButton && (
-          <Heading size="$5" fontWeight="700" color="$mainText" fontSize={fs(18)}>
+          <Heading
+            size="$5"
+            fontWeight="700"
+            color="$mainText"
+            fontSize={fs(18)}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{ maxWidth: "70%" }}
+          >
             {title}
           </Heading>
         )}
