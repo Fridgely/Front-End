@@ -8,8 +8,8 @@ export function OnboardingItem({ item, isDark }: OnboardingItemProps) {
   const { width: screenWidth } = useWindowDimensions();
   const imageHeight = ms(280);
   return (
-    <View w={screenWidth} px="$6">
-      <YStack pt="$5" ai="center">
+    <View w={screenWidth} px="$6" f={1}>
+      <YStack f={1} ai="center" jc="center">
         <View
           w="100%"
           h={imageHeight}
