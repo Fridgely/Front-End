@@ -1,11 +1,11 @@
 import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
+import { fs, ms, s } from "@/shared/constants/layout";
 import { Bell, ChevronLeft } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Heading, View, XStack } from "tamagui";
 import { HeaderProps } from "./Header.types";
-import { fs, ms, s } from "@/shared/constants/layout";
 export function Header({
   title = "Fridgely",
   showBackButton = false,
@@ -41,7 +41,7 @@ export function Header({
               fontWeight="700"
               color="$mainText"
               letterSpacing={-0.5}
-              fontSize={fs(20)}
+              fontSize={fs(18)}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
