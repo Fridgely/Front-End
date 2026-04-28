@@ -66,7 +66,7 @@ export function useImagePickerActions() {
 
     const normalized = normalizeOptions(options);
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: "images",
+      mediaTypes: ["images"],
       allowsEditing: normalized.allowsEditing,
       aspect: normalized.aspect,
       quality: normalized.quality,
