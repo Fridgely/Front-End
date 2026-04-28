@@ -13,10 +13,9 @@ import {
   Palette,
   Refrigerator,
 } from "@tamagui/lucide-icons";
-import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
-import { Alert, Linking } from "react-native";
+import { Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Avatar,
@@ -39,6 +38,7 @@ import {
   getSavedProfileImage,
   saveProfileImageIndex,
 } from "../utils/getRandomDefaultProfileImage";
+import { useImagePickerActions } from "@/shared/hooks/useImagePickerActions";
 
 export function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -61,6 +61,7 @@ export function ProfileScreen() {
   const nickname = memberProfile?.data?.nickname ?? "Fridgely";
   const { mutate: updateProfileImage, isPending: isUpdatingProfileImage } =
     useUpdateProfileImageMutation(loginId);
+  const { showPickerAlert } = useImagePickerActions();
   const [profileImageSource, setProfileImageSource] = React.useState<
     any | null
   >(null);
@@ -116,37 +117,17 @@ export function ProfileScreen() {
   };
 
   const handleProfileImageUpdate = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permissionResult.granted) {
-      Alert.alert(
-        "권한 필요",
-        "프로필 사진 변경을 위해 사진첩 접근 권한이 필요합니다.",
-      );
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: "images",
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (result.canceled) {
-      return;
-    }
-
-    const selectedAsset = result.assets?.[0];
-    if (!selectedAsset?.uri) {
-      return;
-    }
-
-    updateProfileImage({
-      uri: selectedAsset.uri,
-      fileName: selectedAsset.fileName,
-      mimeType: selectedAsset.mimeType,
+    showPickerAlert({
+      title: "프로필 사진 변경",
+      message: "원하는 방법을 선택하세요.",
+      options: { allowsEditing: true, aspect: [1, 1], quality: 1 },
+      onPicked: (asset) => {
+        updateProfileImage({
+          uri: asset.uri,
+          fileName: asset.fileName ?? undefined,
+          mimeType: asset.mimeType ?? undefined,
+        });
+      },
     });
   };
 
