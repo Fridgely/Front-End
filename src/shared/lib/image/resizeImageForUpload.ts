@@ -43,6 +43,13 @@ export async function resizeImageForUpload(
   const maxSize = params.maxSize ?? 1280;
   const compress = params.compress ?? 0.8;
 
+  if (!Number.isFinite(maxSize) || maxSize <= 0) {
+    throw new Error("maxSize must be a positive number");
+  }
+  if (!Number.isFinite(compress) || compress < 0 || compress > 1) {
+    throw new Error("compress must be between 0 and 1");
+  }
+
   let width: number | null = null;
   let height: number | null = null;
 
