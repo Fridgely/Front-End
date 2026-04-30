@@ -2,6 +2,7 @@ import { addFoodApi } from "@/features/food-add/apis/food";
 import { FoodFormValues } from "@/features/food-add/types";
 import { useApiMutation } from "@/shared/apis/builder/ApiBuilder";
 import { QUERY_KEYS } from "@/shared/constants/queryKeys";
+import { resizeImageForUpload } from "@/shared/lib/image/resizeImageForUpload";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
@@ -69,23 +70,37 @@ const useAddFoodMutation = (fridgeId: number) => {
       type: "application/json",
     } as any);
 
-    if (values.imageURL) {
-      const uri = values.imageURL;
-      const fileName = uri.split("/").pop() || `food_${Date.now()}.jpg`;
+    (async () => {
+      if (values.imageURL) {
+        try {
+          const resized = await resizeImageForUpload({
+            uri: values.imageURL,
+            maxSize: 1280,
+          });
+          formData.append("image", {
+            uri: resized.uri,
+            name: resized.fileName,
+            type: resized.mimeType,
+          } as any);
+        } catch {
+          const uri = values.imageURL;
+          const fileName = uri.split("/").pop() || `food_${Date.now()}.jpg`;
 
-      const extension = fileName.split(".").pop()?.toLowerCase();
-      let mimeType = "image/jpeg"; // 기본값
-      if (extension === "png") mimeType = "image/png";
-      if (extension === "gif") mimeType = "image/gif";
+          const extension = fileName.split(".").pop()?.toLowerCase();
+          let mimeType = "image/jpeg"; // 기본값
+          if (extension === "png") mimeType = "image/png";
+          if (extension === "gif") mimeType = "image/gif";
 
-      formData.append("image", {
-        uri: uri,
-        name: fileName,
-        type: mimeType, // image/jpeg, image/png 등
-      } as any);
-    }
+          formData.append("image", {
+            uri: uri,
+            name: fileName,
+            type: mimeType, // image/jpeg, image/png 등
+          } as any);
+        }
+      }
 
-    return mutation.mutate(formData);
+      mutation.mutate(formData);
+    })();
   };
 
   return { ...mutation, mutate: addFood };

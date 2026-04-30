@@ -1,4 +1,5 @@
 import { QUERY_KEYS } from "@/shared/constants/queryKeys";
+import { resizeImageForUpload } from "@/shared/lib/image/resizeImageForUpload";
 import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
@@ -44,18 +45,28 @@ const useUpdateProfileImageMutation = (loginId: string) => {
       });
 
       if (!response.ok) {
+        const contentType = response.headers.get("content-type") || "";
         let errorData: any = null;
+        let errorText: string | null = null;
 
         try {
-          errorData = await response.json();
+          if (contentType.includes("application/json")) {
+            errorData = await response.json();
+          } else {
+            errorText = await response.text();
+          }
         } catch {
-          errorData = null;
+          try {
+            errorText = await response.text();
+          } catch {
+            errorText = null;
+          }
         }
 
         throw {
           response: {
             status: response.status,
-            data: errorData,
+            data: errorData ?? { raw: errorText },
           },
         };
       }
@@ -77,11 +88,18 @@ const useUpdateProfileImageMutation = (loginId: string) => {
     },
     onError: (error: any, _variables, _onMutateResult, _context) => {
       const serverMessage = error.response?.data?.error?.message;
+      const rawMessage =
+        typeof error.response?.data?.raw === "string"
+          ? error.response.data.raw
+          : null;
 
       Toast.show({
         type: "error",
         text1: "프로필 사진 수정 실패",
-        text2: serverMessage || "프로필 사진 업로드 중 오류가 발생했습니다.",
+        text2:
+          serverMessage ||
+          rawMessage ||
+          "프로필 사진 업로드 중 오류가 발생했습니다.",
       });
     },
   });
@@ -91,18 +109,30 @@ const useUpdateProfileImageMutation = (loginId: string) => {
     fileName: inputFileName,
     mimeType,
   }: ProfileImageUploadInput) => {
-    const fileName =
-      inputFileName || uri.split("/").pop() || `profile_${Date.now()}.jpg`;
-    const type = getMimeType(fileName, mimeType);
+    (async () => {
+      let finalUri = uri;
+      let fileName =
+        inputFileName || uri.split("/").pop() || `profile_${Date.now()}.jpg`;
+      let type = getMimeType(fileName, mimeType);
 
-    const formData = new FormData();
-    formData.append("file", {
-      uri,
-      type,
-      name: fileName,
-    } as any);
+      try {
+        const resized = await resizeImageForUpload({ uri, maxSize: 1280 });
+        finalUri = resized.uri;
+        fileName = resized.fileName;
+        type = resized.mimeType;
+      } catch {
+        // 리사이징 실패 시 원본으로 업로드
+      }
 
-    mutation.mutate(formData);
+      const formData = new FormData();
+      formData.append("file", {
+        uri: finalUri,
+        type,
+        name: fileName,
+      } as any);
+
+      mutation.mutate(formData);
+    })();
   };
 
   return { ...mutation, mutate: updateProfileImage };
