@@ -61,12 +61,13 @@ export async function resizeImageForUpload(
 
   const longSide =
     width != null && height != null ? Math.max(width, height) : null;
-  const shouldResize = longSide == null ? true : longSide > maxSize;
-  const resizeAction = !shouldResize
-    ? []
-    : width != null && height != null && height > width
-      ? [{ resize: { height: maxSize } }]
-      : [{ resize: { width: maxSize } }];
+  const shouldResize = longSide != null && longSide > maxSize;
+  const resizeAction =
+    shouldResize && width != null && height != null
+      ? height > width
+        ? [{ resize: { height: maxSize } }]
+        : [{ resize: { width: maxSize } }]
+      : [];
 
   const result = await ImageManipulator.manipulateAsync(
     params.uri,
