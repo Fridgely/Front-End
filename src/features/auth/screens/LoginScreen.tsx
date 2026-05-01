@@ -134,7 +134,7 @@ export function LoginScreen() {
               h={rv({ sm: ms(48), md: ms(56), lg: ms(56) })}
               br="$3"
               fontWeight="700"
-              fontSize={rv({ sm: fs(14), md: fs(16), lg: fs(16) })}
+              fontSize={rv({ sm: fs(14), md: fs(15), lg: fs(16) })}
               icon={LogIn}
               pressStyle={{ opacity: 0.8, scale: 0.98 }}
               onPress={handleSubmit(handleLoginClick)}
