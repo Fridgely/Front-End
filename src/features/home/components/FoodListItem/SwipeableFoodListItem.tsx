@@ -23,10 +23,12 @@ export function SwipeableFoodListItem({
           borderRadius="$4"
           disabled={isDeleting}
           onPress={() => {
-            swipeableRef.current?.close();
             if (onDelete) {
               onDelete(item.id);
             }
+            requestAnimationFrame(() => {
+              swipeableRef.current?.close();
+            });
           }}
           pressStyle={{ opacity: 0.7 }}
         >

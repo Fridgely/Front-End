@@ -7,7 +7,7 @@ import {
 } from "@/shared/stores/useFridgeStore";
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { View } from "react-native";
 import { Text, XStack, YStack } from "tamagui";
 import { CategoryTabs } from "../components/CategoryTabs";
@@ -61,6 +61,8 @@ export function HomeScreen() {
     ? allFoodStatusData
     : fridgeFoodStatusData;
 
+  const foodStatus = foodStatusData?.data;
+
   const isFoodLoading = isAllFridgeTab
     ? isAllFoodLoading
     : isRefrigeratorFoodLoading;
@@ -71,24 +73,26 @@ export function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
+  const deleteTargetRef = useRef<DeleteTarget | null>(null);
+  const [deletingFoodId, setDeletingFoodId] = useState<number | null>(null);
 
   const { mutate: deleteFood, isPending: isDeletePending } =
     useDeleteFoodMutation({
       onSettled: () => {
-        setDeleteTarget(null);
+        deleteTargetRef.current = null;
+        setDeletingFoodId(null);
       },
     });
 
   const allFoods = useMemo(() => {
-    if (!foodStatusData?.data) return [];
+    if (!foodStatus) return [];
     return [
-      ...foodStatusData.data.black,
-      ...foodStatusData.data.red,
-      ...foodStatusData.data.yellow,
-      ...foodStatusData.data.green,
+      ...foodStatus.black,
+      ...foodStatus.red,
+      ...foodStatus.yellow,
+      ...foodStatus.green,
     ];
-  }, [foodStatusData]);
+  }, [foodStatus]);
 
   const categoryOptions = useMemo(() => {
     const names = Array.from(
@@ -143,6 +147,54 @@ export function HomeScreen() {
     ? "전체"
     : fridgeData?.data?.find((f) => f.id === selectedFridgeId)?.name ||
       "냉장고";
+
+  const handleRequestDelete = useCallback(
+    (item: (typeof sortedAndFilteredFoods)[number]) => {
+      const targetFridgeId =
+        item.refrigeratorId || (!isAllFridgeTab ? selectedFridgeId : null);
+      if (!targetFridgeId) {
+        return;
+      }
+
+      deleteTargetRef.current = {
+        fridgeId: targetFridgeId,
+        foodId: item.id,
+        // foodName: item.name,
+      };
+      setIsDeleteConfirmOpen(true);
+    },
+    [isAllFridgeTab, selectedFridgeId],
+  );
+
+  const handlePressItem = useCallback(
+    (item: (typeof sortedAndFilteredFoods)[number]) => {
+      const targetRefrigeratorId =
+        item.refrigeratorId ?? selectedFridgeId ?? undefined;
+
+      router.push({
+        pathname: "/food/[id]",
+        params: {
+          id: item.id.toString(),
+          ...(targetRefrigeratorId !== undefined
+            ? { refrigeratorId: targetRefrigeratorId.toString() }
+            : {}),
+        },
+      } as any);
+    },
+    [router, selectedFridgeId],
+  );
+
+  const renderFoodItem = useCallback(
+    ({ item }: { item: (typeof sortedAndFilteredFoods)[number] }) => (
+      <SwipeableFoodListItem
+        item={item}
+        onDelete={() => handleRequestDelete(item)}
+        isDeleting={isDeletePending && deletingFoodId === item.id}
+        onPress={() => handlePressItem(item)}
+      />
+    ),
+    [deletingFoodId, handlePressItem, handleRequestDelete, isDeletePending],
+  );
 
   if (isFridgeLoading || isFoodLoading) {
     return (
@@ -199,41 +251,7 @@ export function HomeScreen() {
       <View style={{ flex: 1, width: "100%" }}>
         <FlashList
           data={sortedAndFilteredFoods}
-          renderItem={({ item }) => (
-            <SwipeableFoodListItem
-              item={item}
-              onDelete={() => {
-                const targetFridgeId =
-                  item.refrigeratorId ||
-                  (!isAllFridgeTab ? selectedFridgeId : null);
-                if (!targetFridgeId) {
-                  return;
-                }
-
-                setDeleteTarget({
-                  fridgeId: targetFridgeId,
-                  foodId: item.id,
-                  // foodName: item.name,
-                });
-                setIsDeleteConfirmOpen(true);
-              }}
-              isDeleting={isDeletePending && deleteTarget?.foodId === item.id}
-              onPress={() => {
-                const targetRefrigeratorId =
-                  item.refrigeratorId ?? selectedFridgeId ?? undefined;
-
-                router.push({
-                  pathname: "/food/[id]",
-                  params: {
-                    id: item.id.toString(),
-                    ...(targetRefrigeratorId !== undefined
-                      ? { refrigeratorId: targetRefrigeratorId.toString() }
-                      : {}),
-                  },
-                } as any);
-              }}
-            />
-          )}
+          renderItem={renderFoodItem}
           keyExtractor={(item) => item.id.toString()}
           //@ts-ignore
           contentContainerStyle={{ paddingBottom: ms(40) }}
@@ -260,19 +278,19 @@ export function HomeScreen() {
         }}
         title="정말 삭제하시겠습니까?"
         description={
-          deleteTarget
-            ? `삭제된 식품은 복구할 수 없습니다. 신중하게 선택해 주세요.`
-            : "선택한 식품을 삭제하시겠어요?"
+          `삭제된 식품은 복구할 수 없습니다. 신중하게 선택해 주세요.`
         }
         confirmText="삭제"
         onConfirm={() => {
-          if (!deleteTarget || isDeletePending) {
+          const target = deleteTargetRef.current;
+          if (!target || isDeletePending) {
             return;
           }
 
+          setDeletingFoodId(target.foodId);
           deleteFood({
-            fridgeId: deleteTarget.fridgeId,
-            foodId: deleteTarget.foodId,
+            fridgeId: target.fridgeId,
+            foodId: target.foodId,
           });
         }}
         confirmColor="$warning"
