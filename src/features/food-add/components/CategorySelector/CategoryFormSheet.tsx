@@ -32,11 +32,15 @@ export const CategoryFormSheet = ({
   const { height: windowHeight } = useWindowDimensions();
   const nameInputRef = useRef<TextInput | null>(null);
 
+  const visibleRef = useRef(visible);
+  visibleRef.current = visible;
+
   const [show, setShow] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const sheetOpacity = useRef(new Animated.Value(0)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
-  const isAnimatingRef = useRef(false);
+  const isEnterAnimatingRef = useRef(false);
+  const isExitAnimatingRef = useRef(false);
   const hasOpenedRef = useRef(false);
 
   const sheetHiddenY = useMemo(
@@ -78,8 +82,8 @@ export const CategoryFormSheet = ({
   }, []);
 
   const runClose = useCallback(() => {
-    if (isAnimatingRef.current) return;
-    isAnimatingRef.current = true;
+    if (isExitAnimatingRef.current) return;
+    isExitAnimatingRef.current = true;
 
     Animated.parallel([
       Animated.timing(backdropOpacity, {
@@ -101,7 +105,7 @@ export const CategoryFormSheet = ({
         useNativeDriver: true,
       }),
     ]).start(({ finished }) => {
-      isAnimatingRef.current = false;
+      isExitAnimatingRef.current = false;
       if (finished) setShow(false);
     });
   }, [backdropOpacity, sheetHiddenY, sheetOpacity, translateY]);
@@ -111,7 +115,7 @@ export const CategoryFormSheet = ({
       hasOpenedRef.current = true;
       setShow(true);
       requestAnimationFrame(() => {
-        isAnimatingRef.current = true;
+        isEnterAnimatingRef.current = true;
         translateY.setValue(sheetHiddenY);
         sheetOpacity.setValue(0);
         backdropOpacity.setValue(0);
@@ -135,13 +139,19 @@ export const CategoryFormSheet = ({
             useNativeDriver: true,
           }),
         ]).start(() => {
-          isAnimatingRef.current = false;
+          isEnterAnimatingRef.current = false;
+          if (!visibleRef.current) {
+            runClose();
+          }
         });
       });
       return;
     }
 
     if (!hasOpenedRef.current) return;
+    if (isEnterAnimatingRef.current) {
+      return;
+    }
     runClose();
   }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
 

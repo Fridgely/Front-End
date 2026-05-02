@@ -23,11 +23,16 @@ export const CategoryActionSheet = ({
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
 
+  const visibleRef = useRef(visible);
+  visibleRef.current = visible;
+
   const [show, setShow] = useState(false);
   const translateY = useRef(new Animated.Value(0)).current;
   const sheetOpacity = useRef(new Animated.Value(0)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
-  const isAnimatingRef = useRef(false);
+  const isEnterAnimatingRef = useRef(false);
+  const isExitAnimatingRef = useRef(false);
+  const pendingAfterCloseRef = useRef<(() => void) | null>(null);
   const hasOpenedRef = useRef(false);
 
   const sheetHiddenY = useMemo(
@@ -36,8 +41,8 @@ export const CategoryActionSheet = ({
   );
 
   const runClose = useCallback(() => {
-    if (isAnimatingRef.current) return;
-    isAnimatingRef.current = true;
+    if (isExitAnimatingRef.current) return;
+    isExitAnimatingRef.current = true;
 
     Animated.parallel([
       Animated.timing(backdropOpacity, {
@@ -59,8 +64,13 @@ export const CategoryActionSheet = ({
         useNativeDriver: true,
       }),
     ]).start(({ finished }) => {
-      isAnimatingRef.current = false;
-      if (finished) setShow(false);
+      isExitAnimatingRef.current = false;
+      if (finished) {
+        setShow(false);
+        const next = pendingAfterCloseRef.current;
+        pendingAfterCloseRef.current = null;
+        next?.();
+      }
     });
   }, [backdropOpacity, sheetHiddenY, sheetOpacity, translateY]);
 
@@ -69,7 +79,7 @@ export const CategoryActionSheet = ({
       hasOpenedRef.current = true;
       setShow(true);
       requestAnimationFrame(() => {
-        isAnimatingRef.current = true;
+        isEnterAnimatingRef.current = true;
         translateY.setValue(sheetHiddenY);
         sheetOpacity.setValue(0);
         backdropOpacity.setValue(0);
@@ -93,13 +103,19 @@ export const CategoryActionSheet = ({
             useNativeDriver: true,
           }),
         ]).start(() => {
-          isAnimatingRef.current = false;
+          isEnterAnimatingRef.current = false;
+          if (!visibleRef.current) {
+            runClose();
+          }
         });
       });
       return;
     }
 
     if (!hasOpenedRef.current) return;
+    if (isEnterAnimatingRef.current) {
+      return;
+    }
     runClose();
   }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
 
@@ -183,7 +199,7 @@ export const CategoryActionSheet = ({
                   br="$4"
                   onPress={() => {
                     if (!target) return;
-                    onEdit(target);
+                    pendingAfterCloseRef.current = () => onEdit(target);
                     onClose();
                   }}
                   pressStyle={{ scale: 0.97 }}
@@ -204,7 +220,7 @@ export const CategoryActionSheet = ({
                   br="$4"
                   onPress={() => {
                     if (!target) return;
-                    onDelete(target);
+                    pendingAfterCloseRef.current = () => onDelete(target);
                     onClose();
                   }}
                   pressStyle={{ scale: 0.97 }}
