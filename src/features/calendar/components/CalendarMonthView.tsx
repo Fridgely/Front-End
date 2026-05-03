@@ -1,8 +1,10 @@
 import { getCalendarTheme } from "@/features/calendar/constants/calendarTheme";
+import { CalendarMonthYearPickerModal } from "@/features/calendar/components/CalendarMonthYearPickerModal";
+import { daysInMonth, pad2 } from "@/features/calendar/utils/calendar";
 import { fs, ms, rv, s } from "@/shared/constants/layout";
 import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { ChevronLeft, ChevronRight } from "@tamagui/lucide-icons";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   Pressable,
   Text as RNText,
@@ -29,9 +31,35 @@ export function CalendarMonthView({
   const selectedDayTextColor = "#111111";
   const disabledDayTextColor = isDark ? "#4A5A56" : "#D0D4D3";
 
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerSeed, setPickerSeed] = useState({ y: 0, m: 1 });
+  const [jumpKey, setJumpKey] = useState(0);
+
+  const openMonthYearPicker = useCallback(
+    (month: { getFullYear(): number; getMonth(): number }) => {
+      setPickerSeed({ y: month.getFullYear(), m: month.getMonth() + 1 });
+      setPickerOpen(true);
+    },
+    [],
+  );
+
+  const applyMonthYear = useCallback(
+    (year: number, month: number) => {
+      const maxDay = daysInMonth(year, month);
+      const parts = selectedDate.split("-").map(Number);
+      const prevDay = parts[2] ?? 1;
+      const day = Math.min(prevDay, maxDay);
+      onSelectDate(`${year}-${pad2(month)}-${pad2(day)}`);
+      setJumpKey((k) => k + 1);
+      setPickerOpen(false);
+    },
+    [onSelectDate, selectedDate],
+  );
+
   return (
     <View px="$2">
       <Calendar
+        key={jumpKey}
         current={selectedDate}
         onDayPress={(day: DateData) => onSelectDate(day.dateString)}
         markingType="multi-dot"
@@ -47,6 +75,21 @@ export function CalendarMonthView({
               <ChevronRight size={s(22)} color="$mainText" />
             )}
           </RNText>
+        )}
+        renderHeader={(month) => (
+          <Pressable
+            onPress={() => openMonthYearPicker(month)}
+            accessibilityRole="button"
+            accessibilityLabel="연도 및 월 선택"
+            hitSlop={12}
+          >
+            <RNText
+              style={[styles.headerTitle, { color: arrowColor }]}
+              numberOfLines={1}
+            >
+              {`${month.getFullYear()}년 ${month.getMonth() + 1}월`}
+            </RNText>
+          </Pressable>
         )}
         dayComponent={({ date, state, marking, onPress }) => {
           const isSelected = !!marking?.selected;
@@ -95,11 +138,25 @@ export function CalendarMonthView({
           );
         }}
       />
+
+      <CalendarMonthYearPickerModal
+        open={pickerOpen}
+        year={pickerSeed.y}
+        month={pickerSeed.m}
+        onClose={() => setPickerOpen(false)}
+        onConfirm={applyMonthYear}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  headerTitle: {
+    fontFamily: "BMJUA",
+    fontSize: rv({ sm: fs(16), md: fs(18), lg: fs(18) }),
+    fontWeight: "700",
+    textAlign: "center",
+  },
   arrow: {
     fontSize: rv({ sm: fs(14), md: fs(18), lg: fs(18) }),
     fontWeight: "700",
