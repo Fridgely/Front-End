@@ -1,50 +1,58 @@
 import { getMessaging, onTokenRefresh } from "@react-native-firebase/messaging";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { AppState, AppStateStatus } from "react-native";
 import { getFcmToken } from "./getFcmToken";
+
+let fcmSyncTail = Promise.resolve();
+
+let lastSyncedPair: { userId: string; token: string } | null = null;
 
 export const useFcmSync = (
   userId: string | null,
   onSync?: (token: string) => Promise<void>,
 ) => {
   const appState = useRef<AppStateStatus>(AppState.currentState);
-  const lastSyncRef = useRef<{ token: string; userId: string | null }>({
-    token: "",
-    userId: null,
-  });
+  const onSyncRef = useRef(onSync);
+  onSyncRef.current = onSync;
 
-  const syncFcmToken = async (currentUserId: string | null) => {
+  const syncFcmToken = useCallback(async (currentUserId: string | null) => {
     if (!currentUserId) {
-      // 사용자 미로그인 상태
+      lastSyncedPair = null;
       return;
     }
 
-    try {
-      const fcmToken = await getFcmToken();
-      if (!fcmToken) {
-        console.warn("FCM: 토큰을 찾을 수 없음");
-        return;
-      }
+    const run = async () => {
+      try {
+        const fcmToken = await getFcmToken();
+        if (!fcmToken) {
+          console.warn("FCM: 토큰을 찾을 수 없음");
+          return;
+        }
 
-      const prevToken = lastSyncRef.current.token;
-      const prevUserId = lastSyncRef.current.userId;
+        if (
+          lastSyncedPair?.userId === currentUserId &&
+          lastSyncedPair?.token === fcmToken
+        ) {
+          return;
+        }
 
-      if (fcmToken !== prevToken || currentUserId !== prevUserId) {
-        if (onSync) await onSync(fcmToken);
-        // 토큰 또는 사용자 ID가 변경된 경우에만 서버에 동기화
-        lastSyncRef.current = { token: fcmToken, userId: currentUserId };
-      } else {
-        // 토큰과 사용자 ID 모두 변경되지 않음
+        const register = onSyncRef.current;
+        if (register) await register(fcmToken);
+        lastSyncedPair = { userId: currentUserId, token: fcmToken };
+      } catch (error) {
+        console.error("FCM 토큰 동기화 실패:", error);
       }
-    } catch (error) {
-      // 동기화 실패 시에도 앱이 정상 동작하도록 에러를 무시
+    };
+
+    fcmSyncTail = fcmSyncTail.then(run).catch((error) => {
       console.error("FCM 토큰 동기화 실패:", error);
-    }
-  };
+    });
+    await fcmSyncTail;
+  }, []);
 
   useEffect(() => {
     syncFcmToken(userId);
-  }, [userId]);
+  }, [userId, syncFcmToken]);
 
   useEffect(() => {
     // 토큰 갱신
@@ -53,7 +61,7 @@ export const useFcmSync = (
       syncFcmToken(userId);
     });
     return unsubscribe;
-  }, [userId]);
+  }, [userId, syncFcmToken]);
 
   useEffect(() => {
     // 앱이 포그라운드로 돌아올 때 토큰 동기화
@@ -71,5 +79,5 @@ export const useFcmSync = (
       },
     );
     return () => subscription.remove();
-  }, [userId]);
+  }, [userId, syncFcmToken]);
 };
