@@ -1,5 +1,10 @@
 import { FoodItem, FoodStatus } from "@/shared/types/food";
 
+export const pad2 = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+
+export const daysInMonth = (year: number, month: number) =>
+  new Date(year, month, 0).getDate();
+
 const STATUS_DOT_COLOR: Record<FoodStatus, string> = {
   GREEN: "#22C55E",
   YELLOW: "#F97316",
