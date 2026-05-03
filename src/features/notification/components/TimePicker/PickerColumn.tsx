@@ -1,4 +1,10 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, {
+  memo,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import {
   FlatList,
   NativeScrollEvent,
@@ -24,7 +30,7 @@ const getItemLayout = (_: unknown, index: number) => ({
 type RowProps = {
   item: string | number;
   selected: string | number;
-  format: (value: string | number) => string;
+  format: (value: string | number) => string | number;
 };
 
 const PickerRow = memo(function PickerRow({
@@ -54,6 +60,9 @@ function PickerColumnInner({
   format = (v) => v,
   width = 80,
 }: PickerColumnProps) {
+  const scrollRef = useRef<ScrollView>(null);
+  const listRef = useRef<FlatList<string | number>>(null);
+
   const handleScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const y = e.nativeEvent.contentOffset.y;
@@ -71,6 +80,15 @@ function PickerColumnInner({
     return i >= 0 ? i : 0;
   }, [items, selected]);
 
+  useLayoutEffect(() => {
+    const y = selectedIndex * PICKER_ITEM_HEIGHT;
+    if (items.length > LIST_VIRTUALIZE_THRESHOLD) {
+      listRef.current?.scrollToOffset({ offset: y, animated: false });
+    } else {
+      scrollRef.current?.scrollTo({ y, animated: false });
+    }
+  }, []);
+
   const renderItem = useCallback(
     ({ item }: { item: string | number }) => (
       <PickerRow item={item} selected={selected} format={format} />
@@ -84,6 +102,7 @@ function PickerColumnInner({
     return (
       <YStack width={width} h={PICKER_ITEM_HEIGHT * 3} pos="relative">
         <FlatList
+          ref={listRef}
           data={items}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
@@ -94,7 +113,6 @@ function PickerColumnInner({
           scrollEventThrottle={16}
           contentContainerStyle={contentPadding}
           getItemLayout={getItemLayout}
-          initialScrollIndex={selectedIndex}
           removeClippedSubviews
           windowSize={7}
           maxToRenderPerBatch={12}
@@ -107,6 +125,7 @@ function PickerColumnInner({
   return (
     <YStack width={width} h={PICKER_ITEM_HEIGHT * 3} pos="relative">
       <ScrollView
+        ref={scrollRef}
         showsVerticalScrollIndicator={false}
         snapToInterval={PICKER_ITEM_HEIGHT}
         decelerationRate="fast"

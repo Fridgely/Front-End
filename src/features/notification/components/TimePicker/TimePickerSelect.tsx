@@ -14,11 +14,14 @@ const TimePickerSelectBase = ({
 }: TimePickerSelectProps) => {
   const [open, setOpen] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+  const [pickerSession, setPickerSession] = useState(0);
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    if (open) setTempValue(value);
-  }, [open, value]);
+    if (!open) {
+      setTempValue(value);
+    }
+  }, [value, open]);
 
   const parseValue = useCallback((val: string) => {
     const [h, m] = val.split(":").map(Number);
@@ -64,6 +67,8 @@ const TimePickerSelectBase = ({
         disabled={disabled}
         onPress={() => {
           if (disabled) return;
+          setTempValue(value);
+          setPickerSession((s) => s + 1);
           setOpen(true);
         }}
       >
@@ -124,6 +129,7 @@ const TimePickerSelectBase = ({
                 />
 
                 <PickerColumn
+                  key={`ampm-${pickerSession}`}
                   items={AM_PM}
                   selected={isPm ? "오후" : "오전"}
                   onSelect={(val) => handleTempSelect({ isPm: val === "오후" })}
@@ -133,6 +139,7 @@ const TimePickerSelectBase = ({
                   :
                 </Text>
                 <PickerColumn
+                  key={`hour-${pickerSession}`}
                   items={HOURS}
                   selected={hour}
                   onSelect={(val) => handleTempSelect({ hour: val })}
@@ -143,6 +150,7 @@ const TimePickerSelectBase = ({
                   :
                 </Text>
                 <PickerColumn
+                  key={`minute-${pickerSession}`}
                   items={MINUTES}
                   selected={minute}
                   onSelect={(val) => handleTempSelect({ minute: val })}
