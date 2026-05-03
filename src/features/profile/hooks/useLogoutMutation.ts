@@ -1,13 +1,18 @@
 import { useAuthActions } from "@/features/auth/store/useAuthStore";
 import { useApiMutation } from "@/shared/apis/builder/ApiBuilder";
+import { QUERY_KEYS } from "@/shared/constants/queryKeys";
+import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { logoutApi } from "../apis/profile";
 
 const useLogoutMutation = () => {
   const { logout } = useAuthActions();
+  const queryClient = useQueryClient();
 
   return useApiMutation<void, void>(logoutApi, {
     onSuccess: async () => {
+      await queryClient.cancelQueries({ queryKey: QUERY_KEYS.member.me() });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.member.me() });
       await logout();
       Toast.show({
         type: "success",
@@ -17,6 +22,8 @@ const useLogoutMutation = () => {
     },
     onError: async (error: any) => {
       if (error.response?.status === 401) {
+        await queryClient.cancelQueries({ queryKey: QUERY_KEYS.member.me() });
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.member.me() });
         await logout();
         Toast.show({
           type: "success",
