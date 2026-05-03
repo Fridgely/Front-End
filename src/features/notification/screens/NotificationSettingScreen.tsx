@@ -1,5 +1,8 @@
 import { Bell, Clock, Info, Users } from "@tamagui/lucide-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import React, { useCallback, useMemo } from "react";
+import { BackHandler } from "react-native";
 import Toast from "react-native-toast-message";
 import {
   Button,
@@ -20,12 +23,27 @@ import { TimePickerSelect } from "../components/TimePicker/TimePickerSelect";
 import { useNotificationSettings } from "../hooks/useNotificationSettings";
 
 export function NotificationSettingScreen() {
+  const router = useRouter();
   const {
     data: settings,
     isLoading,
     updateSettings,
     isUpdating,
   } = useNotificationSettings();
+
+  const goBackToProfile = useCallback(() => {
+    router.replace("/profile");
+  }, [router]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const sub = BackHandler.addEventListener("hardwareBackPress", () => {
+        goBackToProfile();
+        return true;
+      });
+      return () => sub.remove();
+    }, [goBackToProfile]),
+  );
 
   const handleOpenNotificationSettings = useCallback(async () => {
     try {
@@ -64,7 +82,12 @@ export function NotificationSettingScreen() {
   if (isLoading || !settings) {
     return (
       <YStack f={1} backgroundColor="$background">
-        <Header title="알림" showBackButton showNotificationBell={false} />
+        <Header
+          title="알림"
+          showBackButton
+          showNotificationBell={false}
+          onBackPress={goBackToProfile}
+        />
         <YStack f={1} jc="center" ai="center">
           <Spinner size="large" color="$primary" />
         </YStack>
@@ -74,7 +97,12 @@ export function NotificationSettingScreen() {
 
   return (
     <YStack f={1} backgroundColor="$background">
-      <Header title="알림 설정" showBackButton showNotificationBell={false} />
+      <Header
+        title="알림 설정"
+        showBackButton
+        showNotificationBell={false}
+        onBackPress={goBackToProfile}
+      />
 
       <ScrollView f={1}>
         <YStack gap="$5">

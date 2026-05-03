@@ -10,6 +10,7 @@ export function Header({
   title = "Fridgely",
   showBackButton = false,
   showNotificationBell = false,
+  onBackPress,
 }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -32,7 +33,9 @@ export function Header({
               size="$2"
               chromeless
               icon={<ChevronLeft size={s(22)} color="$mainText" />}
-              onPress={() => router.back()}
+              onPress={() =>
+                onBackPress ? onBackPress() : router.back()
+              }
               paddingLeft={0}
             />
           ) : (
