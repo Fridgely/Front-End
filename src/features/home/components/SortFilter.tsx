@@ -63,35 +63,43 @@ export function SortFilter({
     setDraftCategory(selectedCategory);
   }, [visible, selectedSort, selectedCategory]);
 
-  const runClose = useCallback(() => {
-    if (isExitAnimatingRef.current) return;
-    isExitAnimatingRef.current = true;
-    dragY.setValue(0);
+  const requestClose = useCallback(
+    (notifyParent: boolean) => {
+      if (isExitAnimatingRef.current) return;
+      isExitAnimatingRef.current = true;
+      dragY.stopAnimation();
 
-    Animated.parallel([
-      Animated.timing(backdropOpacity, {
-        toValue: 0,
-        duration: 140,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
-      }),
-      Animated.timing(sheetOpacity, {
-        toValue: 0,
-        duration: 140,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
-      }),
-      Animated.timing(translateY, {
-        toValue: sheetHiddenY,
-        duration: 180,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }),
-    ]).start(({ finished }) => {
-      isExitAnimatingRef.current = false;
-      if (finished) setShow(false);
-    });
-  }, [backdropOpacity, dragY, sheetHiddenY, sheetOpacity, translateY]);
+      Animated.parallel([
+        Animated.timing(backdropOpacity, {
+          toValue: 0,
+          duration: 140,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(sheetOpacity, {
+          toValue: 0,
+          duration: 140,
+          easing: Easing.out(Easing.quad),
+          useNativeDriver: true,
+        }),
+        Animated.timing(translateY, {
+          toValue: sheetHiddenY,
+          duration: 180,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+      ]).start(({ finished }) => {
+        isExitAnimatingRef.current = false;
+        if (finished) {
+          dragY.setValue(0);
+          translateY.setValue(0);
+          setShow(false);
+          if (notifyParent) onClose();
+        }
+      });
+    },
+    [backdropOpacity, dragY, onClose, sheetHiddenY, sheetOpacity, translateY],
+  );
 
   useEffect(() => {
     if (visible) {
@@ -125,7 +133,7 @@ export function SortFilter({
         ]).start(() => {
           isEnterAnimatingRef.current = false;
           if (!visibleRef.current) {
-            runClose();
+            requestClose(false);
           }
         });
       });
@@ -134,11 +142,11 @@ export function SortFilter({
 
     if (!hasOpenedRef.current) return;
     if (isEnterAnimatingRef.current) return;
-    runClose();
+    requestClose(false);
   }, [
     backdropOpacity,
     dragY,
-    runClose,
+    requestClose,
     sheetHiddenY,
     sheetOpacity,
     translateY,
@@ -158,8 +166,7 @@ export function SortFilter({
       },
       onPanResponderRelease: (_, gestureState) => {
         if (gestureState.dy > 100 || gestureState.vy > 0.5) {
-          onClose();
-          dragY.setValue(0);
+          requestClose(true);
         } else {
           Animated.spring(dragY, {
             toValue: 0,
@@ -185,11 +192,14 @@ export function SortFilter({
       visible={show}
       transparent
       animationType="none"
-      onRequestClose={onClose}
+      onRequestClose={() => requestClose(true)}
       statusBarTranslucent
     >
       <YStack f={1} jc="flex-end">
-        <Pressable style={StyleSheet.absoluteFill} onPress={onClose}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={() => requestClose(true)}
+        >
           <Animated.View
             style={[styles.backdrop, { opacity: backdropOpacity }]}
           />
@@ -312,7 +322,7 @@ export function SortFilter({
                   sort: draftSort,
                   category: draftCategory,
                 });
-                onClose();
+                requestClose(true);
               }}
               pressStyle={{ scale: 0.98 }}
             >
