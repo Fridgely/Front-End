@@ -1,5 +1,11 @@
 import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
   Easing,
@@ -7,6 +13,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  PanResponder,
   Platform,
   Pressable,
   StyleSheet,
@@ -45,6 +52,32 @@ export const FridgeNameEditSheet = ({
     () => Math.max(50, Math.round(windowHeight * 0.25)),
     [windowHeight],
   );
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dy) > 5;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dy > 0) {
+          translateY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 100 || gestureState.vy > 0.5) {
+          onClose();
+        } else {
+          Animated.spring(translateY, {
+            toValue: 0,
+            useNativeDriver: true,
+            friction: 8,
+            tension: 40,
+          }).start();
+        }
+      },
+    }),
+  ).current;
 
   useEffect(() => {
     if (visible) {
@@ -137,7 +170,14 @@ export const FridgeNameEditSheet = ({
       return;
     }
     runClose();
-  }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
+  }, [
+    backdropOpacity,
+    runClose,
+    sheetHiddenY,
+    sheetOpacity,
+    translateY,
+    visible,
+  ]);
 
   useEffect(() => {
     if (!visible || !show) return;
@@ -191,6 +231,7 @@ export const FridgeNameEditSheet = ({
               transform: [{ translateY }],
               opacity: sheetOpacity,
             }}
+            {...panResponder.panHandlers}
           >
             <YStack
               bg="$background"
@@ -202,13 +243,7 @@ export const FridgeNameEditSheet = ({
               borderBottomRightRadius={0}
               zIndex={100}
             >
-              <View
-                w={s(40)}
-                h={s(5)}
-                bg="$gray4"
-                br="$4"
-                alignSelf="center"
-              />
+              <View w={s(40)} h={s(5)} bg="$gray4" br="$4" alignSelf="center" />
 
               <YStack gap="$2">
                 <Text fontSize="$4" fontWeight="700" fontFamily="$baemin">

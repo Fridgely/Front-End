@@ -1,8 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
   Easing,
   Modal,
+  PanResponder,
   Pressable,
   StyleSheet,
   useWindowDimensions,
@@ -10,7 +18,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Text, View, XStack, YStack } from "tamagui";
 import { CategoryActionSheetProps } from "../../types";
-import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 
 export const CategoryActionSheet = ({
   visible,
@@ -39,6 +46,32 @@ export const CategoryActionSheet = ({
     () => Math.max(50, Math.round(windowHeight * 0.25)),
     [windowHeight],
   );
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dy) > 5;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dy > 0) {
+          translateY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 100 || gestureState.vy > 0.5) {
+          onClose();
+        } else {
+          Animated.spring(translateY, {
+            toValue: 0,
+            useNativeDriver: true,
+            friction: 8,
+            tension: 40,
+          }).start();
+        }
+      },
+    }),
+  ).current;
 
   const runClose = useCallback(() => {
     if (isExitAnimatingRef.current) return;
@@ -117,7 +150,14 @@ export const CategoryActionSheet = ({
       return;
     }
     runClose();
-  }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
+  }, [
+    backdropOpacity,
+    runClose,
+    sheetHiddenY,
+    sheetOpacity,
+    translateY,
+    visible,
+  ]);
 
   return (
     <Modal
@@ -140,6 +180,7 @@ export const CategoryActionSheet = ({
             transform: [{ translateY }],
             opacity: sheetOpacity,
           }}
+          {...panResponder.panHandlers}
         >
           <YStack
             bg="$background"
