@@ -21,6 +21,8 @@ import {
 } from "tamagui";
 import { FridgeSelectionProps } from "../types";
 
+const AnimatedYStack = Animated.createAnimatedComponent(YStack);
+
 export const FridgeSelectionSheet = ({
   visible,
   onClose,
@@ -52,8 +54,6 @@ export const FridgeSelectionSheet = ({
       },
     }),
   ).current;
-
-  const AnimatedYStack = Animated.createAnimatedComponent(YStack);
 
   return (
     <Modal
