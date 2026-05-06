@@ -16,6 +16,7 @@ import { useAppHydration } from "@/shared/hooks/useAppHydration";
 import { queryClient } from "@/shared/lib/queryClient";
 import { OnboardingGate } from "@/shared/providers/OnboardingProvider";
 import { SessionProvider } from "@/shared/providers/SessionProvider";
+import { NotificationPermissionGate } from "@/shared/components/NotificationPermissionGate";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { useFonts } from "expo-font";
 import config from "../tamagui.config";
@@ -90,6 +91,7 @@ export default function RootLayout() {
         <SafeAreaProvider>
           <TamaguiProvider config={config} defaultTheme={resolvedTheme}>
             <OnboardingGate />
+            <NotificationPermissionGate enabled={isAppReady && !shouldShowSplash} />
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
             <SessionProvider />
 
