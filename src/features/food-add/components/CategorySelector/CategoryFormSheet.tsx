@@ -1,5 +1,11 @@
 import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Animated,
@@ -8,6 +14,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Modal,
+  PanResponder,
   Platform,
   Pressable,
   StyleSheet,
@@ -47,6 +54,32 @@ export const CategoryFormSheet = ({
     () => Math.max(50, Math.round(windowHeight * 0.25)),
     [windowHeight],
   );
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dy) > 5;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dy > 0) {
+          translateY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 100 || gestureState.vy > 0.5) {
+          onClose();
+        } else {
+          Animated.spring(translateY, {
+            toValue: 0,
+            useNativeDriver: true,
+            friction: 8,
+            tension: 40,
+          }).start();
+        }
+      },
+    }),
+  ).current;
 
   const {
     control,
@@ -153,7 +186,14 @@ export const CategoryFormSheet = ({
       return;
     }
     runClose();
-  }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
+  }, [
+    backdropOpacity,
+    runClose,
+    sheetHiddenY,
+    sheetOpacity,
+    translateY,
+    visible,
+  ]);
 
   useEffect(() => {
     if (!visible || !show || isEditMode) return;
@@ -221,6 +261,7 @@ export const CategoryFormSheet = ({
               transform: [{ translateY }],
               opacity: sheetOpacity,
             }}
+            {...panResponder.panHandlers}
           >
             <YStack
               bg="$background"
