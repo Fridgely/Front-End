@@ -147,6 +147,9 @@ export function SignupScreen() {
               control={control}
               placeholder="비밀번호를 다시 입력하세요."
               secureTextEntry
+              returnKeyType="go"
+              blurOnSubmit
+              onSubmitEditing={handleSubmit(onSignUpClick)}
               rules={{
                 required: "비밀번호를 다시 입력해주세요.",
                 validate: (value: string) => {

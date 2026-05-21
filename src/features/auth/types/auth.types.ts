@@ -16,6 +16,9 @@ interface AuthInputProps {
   secureTextEntry?: boolean;
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
   autoCorrect?: boolean;
+  returnKeyType?: "done" | "go" | "next" | "search" | "send";
+  blurOnSubmit?: boolean;
+  onSubmitEditing?: () => void;
   /**
    * 키보드 기본 default
    * email-address @와.버튼 포함
