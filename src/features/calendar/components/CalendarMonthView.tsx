@@ -2,15 +2,14 @@ import { getCalendarTheme } from "@/features/calendar/constants/calendarTheme";
 import { CalendarMonthYearPickerModal } from "@/features/calendar/components/CalendarMonthYearPickerModal";
 import { daysInMonth, pad2 } from "@/features/calendar/utils/calendar";
 import { fs, ms, rv, s } from "@/shared/constants/layout";
-import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
+import { useResolvedTheme } from "@/shared/hooks/useResolvedTheme";
 import { ChevronLeft, ChevronRight } from "@tamagui/lucide-icons";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Pressable,
   Text as RNText,
   View as RNView,
   StyleSheet,
-  useColorScheme,
 } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import { View } from "tamagui";
@@ -21,15 +20,16 @@ export function CalendarMonthView({
   markedDates,
   onSelectDate,
 }: CalendarMonthViewProps) {
-  const theme = useThemeStore((state) => state.theme);
-  const systemColorScheme = useColorScheme();
-  const resolvedTheme = resolveTheme(theme, systemColorScheme);
-  const isDark = resolvedTheme === "dark";
-  const arrowColor = isDark ? "#E5EBE9" : "#111111";
-  const selectedDayBg = isDark ? "#26D19B" : "#2EE6A8";
-  const dayTextColor = isDark ? "#E5EBE9" : "#111111";
-  const selectedDayTextColor = "#111111";
-  const disabledDayTextColor = isDark ? "#4A5A56" : "#D0D4D3";
+  const { resolvedTheme, isDark } = useResolvedTheme();
+  const calendarTheme = useMemo(
+    () => getCalendarTheme(resolvedTheme),
+    [resolvedTheme],
+  );
+  const arrowColor = calendarTheme.arrowColor;
+  const selectedDayBg = calendarTheme.selectedDayBackgroundColor;
+  const dayTextColor = calendarTheme.dayTextColor;
+  const selectedDayTextColor = calendarTheme.selectedDayTextColor;
+  const disabledDayTextColor = calendarTheme.textDisabledColor;
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pickerSeed, setPickerSeed] = useState({ y: 0, m: 1 });
@@ -57,22 +57,25 @@ export function CalendarMonthView({
   );
 
   return (
-    <View px="$2">
+    <View
+      px="$2"
+      style={{ backgroundColor: calendarTheme.calendarBackground }}
+    >
       <Calendar
-        key={jumpKey}
+        key={`${resolvedTheme}-${jumpKey}`}
         current={selectedDate}
         onDayPress={(day: DateData) => onSelectDate(day.dateString)}
         markingType="multi-dot"
         markedDates={markedDates}
-        theme={getCalendarTheme(resolvedTheme)}
+        theme={calendarTheme}
         hideExtraDays={false}
         enableSwipeMonths
         renderArrow={(direction) => (
           <RNText style={[styles.arrow, { color: arrowColor }]}>
             {direction === "left" ? (
-              <ChevronLeft size={s(22)} color="$mainText" />
+              <ChevronLeft size={s(22)} color={arrowColor} />
             ) : (
-              <ChevronRight size={s(22)} color="$mainText" />
+              <ChevronRight size={s(22)} color={arrowColor} />
             )}
           </RNText>
         )}
