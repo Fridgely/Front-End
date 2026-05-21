@@ -14,6 +14,8 @@ interface AuthInputProps {
   rules?: object;
   placeholder?: string;
   secureTextEntry?: boolean;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  autoCorrect?: boolean;
   /**
    * 키보드 기본 default
    * email-address @와.버튼 포함
