@@ -1,4 +1,4 @@
-import { Dimensions, PixelRatio } from "react-native";
+import { Dimensions, PixelRatio, Platform, StatusBar } from "react-native";
 
 // pixel7 기준으로 스케일 계산
 const BASE_WIDTH = 412;
@@ -95,6 +95,33 @@ export function rv<T>(values: { sm: T; md: T; lg: T }) {
 }
 
 export const DEFAULT_BOTTOM_SPACING = ms(24);
+
+/** 상태바 아래 추가 여유 (20dp 스케일) */
+export const DEFAULT_TOP_SAFE_EXTRA = ms(20);
+
+function getFallbackTopInset() {
+  if (Platform.OS === "android") {
+    return StatusBar.currentHeight ?? ms(28);
+  }
+
+  return ms(12);
+}
+
+/**
+ * 헤더 상단 패딩 (edge-to-edge + Safe Area).
+ * - inset이 0이면 OS별 fallback 적용
+ * - 그 위에 DEFAULT_TOP_SAFE_EXTRA(8dp) 추가
+ */
+export function getTopPaddingForHeader({
+  topInset,
+  extraSpacing = DEFAULT_TOP_SAFE_EXTRA,
+}: {
+  topInset: number;
+  extraSpacing?: number;
+}) {
+  const baseInset = topInset > 0 ? topInset : getFallbackTopInset();
+  return baseInset + extraSpacing;
+}
 
 export function getBottomPaddingForSheet({
   bottomInset,
