@@ -1,5 +1,5 @@
 import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
-import { fs, ms, s } from "@/shared/constants/layout";
+import { fs, getTopPaddingForHeader, ms, s } from "@/shared/constants/layout";
 import { Bell, ChevronLeft } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -19,7 +19,10 @@ export function Header({
   );
 
   return (
-    <View backgroundColor="$background" style={{ paddingTop: insets.top }}>
+    <View
+      backgroundColor="$background"
+      style={{ paddingTop: getTopPaddingForHeader({ topInset: insets.top }) }}
+    >
       <XStack
         height={ms(56)}
         paddingHorizontal="$4"

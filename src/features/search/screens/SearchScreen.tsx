@@ -2,6 +2,7 @@ import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
 import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { FlashList } from "@shopify/flash-list";
 import { Search as SearchIcon, X } from "@tamagui/lucide-icons";
+import { DEFAULT_TOP_SAFE_EXTRA } from "@/shared/constants/layout";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useColorScheme } from "react-native";
@@ -33,7 +34,11 @@ export function SearchScreen() {
         backgroundColor,
       }}
     >
-      <YStack f={1} backgroundColor={backgroundColor}>
+      <YStack
+        f={1}
+        backgroundColor={backgroundColor}
+        paddingTop={DEFAULT_TOP_SAFE_EXTRA}
+      >
         <XStack px="$3" py="$2" ai="center" gap="$2">
           <XStack
             f={1}
