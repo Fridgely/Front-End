@@ -1,4 +1,5 @@
 import { fs, ms, rv } from "@/shared/constants/layout";
+import { useResolvedTheme } from "@/shared/hooks/useResolvedTheme";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Modal,
@@ -29,8 +30,14 @@ export function CalendarMonthYearPickerModal({
   onClose,
   onConfirm,
 }: CalendarMonthYearPickerModalProps) {
+  const { isDark } = useResolvedTheme();
   const [draftYear, setDraftYear] = useState(year);
   const [draftMonth, setDraftMonth] = useState(month);
+
+  const chipBg = isDark ? "#1A2422" : "#F3F4F6";
+  const chipText = isDark ? "#C5D0CD" : "#374151";
+  const chipActiveBg = isDark ? "#26D19B" : "#2BEEAD";
+  const chipActiveText = isDark ? "#111816" : "#065F46";
 
   useEffect(() => {
     if (open) {
@@ -101,12 +108,17 @@ export function CalendarMonthYearPickerModal({
                   <Pressable
                     key={y}
                     onPress={() => setDraftYear(y)}
-                    style={[styles.yearChip, active && styles.yearChipActive]}
+                    style={[
+                      styles.yearChip,
+                      { backgroundColor: chipBg },
+                      active && { backgroundColor: chipActiveBg },
+                    ]}
                   >
                     <RNText
                       style={[
                         styles.yearChipText,
-                        active && styles.yearChipTextActive,
+                        { color: chipText },
+                        active && { color: chipActiveText, fontWeight: "700" },
                       ]}
                     >
                       {y}
@@ -130,12 +142,17 @@ export function CalendarMonthYearPickerModal({
                   <Pressable
                     key={m}
                     onPress={() => setDraftMonth(m)}
-                    style={[styles.monthCell, active && styles.monthCellActive]}
+                    style={[
+                      styles.monthCell,
+                      { backgroundColor: chipBg },
+                      active && { backgroundColor: chipActiveBg },
+                    ]}
                   >
                     <RNText
                       style={[
                         styles.monthCellText,
-                        active && styles.monthCellTextActive,
+                        { color: chipText },
+                        active && { color: chipActiveText, fontWeight: "700" },
                       ]}
                     >
                       {m}월
@@ -188,21 +205,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: ms(16),
     paddingVertical: ms(10),
     borderRadius: ms(12),
-    backgroundColor: "#F3F4F6",
     minWidth: ms(72),
     alignItems: "center",
-  },
-  yearChipActive: {
-    backgroundColor: "#2BEEAD",
   },
   yearChipText: {
     fontFamily: "BMJUA",
     fontSize: rv({ sm: fs(15), md: fs(16), lg: fs(16) }),
-    color: "#374151",
-  },
-  yearChipTextActive: {
-    color: "#065F46",
-    fontWeight: "700",
   },
   monthGrid: {
     flexDirection: "row",
@@ -214,19 +222,10 @@ const styles = StyleSheet.create({
     width: "22%",
     paddingVertical: ms(10),
     borderRadius: ms(12),
-    backgroundColor: "#F3F4F6",
     alignItems: "center",
-  },
-  monthCellActive: {
-    backgroundColor: "#2BEEAD",
   },
   monthCellText: {
     fontFamily: "BMJUA",
     fontSize: rv({ sm: fs(14), md: fs(15), lg: fs(15) }),
-    color: "#374151",
-  },
-  monthCellTextActive: {
-    color: "#065F46",
-    fontWeight: "700",
   },
 });

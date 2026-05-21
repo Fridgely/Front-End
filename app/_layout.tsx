@@ -7,7 +7,7 @@ import { StyleSheet, View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { TamaguiProvider } from "tamagui";
+import { TamaguiProvider, Theme } from "tamagui";
 
 import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
 import FridgeSplashScreen from "@/shared/components/FridgeSplashScreen";
@@ -90,6 +90,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <SafeAreaProvider>
           <TamaguiProvider config={config} defaultTheme={resolvedTheme}>
+            <Theme name={resolvedTheme}>
             <OnboardingGate />
             <NotificationPermissionGate enabled={isAppReady && !shouldShowSplash} />
             {/* 세션 관리 로직을 위해 스택 위에 배치 */}
@@ -117,6 +118,7 @@ export default function RootLayout() {
             )}
             <StatusBar style="auto" />
             <Toast config={toastConfig} />
+            </Theme>
           </TamaguiProvider>
         </SafeAreaProvider>
       </QueryClientProvider>
