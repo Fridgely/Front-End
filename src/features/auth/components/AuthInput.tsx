@@ -10,6 +10,9 @@ export function AuthInput({
   name,
   control,
   rules,
+  secureTextEntry,
+  autoCapitalize = "none",
+  autoCorrect = false,
   ...props
 }: AuthInputProps) {
   const theme = useThemeStore((state) => state.theme);
@@ -46,6 +49,10 @@ export function AuthInput({
                 px="$4"
                 color="$mainText"
                 placeholderTextColor={isDark ? "#4A5A56" : "#9CA3AF"}
+                secureTextEntry={secureTextEntry}
+                autoCapitalize={autoCapitalize}
+                autoCorrect={autoCorrect}
+                spellCheck={false}
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
