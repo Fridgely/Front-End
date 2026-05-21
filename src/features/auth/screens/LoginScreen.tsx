@@ -59,6 +59,7 @@ export function LoginScreen() {
         resetScrollToCoords={{ x: 0, y: 0 }}
         scrollEnabled={true}
         enableOnAndroid={true}
+        keyboardShouldPersistTaps="handled"
         extraScrollHeight={rv({ sm: ms(12), md: ms(20), lg: ms(20) })}
       >
         <YStack
@@ -116,6 +117,9 @@ export function LoginScreen() {
               control={control}
               placeholder="비밀번호를 입력하세요."
               secureTextEntry
+              returnKeyType="go"
+              blurOnSubmit
+              onSubmitEditing={handleSubmit(handleLoginClick)}
               rules={{
                 required: "비밀번호를 입력해주세요.",
                 pattern: {
