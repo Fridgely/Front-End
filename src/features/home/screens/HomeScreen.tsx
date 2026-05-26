@@ -217,6 +217,7 @@ export function HomeScreen() {
             setSelectedFridgeId(fridge.id);
             setIsAllFridgeTab(false);
           }}
+          onPressAdd={() => router.push("/fridge-add")}
           data={fridgeData?.data}
         />
         <Expiry

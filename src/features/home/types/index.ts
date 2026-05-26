@@ -28,7 +28,7 @@ interface FridgeTabScrollProps {
   isAllSelected: boolean;
   onSelectAll: () => void;
   onSelect: (fridge: Fridge) => void;
-
+  onPressAdd: () => void;
   data?: Fridge[];
 }
 

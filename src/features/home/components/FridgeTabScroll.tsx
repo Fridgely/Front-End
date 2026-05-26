@@ -8,6 +8,7 @@ export function FridgeTabScroll({
   isAllSelected,
   onSelectAll,
   onSelect,
+  onPressAdd,
   data = [],
 }: FridgeTabScrollProps) {
   return (
@@ -69,6 +70,7 @@ export function FridgeTabScroll({
         })}
 
         <Button
+          onPress={onPressAdd}
           icon={<Plus size="$1" color="$gray" />}
           size={rv({ sm: "$3", md: "$4", lg: "$4" })}
           bg="$surface"
@@ -79,6 +81,8 @@ export function FridgeTabScroll({
           fontFamily="$baemin"
           fontSize={rv({ sm: "$2", md: "$3", lg: "$3" })}
           color="$gray"
+          hoverStyle={{ scale: 0.95 }}
+          pressStyle={{ scale: 0.9 }}
         >
           추가
         </Button>
