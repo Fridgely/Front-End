@@ -1,9 +1,18 @@
 import { Minus, Plus } from "@tamagui/lucide-icons";
-import React from "react";
-import { Controller } from "react-hook-form";
+import React, { useState } from "react";
+import { Controller, useWatch } from "react-hook-form";
 import { Keyboard } from "react-native";
 import { Button, Input, Text, XStack, styled } from "tamagui";
 import { QuantityInputProps } from "../../types";
+import {
+  MIN_QUANTITY,
+  adjustQuantity,
+  formatQuantityDisplay,
+  isQuantityValid,
+  normalizeQuantity,
+  parseQuantityInput,
+  sanitizeDecimalInput,
+} from "../../utils/quantityInput";
 import { UnitSelector } from "./UnitSelector";
 import { fs, ms, s } from "@/shared/constants/layout";
 
@@ -13,22 +22,15 @@ const LabelText = styled(Text, {
   fontWeight: "700",
 });
 
-const MIN_QUANTITY = 1;
-
-const normalizeQuantity = (value: number | null | undefined) => {
-  const numericValue = Number(value ?? MIN_QUANTITY);
-
-  if (!Number.isFinite(numericValue)) {
-    return MIN_QUANTITY;
-  }
-
-  return Math.max(MIN_QUANTITY, numericValue);
-};
-
 export const QuantityInput = ({
   control,
   onInputFocus,
 }: QuantityInputProps) => {
+  const [editingAmountText, setEditingAmountText] = useState<string | null>(
+    null,
+  );
+  const unit = useWatch({ control, name: "unit" }) ?? "PIECE";
+
   return (
     <XStack ai="center" jc="space-between">
       <LabelText fontFamily="$baemin" fontSize={fs(14)}>
@@ -43,66 +45,85 @@ export const QuantityInput = ({
             rules={{
               required: "수량을 입력해주세요.",
               validate: (value) =>
-                value >= MIN_QUANTITY || "수량은 1 이상이어야 합니다.",
+                isQuantityValid(value) ||
+                `수량은 ${MIN_QUANTITY} 이상이어야 합니다.`,
             }}
-            render={({ field: { onChange, value } }) => (
-              <>
-                <Button
-                  w={ms(20)}
-                  h={ms(26)}
-                  br="$2"
-                  bg="$surface"
-                  icon={<Minus size={s(14)} />}
-                  onPress={() => {
-                    const next = normalizeQuantity(value) - 1;
-                    onChange(normalizeQuantity(next));
-                  }}
-                />
-                <Input
-                  w={ms(46)}
-                  h={ms(28)}
-                  p={0}
-                  ta="center"
-                  fontFamily="$baemin"
-                  fontSize={fs(14)}
-                  fontWeight="700"
-                  keyboardType="number-pad"
-                  returnKeyType="done"
-                  selectTextOnFocus
-                  borderWidth={0}
-                  backgroundColor="transparent"
-                  value={String(normalizeQuantity(value))}
-                  onChangeText={(text) => {
-                    const onlyNumbers = text.replace(/[^0-9]/g, "");
+            render={({ field: { onChange, value } }) => {
+              const normalizedValue = normalizeQuantity(value);
+              const displayValue =
+                editingAmountText ?? formatQuantityDisplay(normalizedValue);
 
-                    if (onlyNumbers.length === 0) {
-                      return;
-                    }
+              const commitAmount = (text: string) => {
+                const parsed = parseQuantityInput(text);
+                const next = normalizeQuantity(parsed);
+                onChange(next);
+                setEditingAmountText(null);
+              };
 
-                    const nextValue = Number(onlyNumbers);
-                    if (!Number.isFinite(nextValue)) {
-                      return;
-                    }
+              return (
+                <>
+                  <Button
+                    w={ms(20)}
+                    h={ms(26)}
+                    br="$2"
+                    bg="$surface"
+                    icon={<Minus size={s(14)} />}
+                    onPress={() => {
+                      setEditingAmountText(null);
+                      onChange(
+                        adjustQuantity(normalizedValue, unit, "down"),
+                      );
+                    }}
+                  />
+                  <Input
+                    w={ms(56)}
+                    h={ms(28)}
+                    p={0}
+                    ta="center"
+                    fontFamily="$baemin"
+                    fontSize={fs(14)}
+                    fontWeight="700"
+                    keyboardType="decimal-pad"
+                    returnKeyType="done"
+                    selectTextOnFocus
+                    borderWidth={0}
+                    backgroundColor="transparent"
+                    value={displayValue}
+                    onChangeText={(text) => {
+                      const sanitized = sanitizeDecimalInput(text);
+                      setEditingAmountText(sanitized);
 
-                    onChange(normalizeQuantity(nextValue));
-                  }}
-                  onBlur={() => onChange(normalizeQuantity(value))}
-                  onFocus={onInputFocus}
-                  onSubmitEditing={() => Keyboard.dismiss()}
-                />
-                <Button
-                  w={ms(20)}
-                  h={ms(26)}
-                  br="$2"
-                  bg="$surface"
-                  icon={<Plus size={s(14)} />}
-                  onPress={() => {
-                    const next = normalizeQuantity(value) + 1;
-                    onChange(normalizeQuantity(next));
-                  }}
-                />
-              </>
-            )}
+                      const parsed = parseQuantityInput(sanitized);
+                      if (parsed !== null && !sanitized.endsWith(".")) {
+                        onChange(normalizeQuantity(parsed));
+                      }
+                    }}
+                    onBlur={() => commitAmount(displayValue)}
+                    onFocus={() => {
+                      setEditingAmountText(
+                        formatQuantityDisplay(normalizedValue),
+                      );
+                      onInputFocus?.();
+                    }}
+                    onSubmitEditing={() => {
+                      commitAmount(displayValue);
+                      Keyboard.dismiss();
+                    }}
+                  />
+                  <Button
+                    w={ms(20)}
+                    h={ms(26)}
+                    br="$2"
+                    bg="$surface"
+                    icon={<Plus size={s(14)} />}
+                    onPress={() => {
+                      setEditingAmountText(null);
+                      onChange(adjustQuantity(normalizedValue, unit, "up"));
+                    }}
+                  />
+                </>
+              );
+            }}
           />
         </XStack>
 
