@@ -1,10 +1,12 @@
 import { Header } from "@/shared/components/Header/Header";
+import { ConfirmModal } from "@/shared/components/Modal/ConfirmModal";
 import {
   fs,
   getBottomPaddingForSheet,
   ms,
   rv,
 } from "@/shared/constants/layout";
+import { useImagePickerActions } from "@/shared/hooks/useImagePickerActions";
 import { useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   Bell,
@@ -14,7 +16,7 @@ import {
   Refrigerator,
 } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
@@ -38,11 +40,11 @@ import {
   getSavedProfileImage,
   saveProfileImageIndex,
 } from "../utils/getRandomDefaultProfileImage";
-import { useImagePickerActions } from "@/shared/hooks/useImagePickerActions";
 
 export function ProfileScreen() {
   const insets = useSafeAreaInsets();
-  const { mutate: logout } = useLogoutMutation();
+  const { mutate: logout, isPending: isLogoutPending } = useLogoutMutation();
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
   const router = useRouter();
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
@@ -249,7 +251,7 @@ export function ProfileScreen() {
               titleColor="$warning"
               backgroundColor="#FFEDED"
               isLast
-              onPress={() => logout()}
+              onPress={() => setIsLogoutConfirmOpen(true)}
             />
           </YStack>
 
@@ -273,6 +275,20 @@ export function ProfileScreen() {
           </YStack>
         </YStack>
       </ScrollView>
+
+      <ConfirmModal
+        open={isLogoutConfirmOpen}
+        onOpenChange={setIsLogoutConfirmOpen}
+        title="로그아웃 하시겠습니까?"
+        description="로그아웃 후 다시 로그인해야 합니다."
+        confirmText="로그아웃"
+        confirmColor="$warning"
+        confirmDisabled={isLogoutPending}
+        onConfirm={() => {
+          if (isLogoutPending) return;
+          logout();
+        }}
+      />
     </YStack>
   );
 }
