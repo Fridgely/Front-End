@@ -20,7 +20,7 @@ const adjustQuantity = (
     return Math.max(MIN_PIECE_QUANTITY, next);
   }
 
-  return normalizeQuantity(value + delta);
+  return normalizeQuantity(value + delta, unit);
 };
 
 const sanitizeDecimalInput = (text: string): string => {
@@ -44,6 +44,14 @@ const sanitizeDecimalInput = (text: string): string => {
   return `${intPart}.${decPart}`;
 };
 
+const sanitizeQuantityInput = (text: string, unit: string): string => {
+  if (unit !== PIECE_UNIT) {
+    return sanitizeDecimalInput(text);
+  }
+
+  return text.replace(/,/g, ".").split(".")[0].replace(/[^0-9]/g, "");
+};
+
 const parseQuantityInput = (text: string): number | null => {
   const trimmed = text.trim();
   if (!trimmed || trimmed === ".") {
@@ -57,31 +65,52 @@ const parseQuantityInput = (text: string): number | null => {
 const roundQuantity = (value: number): number =>
   Math.round(value * 10 ** MAX_DECIMAL_PLACES) / 10 ** MAX_DECIMAL_PLACES;
 
-const normalizeQuantity = (value: number | null | undefined): number => {
-  const numericValue = value ?? MIN_QUANTITY;
+const normalizeQuantity = (
+  value: number | null | undefined,
+  unit?: string,
+): number => {
+  if (!Number.isFinite(value ?? NaN)) {
+    return unit === PIECE_UNIT ? MIN_PIECE_QUANTITY : MIN_QUANTITY;
+  }
 
-  if (!Number.isFinite(numericValue)) {
-    return MIN_QUANTITY;
+  const numericValue = value as number;
+
+  if (unit === PIECE_UNIT) {
+    return Math.max(MIN_PIECE_QUANTITY, Math.round(numericValue));
   }
 
   return Math.max(MIN_QUANTITY, roundQuantity(numericValue));
 };
 
-const formatQuantityDisplay = (value: number): string => {
-  const rounded = roundQuantity(value);
-  return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+const formatQuantityDisplay = (value: number, unit?: string): string => {
+  const normalized = normalizeQuantity(value, unit);
+  return String(normalized);
 };
 
-const isQuantityValid = (value: number): boolean => value >= MIN_QUANTITY;
+const isQuantityValid = (value: number, unit?: string): boolean => {
+  if (unit === PIECE_UNIT) {
+    return Number.isInteger(value) && value >= MIN_PIECE_QUANTITY;
+  }
+
+  return value >= MIN_QUANTITY;
+};
+
+const getQuantityValidationMessage = (unit?: string): string =>
+  unit === PIECE_UNIT
+    ? "수량은 1 이상의 정수여야 합니다."
+    : `수량은 ${MIN_QUANTITY} 이상이어야 합니다.`;
 
 export {
+  MIN_PIECE_QUANTITY,
   MIN_QUANTITY,
   PIECE_UNIT,
   adjustQuantity,
   formatQuantityDisplay,
   getQuantityStep,
+  getQuantityValidationMessage,
   isQuantityValid,
   normalizeQuantity,
   parseQuantityInput,
   sanitizeDecimalInput,
+  sanitizeQuantityInput,
 };

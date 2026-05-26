@@ -2,9 +2,11 @@ import {
   adjustQuantity,
   formatQuantityDisplay,
   getQuantityStep,
+  isQuantityValid,
   normalizeQuantity,
   parseQuantityInput,
   sanitizeDecimalInput,
+  sanitizeQuantityInput,
 } from "../../utils/quantityInput";
 
 describe("quantityInput", () => {
@@ -35,13 +37,39 @@ describe("quantityInput", () => {
     });
   });
 
+  describe("sanitizeQuantityInput", () => {
+    it("개 단위는 정수만 허용한다", () => {
+      expect(sanitizeQuantityInput("1.5", "PIECE")).toBe("1");
+      expect(sanitizeQuantityInput("2", "PIECE")).toBe("2");
+    });
+  });
+
   describe("normalizeQuantity", () => {
     it("최소 수량 미만이면 최소값으로 보정한다", () => {
       expect(normalizeQuantity(0)).toBe(0.01);
+      expect(normalizeQuantity(0, "PIECE")).toBe(1);
     });
 
     it("소수 둘째 자리까지 반올림한다", () => {
       expect(normalizeQuantity(1.239)).toBe(1.24);
+    });
+
+    it("개 단위는 정수로 반올림하고 최소 1을 유지한다", () => {
+      expect(normalizeQuantity(1.6, "PIECE")).toBe(2);
+      expect(normalizeQuantity(0.2, "PIECE")).toBe(1);
+    });
+  });
+
+  describe("isQuantityValid", () => {
+    it("개 단위는 1 이상의 정수만 유효하다", () => {
+      expect(isQuantityValid(2, "PIECE")).toBe(true);
+      expect(isQuantityValid(1.5, "PIECE")).toBe(false);
+      expect(isQuantityValid(0, "PIECE")).toBe(false);
+    });
+
+    it("그 외 단위는 최소 수량 이상이면 유효하다", () => {
+      expect(isQuantityValid(0.5, "L")).toBe(true);
+      expect(isQuantityValid(0, "L")).toBe(false);
     });
   });
 

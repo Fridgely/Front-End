@@ -5,13 +5,13 @@ import { Keyboard } from "react-native";
 import { Button, Input, Text, XStack, styled } from "tamagui";
 import { QuantityInputProps } from "../../types";
 import {
-  MIN_QUANTITY,
   adjustQuantity,
   formatQuantityDisplay,
+  getQuantityValidationMessage,
   isQuantityValid,
   normalizeQuantity,
   parseQuantityInput,
-  sanitizeDecimalInput,
+  sanitizeQuantityInput,
 } from "../../utils/quantityInput";
 import { UnitSelector } from "./UnitSelector";
 import { fs, ms, s } from "@/shared/constants/layout";
@@ -30,6 +30,8 @@ export const QuantityInput = ({
     null,
   );
   const unit = useWatch({ control, name: "unit" }) ?? "PIECE";
+  const amount = useWatch({ control, name: "amount" });
+  const amountOnChangeRef = React.useRef<(value: number) => void>(() => {});
 
   return (
     <XStack ai="center" jc="space-between">
@@ -45,17 +47,18 @@ export const QuantityInput = ({
             rules={{
               required: "수량을 입력해주세요.",
               validate: (value) =>
-                isQuantityValid(value) ||
-                `수량은 ${MIN_QUANTITY} 이상이어야 합니다.`,
+                isQuantityValid(value, unit) || getQuantityValidationMessage(unit),
             }}
             render={({ field: { onChange, value } }) => {
-              const normalizedValue = normalizeQuantity(value);
+              amountOnChangeRef.current = onChange;
+              const normalizedValue = normalizeQuantity(value, unit);
               const displayValue =
-                editingAmountText ?? formatQuantityDisplay(normalizedValue);
+                editingAmountText ??
+                formatQuantityDisplay(normalizedValue, unit);
 
               const commitAmount = (text: string) => {
                 const parsed = parseQuantityInput(text);
-                const next = normalizeQuantity(parsed);
+                const next = normalizeQuantity(parsed, unit);
                 onChange(next);
                 setEditingAmountText(null);
               };
@@ -90,18 +93,18 @@ export const QuantityInput = ({
                     backgroundColor="transparent"
                     value={displayValue}
                     onChangeText={(text) => {
-                      const sanitized = sanitizeDecimalInput(text);
+                      const sanitized = sanitizeQuantityInput(text, unit);
                       setEditingAmountText(sanitized);
 
                       const parsed = parseQuantityInput(sanitized);
                       if (parsed !== null && !sanitized.endsWith(".")) {
-                        onChange(normalizeQuantity(parsed));
+                        onChange(normalizeQuantity(parsed, unit));
                       }
                     }}
                     onBlur={() => commitAmount(displayValue)}
                     onFocus={() => {
                       setEditingAmountText(
-                        formatQuantityDisplay(normalizedValue),
+                        formatQuantityDisplay(normalizedValue, unit),
                       );
                       onInputFocus?.();
                     }}
@@ -132,7 +135,18 @@ export const QuantityInput = ({
           name="unit"
           rules={{ required: "단위를 선택해주세요." }}
           render={({ field: { value, onChange } }) => (
-            <UnitSelector value={value} onChange={onChange} />
+            <UnitSelector
+              value={value}
+              onChange={(nextUnit: string) => {
+                onChange(nextUnit);
+                if (amount != null) {
+                  setEditingAmountText(null);
+                  amountOnChangeRef.current(
+                    normalizeQuantity(amount, nextUnit),
+                  );
+                }
+              }}
+            />
           )}
         />
       </XStack>
