@@ -173,14 +173,19 @@ export function LoginScreen() {
                   size="$3"
                   checked={rememberIdChecked}
                   onCheckedChange={async (checked) => {
+                    const prev = rememberIdChecked;
                     setRememberIdChecked(checked);
-                    await setRememberLoginIdEnabled(checked);
-                    if (!checked) {
-                      await clearLastLoginId();
-                      setValue("id", "", {
-                        shouldDirty: false,
-                        shouldValidate: true,
-                      });
+                    try {
+                      await setRememberLoginIdEnabled(checked);
+                      if (!checked) {
+                        await clearLastLoginId();
+                        setValue("id", "", {
+                          shouldDirty: false,
+                          shouldValidate: true,
+                        });
+                      }
+                    } catch {
+                      setRememberIdChecked(prev);
                     }
                   }}
                   backgroundColor={rememberIdChecked ? "$primary" : "$gray4"}
