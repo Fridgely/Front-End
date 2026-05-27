@@ -30,7 +30,13 @@ export function Header({
         justifyContent="center"
         position="relative"
       >
-        <XStack position="absolute" left="$4" alignItems="center">
+        <XStack
+          position="absolute"
+          left="$4"
+          right="$14"
+          alignItems="center"
+          justifyContent="flex-start"
+        >
           {showBackButton ? (
             <Button
               size="$2"
@@ -50,6 +56,7 @@ export function Header({
               fontSize={fs(18)}
               numberOfLines={1}
               ellipsizeMode="tail"
+              style={{ flexShrink: 1, width: "100%" }}
             >
               {title}
             </Heading>
