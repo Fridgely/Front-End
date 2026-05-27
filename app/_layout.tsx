@@ -1,24 +1,134 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import { TamaguiProvider, Theme } from "tamagui";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useIsLoggedIn } from "@/features/auth/store/useAuthStore";
+import FridgeSplashScreen from "@/shared/components/FridgeSplashScreen";
+import { toastConfig } from "@/shared/components/ui/ToastConfig";
+import { useAppHydration } from "@/shared/hooks/useAppHydration";
+import { queryClient } from "@/shared/lib/queryClient";
+import { OnboardingGate } from "@/shared/providers/OnboardingProvider";
+import { SessionProvider } from "@/shared/providers/SessionProvider";
+import { NotificationPermissionGate } from "@/shared/components/NotificationPermissionGate";
+import { useReactQueryDevTools } from "@dev-plugins/react-query";
+import { useFonts } from "expo-font";
+import config from "../tamagui.config";
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import { useNotificationStore } from "@/features/notification/stores/useNotificationStore";
+import {
+  getMessaging,
+  setBackgroundMessageHandler,
+} from "@react-native-firebase/messaging";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+if (__DEV__) {
+  void import("../ReactotronConfig");
+}
+// 백그라운드일때
+const messaging = getMessaging();
+
+setBackgroundMessageHandler(messaging, async (remoteMessage) => {
+  try {
+    if (remoteMessage.notification) {
+      const targetScreen = remoteMessage.data?.target_screen;
+      const state = useNotificationStore.getState();
+
+      // 스토어가 정상적으로 로드된 경우에만 저장
+      if (state && state.addNotification) {
+        state.addNotification({
+          title: remoteMessage.notification.title || "유통기한 임박",
+          body: remoteMessage.notification.body || "",
+          targetScreen:
+            typeof targetScreen === "string" ? targetScreen : undefined,
+          messageId: remoteMessage.messageId ?? undefined,
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Background Store Error:", error);
+  }
+});
+
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
+let hasShownAnimatedSplash = false;
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  useReactQueryDevTools(queryClient);
+  const { isHydrated, resolvedTheme } = useAppHydration();
+  const isLoggedIn = useIsLoggedIn();
+  const [animationFinished, setAnimationFinished] = useState(
+    hasShownAnimatedSplash,
+  );
+  const [fontsLoaded, fontError] = useFonts({
+    "GyeonggiBatang-Bold": require("../assets/fonts/GyeonggiBatang-Bold.otf"),
+    "GyeonggiTitle-Bold": require("../assets/fonts/GyeonggiTitle-Bold.otf"),
+    BMJUA: require("../assets/fonts/BMJUA.otf"),
+  });
+
+  const isAppReady = (isHydrated && fontsLoaded) || !!fontError;
+  const handleAnimationFinish = useCallback(() => {
+    hasShownAnimatedSplash = true;
+    setAnimationFinished(true);
+  }, []);
+
+  const shouldShowSplash = !isAppReady || !animationFinished;
+
+  useEffect(() => {
+    SplashScreen.hideAsync().catch(() => {});
+  }, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <TamaguiProvider config={config} defaultTheme={resolvedTheme}>
+            <Theme name={resolvedTheme}>
+            <OnboardingGate />
+            <NotificationPermissionGate enabled={isAppReady && !shouldShowSplash} />
+            {/* 세션 관리 로직을 위해 스택 위에 배치 */}
+            <SessionProvider />
+
+            <Stack
+              key={isLoggedIn ? "logged-in" : "logged-out"}
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen name="onboarding" />
+              {isLoggedIn ? (
+                <Stack.Screen name="(tabs)" />
+              ) : (
+                <Stack.Screen name="(auth)" />
+              )}
+              <Stack.Screen
+                name="modal"
+                options={{ presentation: "modal", title: "Modal" }}
+              />
+            </Stack>
+            {shouldShowSplash && (
+              <View style={styles.splashOverlay}>
+                <FridgeSplashScreen onAnimationFinish={handleAnimationFinish} />
+              </View>
+            )}
+            <StatusBar style="auto" />
+            <Toast config={toastConfig} />
+            </Theme>
+          </TamaguiProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  splashOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 9999,
+  },
+});

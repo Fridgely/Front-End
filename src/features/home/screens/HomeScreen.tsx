@@ -1,0 +1,313 @@
+import { Header } from "@/shared/components/Header/Header";
+import { ConfirmModal } from "@/shared/components/Modal/ConfirmModal";
+import {
+  useFridgeActions,
+  useIsAllFridgeTab,
+  useSelectedFridgeId,
+} from "@/shared/stores/useFridgeStore";
+import { FlashList } from "@shopify/flash-list";
+import { useRouter } from "expo-router";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { View } from "react-native";
+import { Text, XStack, YStack } from "tamagui";
+import { CategoryTabs } from "../components/CategoryTabs";
+import { Expiry } from "../components/Expiry/Expiry";
+import { SwipeableFoodListItem } from "../components/FoodListItem/SwipeableFoodListItem";
+import { FridgeTabScroll } from "../components/FridgeTabScroll";
+import { HomeSkeleton } from "../components/HomeSkeleton";
+import { SortFilter } from "../components/SortFilter";
+import { useDeleteFoodMutation } from "../hooks/mutations/useDeleteFoodMutation";
+import { useAllFoodStatusQuery } from "../hooks/queries/useAllFoodStatusQuery";
+import { useFridgeFoodStatusQuery } from "../hooks/queries/useFridgeFoodStatusQuery";
+import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
+import { FoodStatus, SortOption } from "../types";
+import { fs, ms } from "@/shared/constants/layout";
+
+interface DeleteTarget {
+  // foodName은 삭제 확인 모달에 표시할지 말지 고민
+  fridgeId: number;
+  foodId: number;
+  // foodName: string;
+}
+
+export function HomeScreen() {
+  const router = useRouter();
+  const { data: fridgeData, isLoading: isFridgeLoading } = useFridgeQuery();
+  const selectedFridgeId = useSelectedFridgeId();
+  const isAllFridgeTab = useIsAllFridgeTab();
+  const { setSelectedFridgeId, setIsAllFridgeTab } = useFridgeActions();
+
+  // 냉장고 목록 로드 완료 시 첫 번째 ID 설정
+  useEffect(() => {
+    if (fridgeData?.data && selectedFridgeId === null) {
+      const firstFridgeId = fridgeData.data[0]?.id;
+      if (firstFridgeId) {
+        setSelectedFridgeId(firstFridgeId);
+      }
+    }
+  }, [fridgeData, selectedFridgeId, setSelectedFridgeId]);
+
+  const { data: allFoodStatusData, isLoading: isAllFoodLoading } =
+    useAllFoodStatusQuery(isAllFridgeTab);
+
+  const {
+    data: fridgeFoodStatusData,
+    isLoading: isRefrigeratorFoodLoading,
+    fetchNextPage: fetchNextFridgePage,
+    hasMore: hasMoreFridgeFood,
+  } = useFridgeFoodStatusQuery(selectedFridgeId, !isAllFridgeTab);
+
+  const foodStatusData = isAllFridgeTab
+    ? allFoodStatusData
+    : fridgeFoodStatusData;
+
+  const foodStatus = foodStatusData?.data;
+
+  const isFoodLoading = isAllFridgeTab
+    ? isAllFoodLoading
+    : isRefrigeratorFoodLoading;
+
+  const [currentTab, setCurrentTab] = useState("전체");
+  const [statusFilter, setStatusFilter] = useState<FoodStatus | null>(null);
+  const [sortOption, setSortOption] = useState<SortOption>("EXPIRY_ASC");
+  const [selectedCategory, setSelectedCategory] = useState("전체");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const deleteTargetRef = useRef<DeleteTarget | null>(null);
+  const [deletingFoodId, setDeletingFoodId] = useState<number | null>(null);
+
+  const { mutate: deleteFood, isPending: isDeletePending } =
+    useDeleteFoodMutation({
+      onSettled: () => {
+        deleteTargetRef.current = null;
+        setDeletingFoodId(null);
+      },
+    });
+
+  const allFoods = useMemo(() => {
+    if (!foodStatus) return [];
+    return [
+      ...foodStatus.black,
+      ...foodStatus.red,
+      ...foodStatus.yellow,
+      ...foodStatus.green,
+    ];
+  }, [foodStatus]);
+
+  const categoryOptions = useMemo(() => {
+    const names = Array.from(
+      new Set(allFoods.map((food) => food.categoryName).filter(Boolean)),
+    );
+    return ["전체", ...names];
+  }, [allFoods]);
+
+  useEffect(() => {
+    if (!categoryOptions.includes(selectedCategory)) {
+      setSelectedCategory("전체");
+    }
+  }, [categoryOptions, selectedCategory]);
+
+  // 필터링 및 정렬 로직 (성능을 위해 useMemo 사용)
+  const sortedAndFilteredFoods = useMemo(() => {
+    let result = allFoods.filter((food) => {
+      if (!food || !food.condition) return false;
+      // 카테고리 필터
+      const matchesTab =
+        currentTab === "전체" ||
+        (currentTab === "냉장" &&
+          food.condition.storageType === "REFRIGERATION") ||
+        (currentTab === "냉동" && food.condition.storageType === "FROZEN") ||
+        (currentTab === "실온" &&
+          food.condition.storageType === "ROOM_TEMPERATURE");
+
+      // 식재료 상태 필터
+      const matchesStatus =
+        statusFilter === null || food.condition.foodStatus === statusFilter;
+
+      const matchesCategory =
+        selectedCategory === "전체" || food.categoryName === selectedCategory;
+
+      return matchesTab && matchesStatus && matchesCategory;
+    });
+
+    return result.sort((a, b) => {
+      if (sortOption === "REGISTERED_DESC") {
+        return b.id - a.id;
+      }
+
+      if (sortOption === "NAME_ASC") {
+        return a.name.localeCompare(b.name, "ko");
+      }
+
+      return a.condition.daysLeft - b.condition.daysLeft;
+    });
+  }, [allFoods, currentTab, statusFilter, selectedCategory, sortOption]);
+
+  const currentFridgeName = isAllFridgeTab
+    ? "전체"
+    : fridgeData?.data?.find((f) => f.id === selectedFridgeId)?.name ||
+      "냉장고";
+
+  const handleRequestDelete = useCallback(
+    (item: (typeof sortedAndFilteredFoods)[number]) => {
+      const targetFridgeId =
+        item.refrigeratorId || (!isAllFridgeTab ? selectedFridgeId : null);
+      if (!targetFridgeId) {
+        return;
+      }
+
+      deleteTargetRef.current = {
+        fridgeId: targetFridgeId,
+        foodId: item.id,
+        // foodName: item.name,
+      };
+      setIsDeleteConfirmOpen(true);
+    },
+    [isAllFridgeTab, selectedFridgeId],
+  );
+
+  const handlePressItem = useCallback(
+    (item: (typeof sortedAndFilteredFoods)[number]) => {
+      const targetRefrigeratorId =
+        item.refrigeratorId ?? selectedFridgeId ?? undefined;
+
+      router.push({
+        pathname: "/food/[id]",
+        params: {
+          id: item.id.toString(),
+          ...(targetRefrigeratorId !== undefined
+            ? { refrigeratorId: targetRefrigeratorId.toString() }
+            : {}),
+        },
+      } as any);
+    },
+    [router, selectedFridgeId],
+  );
+
+  const renderFoodItem = useCallback(
+    ({ item }: { item: (typeof sortedAndFilteredFoods)[number] }) => (
+      <SwipeableFoodListItem
+        item={item}
+        onDelete={() => handleRequestDelete(item)}
+        isDeleting={isDeletePending && deletingFoodId === item.id}
+        onPress={() => handlePressItem(item)}
+      />
+    ),
+    [deletingFoodId, handlePressItem, handleRequestDelete, isDeletePending],
+  );
+
+  if (isFridgeLoading || isFoodLoading) {
+    return (
+      <YStack f={1} backgroundColor="$background">
+        <Header />
+        <HomeSkeleton />
+      </YStack>
+    );
+  }
+
+  return (
+    <YStack f={1} backgroundColor="$background">
+      <Header title={currentFridgeName} showNotificationBell />
+      <YStack gap="$5">
+        <FridgeTabScroll
+          selectedId={selectedFridgeId}
+          isAllSelected={isAllFridgeTab}
+          onSelectAll={() => setIsAllFridgeTab(true)}
+          onSelect={(fridge) => {
+            setSelectedFridgeId(fridge.id);
+            setIsAllFridgeTab(false);
+          }}
+          onPressAdd={() => router.push("/fridge-add")}
+          data={fridgeData?.data}
+        />
+        <Expiry
+          activeStatus={statusFilter}
+          counts={{
+            BLACK: foodStatusData?.data?.blackCount ?? 0,
+            RED: foodStatusData?.data?.redCount ?? 0,
+            YELLOW: foodStatusData?.data?.yellowCount ?? 0,
+            GREEN: foodStatusData?.data?.greenCount ?? 0,
+          }}
+          onStatusChange={(status) =>
+            setStatusFilter((prev) => (prev === status ? null : status))
+          }
+        />
+
+        <YStack>
+          <CategoryTabs activeTab={currentTab} onTabChange={setCurrentTab} />
+
+          <XStack jc="flex-end" px="$4" py="$2">
+            <Text
+              fontSize={fs(12)}
+              color="$gray"
+              onPress={() => setIsFilterOpen(true)}
+              pressStyle={{ opacity: 0.5 }}
+            >
+              정렬 및 필터
+            </Text>
+          </XStack>
+        </YStack>
+      </YStack>
+
+      <View style={{ flex: 1, width: "100%" }}>
+        <FlashList
+          data={sortedAndFilteredFoods}
+          renderItem={renderFoodItem}
+          keyExtractor={(item) => item.id.toString()}
+          //@ts-ignore
+          contentContainerStyle={{ paddingBottom: ms(40) }}
+          onEndReached={() => {
+            if (!isAllFridgeTab && hasMoreFridgeFood) {
+              fetchNextFridgePage();
+            }
+          }}
+          onEndReachedThreshold={0.5}
+          ListEmptyComponent={
+            <YStack ai="center" jc="center" py="$10">
+              <Text color="$gray" fontSize={fs(14)}>
+                해당 카테고리에 음식이 없습니다.
+              </Text>
+            </YStack>
+          }
+        />
+      </View>
+
+      <ConfirmModal
+        open={isDeleteConfirmOpen}
+        onOpenChange={(open) => {
+          setIsDeleteConfirmOpen(open);
+        }}
+        title="정말 삭제하시겠습니까?"
+        description={
+          `삭제된 식품은 복구할 수 없습니다. 신중하게 선택해 주세요.`
+        }
+        confirmText="삭제"
+        onConfirm={() => {
+          const target = deleteTargetRef.current;
+          if (!target || isDeletePending) {
+            return;
+          }
+
+          setDeletingFoodId(target.foodId);
+          deleteFood({
+            fridgeId: target.fridgeId,
+            foodId: target.foodId,
+          });
+        }}
+        confirmColor="$warning"
+      />
+
+      <SortFilter
+        visible={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        selectedSort={sortOption}
+        selectedCategory={selectedCategory}
+        categories={categoryOptions}
+        onApply={({ sort, category }) => {
+          setSortOption(sort);
+          setSelectedCategory(category);
+        }}
+      />
+    </YStack>
+  );
+}

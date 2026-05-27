@@ -1,35 +1,132 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { OverlayMenu } from "@/shared/components/OverlayMenu/OverlayMenu";
+import { X } from "@tamagui/lucide-icons";
+import { Tabs, usePathname } from "expo-router";
+import { Calendar, Home, Plus, Search, User } from "lucide-react-native";
+import { useState } from "react";
+import { TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Circle, useTheme, View } from "tamagui";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const theme = useTheme();
+  const pathname = usePathname();
+  const insets = useSafeAreaInsets();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const activeColor = theme.active.get();
+  const inactiveColor = theme.inactive.get();
+  const hideFooterRoutes = [
+    "/calendar",
+    "/profile",
+    "/profile/notification-setting",
+  ];
+  const shouldHideFooter = hideFooterRoutes.includes(pathname);
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+    <View f={1}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: activeColor,
+          tabBarInactiveTintColor: inactiveColor,
+          tabBarLabelStyle: {
+            fontFamily: "GyeonggiTitle-Bold",
+            fontSize: 12,
+            fontWeight: "700",
+            marginTop: -2,
+          },
+          tabBarStyle: {
+            backgroundColor: theme.background.get(),
+            borderTopWidth: 1,
+            borderTopColor: theme.borderColor.get(),
+            height: 65 + insets.bottom,
+            paddingTop: 3,
+            paddingBottom: insets.bottom,
+            elevation: 0, // 안드로이드 특유의 그림자 제거
+            display: shouldHideFooter ? "none" : "flex",
+          },
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "홈",
+            tabBarIcon: ({ color }) => <Home color={color} size={24} />,
+          }}
+        />
+        <Tabs.Screen
+          name="search"
+          options={{
+            title: "검색",
+            tabBarIcon: ({ color }) => <Search color={color} size={24} />,
+          }}
+        />
+        {/* +버튼을 위해 자리만 남겨놓음 */}
+        <Tabs.Screen
+          name="action"
+          options={{
+            title: "",
+            tabBarButton: () => <View style={{ flex: 1 }} />,
+          }}
+        />
+        <Tabs.Screen
+          name="calendar"
+          options={{
+            title: "캘린더",
+            tabBarIcon: ({ color }) => <Calendar color={color} size={24} />,
+          }}
+        />
+        <Tabs.Screen
+          name="profile/index"
+          options={{
+            title: "설정",
+            tabBarIcon: ({ color }) => <User color={color} size={24} />,
+            href: "/profile",
+          }}
+        />
+        <Tabs.Screen
+          name="profile/notification-setting"
+          options={{
+            href: null,
+          }}
+        />
+      </Tabs>
+      <OverlayMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      {!shouldHideFooter && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: insets.bottom + 35,
+            alignSelf: "center",
+            zIndex: 2000,
+          }}
+        >
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setIsMenuOpen(!isMenuOpen)}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Circle
+              size={60}
+              backgroundColor={activeColor}
+              elevation={4}
+              shadowColor="#000"
+              shadowOffset={{ width: 0, height: 4 }}
+              shadowOpacity={0.3}
+              shadowRadius={5}
+            >
+              {isMenuOpen ? (
+                <X color="white" size={30} />
+              ) : (
+                <Plus color="white" size={30} />
+              )}
+            </Circle>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 }
