@@ -25,9 +25,9 @@ export function OnboardingScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor }}>
       <YStack f={1}>
-        <XStack px="$6" pt="$2" jc="flex-end">
+        <XStack px="$6" pt="$5" jc="flex-end">
           <Button unstyled onPress={toggleTheme}>
-            <Moon size={s(18)} color={isDark ? "#FFFFFF" : "#0B1110"} />
+            <Moon size={s(22)} color={isDark ? "#FFFFFF" : "#0B1110"} />
           </Button>
         </XStack>
 

@@ -7,7 +7,7 @@ import {
   rv,
 } from "@/shared/constants/layout";
 import { useImagePickerActions } from "@/shared/hooks/useImagePickerActions";
-import { useThemeStore } from "@/shared/stores/useThemeStore";
+import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import {
   Bell,
   Headphones,
@@ -17,7 +17,7 @@ import {
 } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Linking } from "react-native";
+import { Linking, useColorScheme } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Avatar,
@@ -48,8 +48,9 @@ export function ProfileScreen() {
   const router = useRouter();
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
-  const themeLabel =
-    theme === "system" ? "시스템" : theme === "dark" ? "다크" : "라이트";
+  const systemColorScheme = useColorScheme();
+  const resolvedTheme = resolveTheme(theme, systemColorScheme);
+  const themeLabel = resolvedTheme === "dark" ? "다크" : "라이트";
   const { data: allFoodStatusData } = useAllFoodStatusQuery(true);
   const { data: memberProfile } = useMemberProfileQuery();
 
