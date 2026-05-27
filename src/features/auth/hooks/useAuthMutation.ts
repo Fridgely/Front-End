@@ -1,4 +1,8 @@
 import { useApiMutation } from "@/shared/apis/builder/ApiBuilder";
+import {
+  getRememberLoginIdEnabled,
+  setLastLoginId,
+} from "@/shared/lib/loginIdStorage/loginIdStorage";
 import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
 import { loginApi, signupApi } from "../api/auth";
@@ -10,9 +14,15 @@ const useLoginMutation = () => {
   const router = useRouter();
 
   return useApiMutation<LoginRequest, LoginResponse>(loginApi, {
-    onSuccess: async (res) => {
+    onSuccess: async (res, variables) => {
       if (res.result === "SUCCESS") {
         await setTokens(res);
+        try {
+          const rememberEnabled = await getRememberLoginIdEnabled();
+          if (rememberEnabled && variables?.loginId) {
+            await setLastLoginId(variables.loginId);
+          }
+        } catch {}
         Toast.show({
           type: "success",
           text1: "로그인 성공",

@@ -11,6 +11,10 @@ jest.mock("@/shared/apis/apiClient");
 jest.mock("react-native-toast-message", () => ({ show: jest.fn() }));
 jest.mock("expo-router", () => ({ useRouter: jest.fn() }));
 jest.mock("../store/useAuthStore", () => ({ useAuthActions: jest.fn() }));
+jest.mock("@/shared/lib/loginIdStorage/loginIdStorage", () => ({
+  setLastLoginId: jest.fn(),
+  getRememberLoginIdEnabled: jest.fn(() => Promise.resolve(true)),
+}));
 
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 
@@ -26,6 +30,9 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("useAuthMutation 테스트", () => {
   const mockReplace = jest.fn();
   const mockSetTokens = jest.fn();
+  const { setLastLoginId } = jest.requireMock(
+    "@/shared/lib/loginIdStorage/loginIdStorage",
+  ) as { setLastLoginId: jest.Mock };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -57,6 +64,7 @@ describe("useAuthMutation 테스트", () => {
       // 비동기 로직 완료 대기
       await waitFor(() => {
         expect(mockSetTokens).toHaveBeenCalledWith(successResponse);
+        expect(setLastLoginId).toHaveBeenCalledWith(loginData.loginId);
         expect(Toast.show).toHaveBeenCalledWith(
           expect.objectContaining({
             type: "success",
@@ -81,6 +89,7 @@ describe("useAuthMutation 테스트", () => {
 
       await waitFor(() => {
         expect(mockSetTokens).not.toHaveBeenCalled();
+        expect(setLastLoginId).not.toHaveBeenCalled();
         expect(Toast.show).toHaveBeenCalledWith(
           expect.objectContaining({
             type: "error",
