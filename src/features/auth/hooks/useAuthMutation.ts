@@ -4,15 +4,23 @@ import Toast from "react-native-toast-message";
 import { loginApi, signupApi } from "../api/auth";
 import { LoginRequest, LoginResponse, SignupRequest } from "../api/auth.types";
 import { useAuthActions } from "../store/useAuthStore";
+import {
+  getRememberLoginIdEnabled,
+  setLastLoginId,
+} from "@/shared/lib/loginIdStorage/loginIdStorage";
 
 const useLoginMutation = () => {
   const { setTokens } = useAuthActions();
   const router = useRouter();
 
   return useApiMutation<LoginRequest, LoginResponse>(loginApi, {
-    onSuccess: async (res) => {
+    onSuccess: async (res, variables) => {
       if (res.result === "SUCCESS") {
         await setTokens(res);
+        const rememberEnabled = await getRememberLoginIdEnabled();
+        if (rememberEnabled && variables?.loginId) {
+          await setLastLoginId(variables.loginId);
+        }
         Toast.show({
           type: "success",
           text1: "로그인 성공",

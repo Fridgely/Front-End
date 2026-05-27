@@ -1,5 +1,6 @@
 import { LogIn } from "@tamagui/lucide-icons";
 import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,12 +9,19 @@ import {
   Heading,
   Paragraph,
   Spacer,
+  Switch,
   Text,
   XStack,
   YStack,
 } from "tamagui";
 
 import { fs, ms, rv } from "@/shared/constants/layout";
+import {
+  clearLastLoginId,
+  getLastLoginId,
+  getRememberLoginIdEnabled,
+  setRememberLoginIdEnabled,
+} from "@/shared/lib/loginIdStorage/loginIdStorage";
 import { resolveTheme, useThemeStore } from "@/shared/stores/useThemeStore";
 import { useForm } from "react-hook-form";
 import { AuthInput } from "../components/AuthInput";
@@ -31,6 +39,7 @@ export function LoginScreen() {
     control,
     handleSubmit,
     formState: { isValid },
+    setValue,
   } = useForm<AuthFormData>({
     mode: "onChange",
     defaultValues: {
@@ -38,6 +47,34 @@ export function LoginScreen() {
       password: "",
     },
   });
+
+  const [rememberIdChecked, setRememberIdChecked] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const rememberEnabled = await getRememberLoginIdEnabled();
+        if (!mounted) return;
+        setRememberIdChecked(rememberEnabled);
+        if (!rememberEnabled) {
+          return;
+        }
+        const lastLoginId = await getLastLoginId();
+        if (!mounted) return;
+        if (lastLoginId) {
+          setValue("id", lastLoginId, {
+            shouldDirty: false,
+            shouldValidate: true,
+          });
+        }
+      } catch {}
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, [setValue]);
 
   const handleLoginClick = (data: AuthFormData) => {
     login({
@@ -130,7 +167,34 @@ export function LoginScreen() {
               }}
             />
 
-            <Spacer size="$2" />
+            <XStack jc="flex-start" ai="center">
+              <XStack ai="center" gap="$2">
+                <Switch
+                  size="$3"
+                  checked={rememberIdChecked}
+                  onCheckedChange={async (checked) => {
+                    setRememberIdChecked(checked);
+                    await setRememberLoginIdEnabled(checked);
+                    if (!checked) {
+                      await clearLastLoginId();
+                      setValue("id", "", {
+                        shouldDirty: false,
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
+                  backgroundColor={rememberIdChecked ? "$primary" : "$gray4"}
+                  height={ms(24)}
+                  width={ms(40)}
+                  p={ms(1)}
+                >
+                  <Switch.Thumb size="$3" />
+                </Switch>
+                <Text fontFamily="$baemin" fontWeight="700" color="$gray10">
+                  아이디 저장
+                </Text>
+              </XStack>
+            </XStack>
 
             <Button
               bc="$primary"
