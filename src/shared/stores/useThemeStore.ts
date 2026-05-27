@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Appearance } from "react-native";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -28,14 +29,14 @@ export const useThemeStore = create<ThemeStore>()(
       theme: "system",
       setTheme: (theme: AppTheme) => set({ theme }),
       toggleTheme: () =>
-        set((state) => ({
-          theme:
-            state.theme === "light"
-              ? "dark"
-              : state.theme === "dark"
-                ? "system"
-                : "light",
-        })),
+        set((state) => {
+          // 시스템 인 경우에도 토글은 라이트, 다크로만 전환
+          const systemColorScheme = Appearance.getColorScheme();
+          const resolvedTheme = resolveTheme(state.theme, systemColorScheme);
+          const nextTheme: AppTheme =
+            resolvedTheme === "dark" ? "light" : "dark";
+          return { theme: nextTheme };
+        }),
     }),
     {
       name: "theme-storage",
