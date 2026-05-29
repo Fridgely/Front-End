@@ -122,9 +122,25 @@ npx jest
 - **모킹**: `expo-secure-store`, `tokenStorage` 등은 전역 모킹으로 테스트 격리
 - **테스트 위치**: `src/**/__tests__/**`, `*.test.ts(x)`
 
+### Performance
+
+**Device**: Samsung Galaxy S21 5G · Android 15 · 120Hz adaptive  
+**Summary**: cold start **~2.4s** · login→home **~1.2s** · home scroll **60fps+** · export **~23MB** (JS 10.6MB + assets).  
+상세·API 흐름·측정 방법·Before/After 템플릿: **[docs/PERFORMANCE.md](./docs/PERFORMANCE.md)**
+
+| Scenario | Result |
+|----------|--------|
+| Home list scroll | FPS **60~120**, no jank (dev, Perf Monitor) |
+| Cold start → interactive | **~2.36s** avg (EAS internal) |
+| Login → Home | **~1.19s** avg (EAS internal) |
+| Android `expo export` | **~23 MB** (not APK size) |
+| Home mount (code) | Fridge list → food fetch, **min. 2 HTTP** (sequential) |
+
 ### 폴더 구조(핵심)
 
 ```text
+docs/
+  PERFORMANCE.md     # 성능 측정 방법·결과·Before/After 템플릿
 app/
   (auth)/            # 로그인/회원가입 라우트 그룹
   (tabs)/            # 탭 라우트 그룹
