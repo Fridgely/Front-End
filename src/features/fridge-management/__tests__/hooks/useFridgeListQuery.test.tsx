@@ -4,6 +4,10 @@ import { renderHook, waitFor } from "@testing-library/react-native";
 import React from "react";
 import { useFridgeListQuery } from "../../hooks/queries/useFridgeListQuery";
 
+jest.mock("@/features/auth/store/useAuthStore", () => ({
+  useIsLoggedIn: () => true,
+}));
+
 jest.mock("@/shared/apis/apiClient");
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 

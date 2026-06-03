@@ -132,6 +132,10 @@ describe("useUpdateProfileImageMutation 테스트", () => {
     fetchMock.mockResolvedValueOnce({
       ok: false,
       status: 500,
+      headers: {
+        get: (name: string) =>
+          name.toLowerCase() === "content-type" ? "application/json" : null,
+      },
       json: jest.fn().mockResolvedValue({
         error: { message: serverMessage },
       }),
