@@ -4,7 +4,7 @@ import { FoodItem } from "@/shared/types/food";
 import { useRouter } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { YStack } from "tamagui";
-import { useFoodStatusQuery } from "../../home/hooks/queries/useFoodStatusQuery";
+import { useFoodStatusQuery } from "@/features/food/hooks/queries/useFoodStatusQuery";
 import { CalendarFoodList } from "../components/CalendarFoodList";
 import { CalendarMonthView } from "../components/CalendarMonthView";
 import { setupCalendarLocale } from "../constants/calendarLocale";

@@ -19,7 +19,7 @@ import { SortFilter } from "../components/SortFilter";
 import { useDeleteFoodMutation } from "../hooks/mutations/useDeleteFoodMutation";
 import { useAllFoodStatusQuery } from "../hooks/queries/useAllFoodStatusQuery";
 import { useFridgeFoodStatusQuery } from "../hooks/queries/useFridgeFoodStatusQuery";
-import { useFridgeQuery } from "../hooks/queries/useFridgeQuery";
+import { useFridgeQuery } from "@/features/fridge/hooks/queries/useFridgeQuery";
 import { FoodStatus, SortOption } from "../types";
 import { fs, ms } from "@/shared/constants/layout";
 

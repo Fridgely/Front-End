@@ -1,13 +1,8 @@
 import ApiBuilder from "@/shared/apis/builder/ApiBuilder";
 import type {
-  FoodStatusResponse,
   FridgeFoodsCursorRequest,
   FridgeFoodsResponseRaw,
 } from "./food.types";
-
-const getFoodStatusApi = ApiBuilder.create<void, FoodStatusResponse>(
-  "/api/v1/foods/status",
-).setMethod("GET");
 
 const getFridgeFoodsApi = (
   fridgeId: number,
@@ -24,4 +19,4 @@ const deleteFoodApi = (fridgeId: number, foodId: number) =>
     `/api/v1/refrigerators/${fridgeId}/foods/${foodId}`,
   ).setMethod("DELETE");
 
-export { deleteFoodApi, getFoodStatusApi, getFridgeFoodsApi };
+export { deleteFoodApi, getFridgeFoodsApi };

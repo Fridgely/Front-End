@@ -1,4 +1,4 @@
-import { useFridgeQuery } from "@/features/home/hooks/queries/useFridgeQuery";
+import { useFridgeQuery } from "@/features/fridge/hooks/queries/useFridgeQuery";
 import { Header } from "@/shared/components/Header/Header";
 import {
   useFridgeActions,

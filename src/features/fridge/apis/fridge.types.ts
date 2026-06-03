@@ -5,4 +5,4 @@ interface FridgeResponse {
   data: Fridge[];
 }
 
-export { FridgeResponse };
+export type { FridgeResponse };

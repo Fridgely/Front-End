@@ -1,4 +1,4 @@
-import { useFoodStatusQuery } from "@/features/home/hooks/queries/useFoodStatusQuery";
+import { useFoodStatusQuery } from "@/features/food/hooks/queries/useFoodStatusQuery";
 import { useSelectedFridgeId } from "@/shared/stores/useFridgeStore";
 import { FoodItem } from "@/shared/types/food";
 import { useMemo } from "react";
