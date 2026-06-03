@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import { Keyboard } from "react-native";
 import { Button, Input, Text, XStack, styled } from "tamagui";
-import { QuantityInputProps } from "../../types";
+import type { QuantityInputProps } from "../../../types";
 import {
   adjustQuantity,
   formatQuantityDisplay,
@@ -12,7 +12,7 @@ import {
   normalizeQuantity,
   parseQuantityInput,
   sanitizeQuantityInput,
-} from "../../utils/quantityInput";
+} from "../../../utils/quantityInput";
 import { UnitSelector } from "./UnitSelector";
 import { fs, ms, s } from "@/shared/constants/layout";
 
@@ -22,13 +22,8 @@ const LabelText = styled(Text, {
   fontWeight: "700",
 });
 
-export const QuantityInput = ({
-  control,
-  onInputFocus,
-}: QuantityInputProps) => {
-  const [editingAmountText, setEditingAmountText] = useState<string | null>(
-    null,
-  );
+export const QuantityInput = ({ control, onInputFocus }: QuantityInputProps) => {
+  const [editingAmountText, setEditingAmountText] = useState<string | null>(null);
   const unit = useWatch({ control, name: "unit" }) ?? "PIECE";
   const amount = useWatch({ control, name: "amount" });
   const amountOnChangeRef = React.useRef<(value: number) => void>(() => {});
@@ -47,14 +42,14 @@ export const QuantityInput = ({
             rules={{
               required: "수량을 입력해주세요.",
               validate: (value) =>
-                isQuantityValid(value, unit) || getQuantityValidationMessage(unit),
+                isQuantityValid(value, unit) ||
+                getQuantityValidationMessage(unit),
             }}
             render={({ field: { onChange, value } }) => {
               amountOnChangeRef.current = onChange;
               const normalizedValue = normalizeQuantity(value, unit);
               const displayValue =
-                editingAmountText ??
-                formatQuantityDisplay(normalizedValue, unit);
+                editingAmountText ?? formatQuantityDisplay(normalizedValue, unit);
 
               const commitAmount = (text: string) => {
                 const parsed = parseQuantityInput(text);
@@ -73,9 +68,7 @@ export const QuantityInput = ({
                     icon={<Minus size={s(14)} />}
                     onPress={() => {
                       setEditingAmountText(null);
-                      onChange(
-                        adjustQuantity(normalizedValue, unit, "down"),
-                      );
+                      onChange(adjustQuantity(normalizedValue, unit, "down"));
                     }}
                   />
                   <Input
@@ -139,12 +132,8 @@ export const QuantityInput = ({
               value={value}
               onChange={(nextUnit: string) => {
                 onChange(nextUnit);
-                if (amount != null) {
-                  setEditingAmountText(null);
-                  amountOnChangeRef.current(
-                    normalizeQuantity(amount, nextUnit),
-                  );
-                }
+                const nextAmount = normalizeQuantity(amount, nextUnit);
+                amountOnChangeRef.current(nextAmount);
               }}
             />
           )}
@@ -153,3 +142,4 @@ export const QuantityInput = ({
     </XStack>
   );
 };
+

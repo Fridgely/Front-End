@@ -1,7 +1,7 @@
 import type { StorageType } from "@/shared/types/food";
-import { Control } from "react-hook-form";
+import type { Control } from "react-hook-form";
 
-interface FoodFormValues {
+export interface FoodFormValues {
   imageURL?: string;
   name: string;
   categoryId: number;
@@ -12,31 +12,31 @@ interface FoodFormValues {
   description?: string;
 }
 
-interface Category {
+export interface Category {
   id: number;
   name: string;
   isDefaultType: boolean;
 }
 
-interface FoodFormProps {
+export interface FoodFormProps {
   control: Control<FoodFormValues>;
 }
 
-interface QuantityInputProps extends FoodFormProps {
+export interface QuantityInputProps extends FoodFormProps {
   onInputFocus?: () => void;
 }
 
-interface CategorySelectorProps extends FoodFormProps {
+export interface CategorySelectorProps extends FoodFormProps {
   categories: Category[];
   onModalOpenChange?: (open: boolean) => void;
   fridgeId: number;
 }
 
-interface CategoryFormValues {
+export interface CategoryFormValues {
   name: string;
 }
 
-interface CategoryFormSheetProps {
+export interface CategoryFormSheetProps {
   visible: boolean;
   onClose: () => void;
   onAdd: (name: string) => void | Promise<void>;
@@ -45,7 +45,7 @@ interface CategoryFormSheetProps {
   isPending?: boolean;
 }
 
-interface CategoryActionSheetProps {
+export interface CategoryActionSheetProps {
   visible: boolean;
   onClose: () => void;
   target: Category | null;
@@ -53,33 +53,20 @@ interface CategoryActionSheetProps {
   onDelete: (target: Category) => void;
 }
 
-interface ImageUploaderProps {
+export interface ImageUploaderProps {
   onPress?: () => void;
   imageURL?: string | null;
 }
 
-interface UnitSelectorProps {
+export interface UnitSelectorProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-interface DateSelectSheetProps {
+export interface DateSelectSheetProps {
   show: boolean;
   onClose: () => void;
   value: Date;
   onChange: (date: Date) => void;
 }
 
-export {
-  Category,
-  CategoryActionSheetProps,
-  CategoryFormSheetProps,
-  CategoryFormValues,
-  CategorySelectorProps,
-  DateSelectSheetProps,
-  FoodFormProps,
-  FoodFormValues,
-  ImageUploaderProps,
-  QuantityInputProps,
-  UnitSelectorProps,
-};

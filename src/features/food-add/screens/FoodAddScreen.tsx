@@ -14,15 +14,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { Button, ScrollView, Text, XStack, YStack } from "tamagui";
 import { fs, getBottomPaddingForSheet, vs } from "@/shared/constants/layout";
-import { CategorySelector } from "../components/CategorySelector/CategorySelector";
-import { ExpiryDatePicker } from "../components/ExpiryDatePicker/ExpiryDatePicker";
-import { FoodNameInput } from "../components/FoodNameInput";
+import { CategorySelector } from "@/features/food/components/form/CategorySelector/CategorySelector";
+import { ExpiryDatePicker } from "@/features/food/components/form/ExpiryDatePicker/ExpiryDatePicker";
+import { FoodNameInput } from "@/features/food/components/form/FoodNameInput";
 import { ImageUploader } from "../components/ImageUploader";
-import { QuantityInput } from "../components/QuantityInput/QuantityInput";
-import { StorageSelector } from "../components/StorageSelector";
+import { QuantityInput } from "@/features/food/components/form/QuantityInput/QuantityInput";
+import { StorageSelector } from "@/features/food/components/form/StorageSelector";
 import { useAddFoodMutation } from "../hooks/mutations/useAddFoodMutation";
-import { useCategoryQuery } from "../hooks/queries/useCategoryQuery";
-import { FoodFormValues } from "../types";
+import { useCategoryQuery } from "@/features/food/hooks/queries/useCategoryQuery";
+import type { FoodFormValues } from "@/features/food/types";
 
 const EXTRA_SCROLL_HEIGHT = vs(150);
 

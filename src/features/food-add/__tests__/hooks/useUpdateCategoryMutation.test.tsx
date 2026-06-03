@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react-native";
 import React from "react";
 import Toast from "react-native-toast-message";
-import { useUpdateCategoryMutation } from "../../hooks/mutations/useUpdateCategoryMutation";
+import { useUpdateCategoryMutation } from "@/features/food/hooks/mutations/useUpdateCategoryMutation";
 
 jest.mock("@/shared/apis/apiClient");
 jest.mock("react-native-toast-message", () => ({ show: jest.fn() }));

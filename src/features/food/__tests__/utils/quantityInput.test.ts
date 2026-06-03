@@ -7,7 +7,7 @@ import {
   parseQuantityInput,
   sanitizeDecimalInput,
   sanitizeQuantityInput,
-} from "../../utils/quantityInput";
+} from "@/features/food/utils/quantityInput";
 
 describe("quantityInput", () => {
   describe("sanitizeDecimalInput", () => {
@@ -103,3 +103,4 @@ describe("quantityInput", () => {
     });
   });
 });
+

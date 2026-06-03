@@ -6,7 +6,7 @@ interface DeleteCategoryVariables {
   categoryId: number;
 }
 
-const useDeleteCategoryMutation = (fridgeId: number) => {
+export const useDeleteCategoryMutation = (fridgeId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation<void, any, DeleteCategoryVariables>({
@@ -32,4 +32,3 @@ const useDeleteCategoryMutation = (fridgeId: number) => {
   });
 };
 
-export { useDeleteCategoryMutation };

@@ -2,7 +2,7 @@ import { Calendar } from "@tamagui/lucide-icons";
 import React, { useState } from "react";
 import { Controller } from "react-hook-form";
 import { Button, Text, XStack, styled } from "tamagui";
-import { FoodFormProps } from "../../types";
+import type { FoodFormProps } from "../../../types";
 import { DateSelectSheet } from "./DateSelectSheet";
 import { fs, ms, s } from "@/shared/constants/layout";
 
@@ -17,8 +17,6 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
 
   const formatDate = (dateInput: any) => {
     const date = new Date(dateInput);
-
-    // 만약 유효하지 않은 날짜라면 오늘 날짜로 대체
     const validDate = isNaN(date.getTime()) ? new Date() : date;
 
     const year = validDate.getFullYear();
@@ -32,7 +30,6 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
     <Controller
       control={control}
       name="expirationDate"
-      // 앱 구동 시 초기값을 오늘 날짜 ISO 스트링으로 설정
       defaultValue={new Date()}
       render={({ field: { value, onChange } }) => (
         <>
@@ -58,12 +55,9 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
             show={show}
             onClose={() => setShow(false)}
             value={
-              value && !isNaN(new Date(value).getTime())
-                ? new Date(value)
-                : new Date()
+              value && !isNaN(new Date(value).getTime()) ? new Date(value) : new Date()
             }
             onChange={(date) => {
-              // ISO 문자열로 저장
               onChange(date.toISOString());
             }}
           />
@@ -72,3 +66,4 @@ export const ExpiryDatePicker = ({ control }: FoodFormProps) => {
     />
   );
 };
+

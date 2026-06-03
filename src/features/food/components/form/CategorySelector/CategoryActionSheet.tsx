@@ -1,11 +1,5 @@
 import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Easing,
@@ -17,7 +11,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Text, View, XStack, YStack } from "tamagui";
-import { CategoryActionSheetProps } from "../../types";
+import type { CategoryActionSheetProps } from "../../../types";
 
 export const CategoryActionSheet = ({
   visible,
@@ -150,14 +144,7 @@ export const CategoryActionSheet = ({
       return;
     }
     runClose();
-  }, [
-    backdropOpacity,
-    runClose,
-    sheetHiddenY,
-    sheetOpacity,
-    translateY,
-    visible,
-  ]);
+  }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
 
   return (
     <Modal
@@ -170,9 +157,7 @@ export const CategoryActionSheet = ({
     >
       <YStack f={1} jc="flex-end">
         <Pressable style={StyleSheet.absoluteFill} onPress={onClose}>
-          <Animated.View
-            style={[styles.backdrop, { opacity: backdropOpacity }]}
-          />
+          <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
         </Pressable>
 
         <Animated.View
@@ -218,76 +203,54 @@ export const CategoryActionSheet = ({
             </YStack>
 
             {isDefaultType ? (
-              <XStack>
-                <Button
-                  flex={1}
-                  backgroundColor="$gray3"
-                  h={ms(48)}
-                  br="$4"
-                  onPress={onClose}
-                  pressStyle={{ scale: 0.97 }}
-                >
-                  <Text color="$mainText" fontWeight="700" fontSize="$4">
-                    확인
-                  </Text>
-                </Button>
-              </XStack>
+              <Button
+                bg="$gray3"
+                br="$4"
+                h={ms(44)}
+                onPress={onClose}
+                pressStyle={{ opacity: 0.8 }}
+              >
+                <Text fontWeight="700" fontFamily="$baemin">
+                  닫기
+                </Text>
+              </Button>
             ) : (
-              <YStack gap="$2">
+              <XStack gap="$2">
                 <Button
-                  backgroundColor="$primary"
-                  h={ms(48)}
+                  f={1}
+                  bg="$gray3"
                   br="$4"
+                  h={ms(44)}
                   onPress={() => {
-                    if (!target) return;
-                    pendingAfterCloseRef.current = () => onEdit(target);
+                    pendingAfterCloseRef.current = () => {
+                      if (target) onEdit(target);
+                    };
                     onClose();
                   }}
-                  pressStyle={{ scale: 0.97 }}
+                  pressStyle={{ opacity: 0.8 }}
                 >
-                  <Text
-                    color="$mainText"
-                    fontWeight="700"
-                    fontSize="$4"
-                    fontFamily="$baemin"
-                  >
-                    이름 수정
+                  <Text fontWeight="700" fontFamily="$baemin">
+                    수정
                   </Text>
                 </Button>
-
                 <Button
-                  backgroundColor="$warning"
-                  h={ms(48)}
+                  f={1}
+                  bg="$warning"
                   br="$4"
+                  h={ms(44)}
                   onPress={() => {
-                    if (!target) return;
-                    pendingAfterCloseRef.current = () => onDelete(target);
+                    pendingAfterCloseRef.current = () => {
+                      if (target) onDelete(target);
+                    };
                     onClose();
                   }}
-                  pressStyle={{ scale: 0.97 }}
+                  pressStyle={{ opacity: 0.8 }}
                 >
-                  <Text color="$white" fontWeight="700" fontSize="$4">
+                  <Text fontWeight="700" color="$white" fontFamily="$baemin">
                     삭제
                   </Text>
                 </Button>
-
-                <Button
-                  backgroundColor="$gray3"
-                  h={ms(48)}
-                  br="$4"
-                  onPress={onClose}
-                  pressStyle={{ scale: 0.97 }}
-                >
-                  <Text
-                    color="$mainText"
-                    fontWeight="700"
-                    fontSize="$4"
-                    fontFamily="$baemin"
-                  >
-                    취소
-                  </Text>
-                </Button>
-              </YStack>
+              </XStack>
             )}
           </YStack>
         </Animated.View>
@@ -302,3 +265,4 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
+

@@ -2,22 +2,9 @@ import { UNIT_OPTIONS } from "@/shared/constants/food";
 import { fs, getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
 import { ChevronDown } from "@tamagui/lucide-icons";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  Animated,
-  Easing,
-  Modal,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-} from "react-native";
+import { Animated, Easing, Modal, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {
-  Button,
-  Text,
-  View,
-  XStack,
-  YStack,
-} from "tamagui";
+import { Button, Text, View, XStack, YStack } from "tamagui";
 
 export const UnitSelector = ({ value, onChange }: any) => {
   const [show, setShow] = useState(false);
@@ -130,9 +117,7 @@ export const UnitSelector = ({ value, onChange }: any) => {
       >
         <YStack f={1} jc="flex-end">
           <Pressable style={StyleSheet.absoluteFill} onPress={close}>
-            <Animated.View
-              style={[styles.backdrop, { opacity: backdropOpacity }]}
-            />
+            <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
           </Pressable>
 
           <Animated.View
@@ -177,11 +162,7 @@ export const UnitSelector = ({ value, onChange }: any) => {
                     h={ms(44)}
                     pressStyle={{ scale: 0.95 }}
                   >
-                    <Text
-                      color="$mainText"
-                      fontWeight="700"
-                      fontSize={fs(13)}
-                    >
+                    <Text color="$mainText" fontWeight="700" fontSize={fs(13)}>
                       {option.label}
                     </Text>
                   </Button>
@@ -198,7 +179,7 @@ export const UnitSelector = ({ value, onChange }: any) => {
 const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    // 기존과 동일한 딤(배경)
     backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
+

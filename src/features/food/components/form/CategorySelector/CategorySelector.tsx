@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useController } from "react-hook-form";
 import { Pressable } from "react-native";
 import { Button, ScrollView, Text, XStack, YStack, styled } from "tamagui";
-import { useAddCategoryMutation } from "../../hooks/mutations/useAddCategoryMutation";
-import { useDeleteCategoryMutation } from "../../hooks/mutations/useDeleteCategoryMutation";
-import { useUpdateCategoryMutation } from "../../hooks/mutations/useUpdateCategoryMutation";
-import { Category, CategorySelectorProps } from "../../types";
+import { useAddCategoryMutation } from "../../../hooks/mutations/useAddCategoryMutation";
+import { useDeleteCategoryMutation } from "../../../hooks/mutations/useDeleteCategoryMutation";
+import { useUpdateCategoryMutation } from "../../../hooks/mutations/useUpdateCategoryMutation";
+import type { Category, CategorySelectorProps } from "../../../types";
 import { CategoryActionSheet } from "./CategoryActionSheet";
 import { CategoryFormSheet } from "./CategoryFormSheet";
 import { fs, ms } from "@/shared/constants/layout";
@@ -96,9 +96,7 @@ export const CategorySelector = ({
           if (value === catId) {
             const idx = categories.findIndex((c) => c.id === catId);
             const nextCategory =
-              idx >= 0
-                ? (categories[idx + 1] ?? categories[idx - 1] ?? null)
-                : null;
+              idx >= 0 ? (categories[idx + 1] ?? categories[idx - 1] ?? null) : null;
             onChange(nextCategory?.id ?? 0);
           }
           setDeleteConfirmOpen(false);
@@ -120,43 +118,50 @@ export const CategorySelector = ({
           {categories.map((cat) => (
             <Pressable
               key={cat.id}
-              onPress={() => onChange(cat.id)}
               onLongPress={() => handleCategoryLongPress(cat)}
-              delayLongPress={450}
+              onPress={() => onChange(cat.id)}
             >
               <Button
-                pointerEvents="none"
-                backgroundColor={value === cat.id ? "$primary" : "$gray3"}
-                color="$mainText"
+                size="$3"
                 br="$4"
-                size="$4"
-                fontFamily="$baemin"
-                fontSize="$3"
-                px="$4"
-                h={ms(40)}
+                bg={value === cat.id ? "$primary" : "$gray3"}
+                pressStyle={{ opacity: 0.7 }}
               >
-                <Text fontFamily="$baemin" fontSize={fs(13)} fontWeight="700">
+                <Text
+                  fontFamily="$baemin"
+                  fontWeight="700"
+                  fontSize={fs(13)}
+                  color={value === cat.id ? "$white" : "$mainText"}
+                >
                   {cat.name}
                 </Text>
               </Button>
             </Pressable>
           ))}
-
           <Button
-            icon={<Plus size="$1" color="$mainText" />}
-            size="$4"
-            bg="$gray3"
+            size="$3"
             br="$4"
-            px="$4"
+            bg="$gray3"
+            icon={<Plus size={ms(16)} color="$gray10" />}
             onPress={openAddSheet}
-            h={ms(40)}
+            pressStyle={{ opacity: 0.7 }}
           >
-            <Text fontFamily="$baemin" fontSize={fs(13)} color="$mainText">
+            <Text fontFamily="$baemin" fontWeight="700" fontSize={fs(13)} color="$gray10">
               추가
             </Text>
           </Button>
         </XStack>
       </ScrollView>
+
+      <CategoryFormSheet
+        visible={isCategorySheetOpen}
+        onClose={closeSheet}
+        onAdd={handleAddCategory}
+        editTarget={editTarget}
+        onUpdate={handleUpdateCategory}
+        isPending={isSheetPending}
+      />
+
       <CategoryActionSheet
         visible={isActionSheetOpen}
         onClose={() => setActionSheetOpen(false)}
@@ -170,14 +175,7 @@ export const CategorySelector = ({
           setDeleteConfirmOpen(true);
         }}
       />
-      <CategoryFormSheet
-        visible={isCategorySheetOpen}
-        onClose={closeSheet}
-        onAdd={handleAddCategory}
-        editTarget={editTarget}
-        onUpdate={handleUpdateCategory}
-        isPending={isSheetPending}
-      />
+
       <ConfirmModal
         open={isDeleteConfirmOpen}
         onOpenChange={(open) => {
@@ -199,3 +197,4 @@ export const CategorySelector = ({
     </YStack>
   );
 };
+

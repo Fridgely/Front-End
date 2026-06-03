@@ -1,11 +1,5 @@
 import { getBottomPaddingForSheet, ms, s } from "@/shared/constants/layout";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   Animated,
@@ -23,7 +17,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Input, Text, View, XStack, YStack } from "tamagui";
-import { CategoryFormSheetProps, CategoryFormValues } from "../../types";
+import type { CategoryFormSheetProps, CategoryFormValues } from "../../../types";
 
 export const CategoryFormSheet = ({
   visible,
@@ -186,14 +180,7 @@ export const CategoryFormSheet = ({
       return;
     }
     runClose();
-  }, [
-    backdropOpacity,
-    runClose,
-    sheetHiddenY,
-    sheetOpacity,
-    translateY,
-    visible,
-  ]);
+  }, [backdropOpacity, runClose, sheetHiddenY, sheetOpacity, translateY, visible]);
 
   useEffect(() => {
     if (!visible || !show || isEditMode) return;
@@ -216,10 +203,7 @@ export const CategoryFormSheet = ({
         await onAdd(trimmedName);
       }
     } catch (error) {
-      console.error(
-        isEditMode ? "카테고리 수정 실패:" : "카테고리 추가 실패:",
-        error,
-      );
+      console.error(isEditMode ? "카테고리 수정 실패:" : "카테고리 추가 실패:", error);
     }
   };
 
@@ -251,9 +235,7 @@ export const CategoryFormSheet = ({
               onClose();
             }}
           >
-            <Animated.View
-              style={[styles.backdrop, { opacity: backdropOpacity }]}
-            />
+            <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]} />
           </Pressable>
 
           <Animated.View
@@ -291,49 +273,58 @@ export const CategoryFormSheet = ({
                   control={control}
                   name="name"
                   rules={{
-                    required: "이름을 입력해주세요.",
-                    validate: (v) =>
-                      v.trim().length > 0 || "공백은 입력할 수 없습니다.",
+                    required: "카테고리 이름을 입력해주세요.",
+                    validate: (value) =>
+                      value?.trim().length > 0 || "카테고리 이름을 입력해주세요.",
+                    maxLength: { value: 20, message: "최대 20자까지 입력할 수 있습니다." },
                   }}
-                  render={({ field: { onChange, value } }) => (
+                  render={({ field: { value, onChange } }) => (
                     <Input
-                      ref={nameInputRef}
-                      h={ms(48)}
-                      placeholder={
-                        isEditMode ? "카테고리 이름" : "새 카테고리 이름"
-                      }
+                      ref={(ref) => {
+                        nameInputRef.current = ref as any;
+                      }}
                       value={value}
                       onChangeText={onChange}
-                      backgroundColor="$gray3"
+                      placeholder="카테고리 이름"
+                      h={ms(44)}
                       br="$4"
-                      bw={errors.name ? 1 : 0}
-                      boc="$warning"
-                      fontSize="$2"
+                      bg="$gray3"
+                      bw={0}
                       fontFamily="$baemin"
-                      onSubmitEditing={handleSubmit(onSubmit)}
-                      returnKeyType="done"
                     />
                   )}
                 />
+                {errors.name && (
+                  <Text color="$warning" fontSize="$3" fontWeight="600">
+                    {errors.name.message}
+                  </Text>
+                )}
               </YStack>
 
-              <XStack>
+              <XStack gap="$2">
                 <Button
-                  flex={1}
-                  backgroundColor="$primary"
-                  h={ms(48)}
+                  f={1}
+                  bg="$gray3"
                   br="$4"
-                  onPress={handleSubmit(onSubmit)}
-                  disabled={isPending}
-                  pressStyle={{ scale: 0.97 }}
+                  h={ms(44)}
+                  onPress={onClose}
+                  pressStyle={{ opacity: 0.8 }}
                 >
-                  <Text
-                    color="$mainText"
-                    fontWeight="700"
-                    fontSize="$4"
-                    fontFamily="$baemin"
-                  >
-                    {isEditMode ? "저장하기" : "추가하기"}
+                  <Text fontWeight="700" fontFamily="$baemin">
+                    취소
+                  </Text>
+                </Button>
+                <Button
+                  f={1}
+                  bg="$primary"
+                  br="$4"
+                  h={ms(44)}
+                  disabled={isPending}
+                  onPress={handleSubmit(onSubmit)}
+                  pressStyle={{ opacity: 0.8 }}
+                >
+                  <Text fontWeight="700" color="$white" fontFamily="$baemin">
+                    {isEditMode ? "수정" : "추가"}
                   </Text>
                 </Button>
               </XStack>
@@ -352,3 +343,4 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
+

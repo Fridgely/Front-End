@@ -1,8 +1,9 @@
 import { ms } from "@/shared/constants/layout";
 import React from "react";
-import { Control, Controller } from "react-hook-form";
+import type { Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Input, Text, YStack, styled, useThemeName } from "tamagui";
-import { FoodFormValues } from "../types";
+import type { FoodFormValues } from "../../types";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -11,11 +12,7 @@ const LabelText = styled(Text, {
   mb: "$2",
 });
 
-export const FoodNameInput = ({
-  control,
-}: {
-  control: Control<FoodFormValues>;
-}) => {
+export const FoodNameInput = ({ control }: { control: Control<FoodFormValues> }) => {
   const themeName = useThemeName();
 
   return (
@@ -24,8 +21,7 @@ export const FoodNameInput = ({
       name="name"
       rules={{
         required: "식품명을 입력해주세요.",
-        validate: (value) =>
-          value?.trim().length > 0 || "식품명을 입력해주세요.",
+        validate: (value) => value?.trim().length > 0 || "식품명을 입력해주세요.",
         maxLength: { value: 20, message: "최대 20자까지 입력할 수 있습니다." },
       }}
       render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -54,3 +50,4 @@ export const FoodNameInput = ({
     />
   );
 };
+

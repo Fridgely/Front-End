@@ -7,14 +7,12 @@ interface UpdateCategoryVariables {
   newName: string;
 }
 
-const useUpdateCategoryMutation = (fridgeId: number) => {
+export const useUpdateCategoryMutation = (fridgeId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation<void, any, UpdateCategoryVariables>({
     mutationFn: async ({ categoryId, newName }) => {
-      await updateCategoryApi(fridgeId, categoryId)
-        .setData({ newName })
-        .execute();
+      await updateCategoryApi(fridgeId, categoryId).setData({ newName }).execute();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories", fridgeId] });
@@ -35,4 +33,3 @@ const useUpdateCategoryMutation = (fridgeId: number) => {
   });
 };
 
-export { useUpdateCategoryMutation };

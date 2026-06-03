@@ -1,9 +1,10 @@
 import { fs, ms } from "@/shared/constants/layout";
-import { StorageType } from "@/shared/types/food";
+import type { StorageType } from "@/shared/types/food";
 import React from "react";
-import { Control, Controller } from "react-hook-form";
+import type { Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Button, Text, XStack, YStack, styled } from "tamagui";
-import { FoodFormValues } from "../types";
+import type { FoodFormValues } from "../../types";
 
 const LabelText = styled(Text, {
   fontFamily: "$heading",
@@ -18,11 +19,7 @@ const STORAGE_OPTIONS: { label: string; value: StorageType }[] = [
   { label: "실온", value: "ROOM_TEMPERATURE" },
 ];
 
-export const StorageSelector = ({
-  control,
-}: {
-  control: Control<FoodFormValues>;
-}) => (
+export const StorageSelector = ({ control }: { control: Control<FoodFormValues> }) => (
   <Controller
     control={control}
     name="storageType"
@@ -53,3 +50,4 @@ export const StorageSelector = ({
     )}
   />
 );
+

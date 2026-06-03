@@ -1,7 +1,7 @@
 import { useApiQuery } from "@/shared/apis/builder/ApiBuilder";
 import { getCategoryApi } from "../../apis/category";
 
-const useCategoryQuery = (fridgeId: number | null) => {
+export const useCategoryQuery = (fridgeId: number | null) => {
   const targetFridgeId = fridgeId ?? 0;
 
   return useApiQuery(
@@ -13,4 +13,3 @@ const useCategoryQuery = (fridgeId: number | null) => {
   );
 };
 
-export { useCategoryQuery };

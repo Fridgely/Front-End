@@ -2,9 +2,9 @@ import { useApiMutation } from "@/shared/apis/builder/ApiBuilder";
 import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { addCategoryApi } from "../../apis/category";
-import { AddCategoryRequest } from "../../apis/category.types";
+import type { AddCategoryRequest } from "../../apis/category.types";
 
-const useAddCategoryMutation = (fridgeId: number) => {
+export const useAddCategoryMutation = (fridgeId: number) => {
   const queryClient = useQueryClient();
 
   return useApiMutation<AddCategoryRequest, void>(addCategoryApi(fridgeId), {
@@ -27,4 +27,3 @@ const useAddCategoryMutation = (fridgeId: number) => {
   });
 };
 
-export { useAddCategoryMutation };
