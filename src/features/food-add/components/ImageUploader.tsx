@@ -1,7 +1,7 @@
 import { Camera } from "@tamagui/lucide-icons";
 import { Control, Controller } from "react-hook-form";
 import { Circle, Image, Text, YStack } from "tamagui";
-import { FoodFormValues } from "../types";
+import type { FoodFormValues } from "@/features/food/types";
 import { fs, ms, s } from "@/shared/constants/layout";
 import { useImagePickerActions } from "@/shared/hooks/useImagePickerActions";
 

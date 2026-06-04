@@ -1,10 +1,10 @@
-import { CategorySelector } from "@/features/food-add/components/CategorySelector/CategorySelector";
-import { ExpiryDatePicker } from "@/features/food-add/components/ExpiryDatePicker/ExpiryDatePicker";
-import { FoodNameInput } from "@/features/food-add/components/FoodNameInput";
-import { QuantityInput } from "@/features/food-add/components/QuantityInput/QuantityInput";
-import { StorageSelector } from "@/features/food-add/components/StorageSelector";
-import { useCategoryQuery } from "@/features/food-add/hooks/queries/useCategoryQuery";
-import { FoodFormValues } from "@/features/food-add/types";
+import { CategorySelector } from "@/features/food/components/form/CategorySelector/CategorySelector";
+import { ExpiryDatePicker } from "@/features/food/components/form/ExpiryDatePicker/ExpiryDatePicker";
+import { FoodNameInput } from "@/features/food/components/form/FoodNameInput";
+import { QuantityInput } from "@/features/food/components/form/QuantityInput/QuantityInput";
+import { StorageSelector } from "@/features/food/components/form/StorageSelector";
+import { useCategoryQuery } from "@/features/food/hooks/queries/useCategoryQuery";
+import type { FoodFormValues } from "@/features/food/types";
 import { useFoodDetailQuery } from "@/features/food-detail/hooks/queries/useFoodDetailQuery";
 import { parseParamToNumber } from "@/features/food-detail/utils/params";
 import { Header } from "@/shared/components/Header/Header";

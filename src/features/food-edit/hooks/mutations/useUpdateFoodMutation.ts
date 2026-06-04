@@ -1,4 +1,4 @@
-import { FoodFormValues } from "@/features/food-add/types";
+import type { FoodFormValues } from "@/features/food/types";
 import { useApiMutation } from "@/shared/apis/builder/ApiBuilder";
 import { QUERY_KEYS } from "@/shared/constants/queryKeys";
 import { resizeImageForUpload } from "@/shared/lib/image/resizeImageForUpload";

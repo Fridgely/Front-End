@@ -1,7 +1,7 @@
 import { tokenStorage } from "@/shared/lib/tokenStorage/tokenStorage";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import apiClient from "./apiClient";
+import apiClient, { setIsLoggedInGetter } from "./apiClient";
 
 // tokenStorage를 mocked로 타입 캐스팅
 const mockTokenStorage = tokenStorage as jest.Mocked<typeof tokenStorage>;
@@ -59,6 +59,14 @@ describe("apiClient 테스트", () => {
   });
 
   describe("응답 인터셉터 테스트 - 토큰 재발급", () => {
+    beforeEach(() => {
+      setIsLoggedInGetter(() => true);
+    });
+
+    afterEach(() => {
+      setIsLoggedInGetter(() => false);
+    });
+
     it("401 에러 시 토큰을 재발급 받고 요청을 재시도한다", async () => {
       const oldAccessToken = "old-access-token";
       const oldRefreshToken = "old-refresh-token";
