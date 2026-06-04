@@ -63,6 +63,10 @@ describe("apiClient 테스트", () => {
       setIsLoggedInGetter(() => true);
     });
 
+    afterEach(() => {
+      setIsLoggedInGetter(() => false);
+    });
+
     it("401 에러 시 토큰을 재발급 받고 요청을 재시도한다", async () => {
       const oldAccessToken = "old-access-token";
       const oldRefreshToken = "old-refresh-token";

@@ -132,6 +132,7 @@ export const QuantityInput = ({ control, onInputFocus }: QuantityInputProps) => 
               value={value}
               onChange={(nextUnit: string) => {
                 onChange(nextUnit);
+                setEditingAmountText(null);
                 const nextAmount = normalizeQuantity(amount, nextUnit);
                 amountOnChangeRef.current(nextAmount);
               }}
