@@ -1,6 +1,8 @@
 ## Fridgely (FrontEnd)
 
-냉장고 식재료를 **등록/관리**하고, **유통기한/알림** 등을 통해 버려지는 식재료를 줄이기 위한 모바일 앱입니다.
+Fridgely는 냉장고 내 식재료의 유통기한과 재고를 실시간으로 관리하여 식재료의 선순환을 돕는 스마트 인벤토리 서비스입니다. "냉장고에 뭐가 있는지 몰라서 또 사고", "유통기한이 지나서 버리는" 비효율적인 식습관 문제를 해결하기 위해 기획되었으며, 1인 가구·자취생, 가계 관리자, 제로 웨이스트 지향 사용자가 모바일에서 재고를 파악하고 유통기한을 놓치지 않도록 돕는 것을 목표로 합니다.
+
+Fridegly는 냉장고 식재료를 **등록/관리**하고, **유통기한/알림** 등을 통해 버려지는 식재료를 줄이기 위한 모바일 앱입니다.
 
 ### 핵심 기능(요약)
 
@@ -128,13 +130,13 @@ npx jest
 **Summary**: cold start **~2.4s** · login→home **~1.2s** · home scroll **60fps+** · export **~23MB** (JS 10.6MB + assets).  
 상세·API 흐름·측정 방법·Before/After 템플릿: **[docs/PERFORMANCE.md](./docs/PERFORMANCE.md)**
 
-| Scenario | Result |
-|----------|--------|
-| Home list scroll | FPS **60~120**, no jank (dev, Perf Monitor) |
-| Cold start → interactive | **~2.36s** avg (EAS internal) |
-| Login → Home | **~1.19s** avg (EAS internal) |
-| Android `expo export` | **~23 MB** (not APK size) |
-| Home mount (code) | Fridge list → food fetch, **min. 2 HTTP** (sequential) |
+| Scenario                 | Result                                                 |
+| ------------------------ | ------------------------------------------------------ |
+| Home list scroll         | FPS **60~120**, no jank (dev, Perf Monitor)            |
+| Cold start → interactive | **~2.36s** avg (EAS internal)                          |
+| Login → Home             | **~1.19s** avg (EAS internal)                          |
+| Android `expo export`    | **~23 MB** (not APK size)                              |
+| Home mount (code)        | Fridge list → food fetch, **min. 2 HTTP** (sequential) |
 
 ### 폴더 구조(핵심)
 
@@ -189,5 +191,5 @@ Prefix 목록:
 | ✅ Test     | Test: 유닛 테스트 코드 추가                |
 | 📝 Docs     | Docs: README 커밋 메시지 규칙 추가         |
 | 🔧 Chore    | Chore: .gitignore 파일 수정                |
-| ⚡️ Perf    | Perf: 이미지 로딩 성능 개선                |
+| ⚡️ Perf     | Perf: 이미지 로딩 성능 개선                |
 | ⚙️ Setting  | 빌드 및 패키지 등 프로젝트 설정            |
