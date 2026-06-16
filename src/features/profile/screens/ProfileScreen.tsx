@@ -15,6 +15,7 @@ import {
   Palette,
   Refrigerator,
 } from "@tamagui/lucide-icons";
+import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Linking, useColorScheme } from "react-native";
@@ -53,6 +54,11 @@ export function ProfileScreen() {
   const themeLabel = resolvedTheme === "dark" ? "다크" : "라이트";
   const { data: allFoodStatusData } = useAllFoodStatusQuery(true);
   const { data: memberProfile } = useMemberProfileQuery();
+  const appVersion =
+    Constants.expoConfig?.version ??
+    (Constants as any).manifest2?.extra?.expoClient?.version ??
+    (Constants as any).manifest?.version ??
+    "1.0.0";
 
   const registeredFoodCount =
     (allFoodStatusData?.data?.blackCount ?? 0) +
@@ -264,14 +270,16 @@ export function ProfileScreen() {
             <Text
               color="$gray10"
               fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+              fontFamily="$baemin"
             >
               Fridgely App
             </Text>
             <Text
               color="$gray10"
               fontSize={rv({ sm: fs(12), md: fs(13), lg: fs(13) })}
+              fontFamily="$baemin"
             >
-              버전 1.0.0
+              버전 {appVersion}
             </Text>
           </YStack>
         </YStack>
